@@ -1,0 +1,77 @@
+.contenedor-notificaciones {
+    width: 90%;
+    max-width: 900px;
+    margin: 2rem auto;
+    background: var(--color-white);
+    padding: 1.5rem;
+    border-radius: 0.6rem;
+    box-shadow: 0 2px 6px var(--color-gray-300);
+}
+
+.titulo-notificaciones {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    color: var(--color-text-title);
+}
+
+.subtitulo-notificaciones {
+    font-size: 1.3rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--color-text-subtitle);
+}
+
+.notificacion {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 0.75rem;
+    background: var(--color-gray-100);
+    border: 1px solid var(--color-border);
+}
+
+.no-leida {
+    background: var(--color-warning); /* tu color warning personalizado */
+    border-left: 5px solid var(--color-primary);
+}
+
+.leida {
+    background: var(--color-gray-100);
+    border-left: 5px solid var(--color-border-strong);
+}
+
+.tipo {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: var(--color-primary-dark);
+}
+
+.mensaje {
+    margin-bottom: 0.5rem;
+    color: var(--color-text);
+}
+
+.fecha {
+    font-size: 0.8rem;
+    color: var(--color-text-lighter);
+}
+
+.btn-leida {
+    margin-top: 0.5rem;
+    padding: 0.4rem 1rem;
+    background: var(--color-success);
+    color: var(--color-white);
+    border: none;
+    border-radius: 0.3rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: 0.2s ease;
+}
+
+.btn-leida:hover {
+    background: var(--color-primary-dark);
+}
+
+.sin-notificaciones {
+    color: var(--color-text-lighter);
+    font-style: italic;
+}

@@ -1,0 +1,50 @@
+.info-container {
+    max-width: 900px;
+    margin: 120px auto 40px;
+    padding: 30px;
+    
+}
+
+
+.info-section {
+    background: var(--color-white);
+    padding: 25px;
+    border-radius: 12px;
+    border: 2px solid var(--color-primary);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+    margin-bottom: 25px;
+}
+
+h1 {
+    margin-top: 20px;
+    color: var(--color-primary);
+    font-size: 50px;
+    text-align: center;
+}
+
+
+.info-section h2 {
+    margin-top: 0;
+    color: var(--color-primary);
+    font-size: 24px;
+}
+
+.info-section:hover {
+    transform: translateY(-3px);
+    transition: 0.3s ease;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.18);
+}
+
+
+.info-section p,
+.info-list li {
+    font-size: 18px;
+    color: var(--color-text);
+    line-height: 1.6;
+}
+
+
+.info-list {
+    padding-left: 20px;
+}
+

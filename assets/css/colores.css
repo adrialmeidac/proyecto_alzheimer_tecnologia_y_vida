@@ -1,0 +1,44 @@
+.colors-container {
+    text-align: center;
+    padding: 30px;
+}
+
+.panel {
+    width: 320px;
+    height: 320px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.color {
+    width: 150px;
+    height: 150px;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+    border: 3px solid var(--color-primary);
+}
+
+/* Colores base */
+.rojo { background: var(--color-red); }
+.azul { background: var(--color-blue); }
+.verde { background: var(--color-green); }
+.amarillo { background: var(--color-yellow); }
+
+.error {
+    animation: errorFlash 0.4s ease;
+}
+
+@keyframes errorFlash {
+    0% { filter: brightness(1); }
+    50% { filter: brightness(0.5); }
+    100% { filter: brightness(1); }
+}
+
+.activo {
+    filter: brightness(2);
+    transform: scale(1.05);
+}
+

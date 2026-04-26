@@ -1,0 +1,77 @@
+:root {
+    /* Colores principales */
+    --color-primary: #2f6f6f;     /* Verde/azulado principal */
+    --color-primary-dark: #4d8f88;
+    --color-primary-light: #8fcac3;
+
+    /* Colores de texto */
+    --color-text: #444;           /* Tu gris base */
+    --color-text-light: #666;
+    --color-text-lighter: #888;
+
+    /* Colores Titutlo y subtitulo index*/
+    --color-text-title: #2c5f5f;
+    --color-text-subtitle: #3f7a7a;
+
+    /* Fondo general */
+    --color-bg: #f4f7f8;          /* Fondo suave */
+
+    /*Colores de botones*/
+    --color-btn-primary: #6c757d;
+    --color-btn-primary-hover: #5c636a;
+    --color-btn-secondary: #6c757d;
+    --color-btn-secondary-hover: #5c636a;
+
+    /* Blancos y grises */
+    --color-white: #ffffff;
+    --color-gray-100: #f5f5f5;
+    --color-gray-200: #e0e0e0;
+    --color-gray-300: #cccccc;
+
+    /* Colores de borde */
+    --color-border: #dcdcdc;
+    --color-border-strong: #bfbfbf;
+
+    /* Colores de hover */
+    --color-hover-bg: #d4d4d4;
+    --color-hover-primary: #4d8f88;
+
+    /* Colores de error, éxito, info (por si los necesitas) */
+    --color-success: #4CAF50;
+    --color-warning: #FFC107;
+    --color-error: #E53935;
+    --color-info: #2196F3;
+
+    /* Colores del juego de colores */
+
+    --color-red: #ff6b6b;
+    --color-blue: #4d9fff;
+    --color-green: #51d88a;
+    --color-yellow: #ffe66d;
+
+    --color-error-bg: #ffe1e1;
+    --color-error-text: #b30000;
+    --color-error-border: #ffb3b3;
+
+    --color-primary-darker: #3b6d68;
+    --color-warning: #a8744f;
+}
+/* Modo oscuro*/
+
+body.dark {
+    --color-bg: #1e1e1e;
+    --color-white: #2a2a2a;
+    --color-text: #e6e6e6;
+    --color-text-light: #cfcfcf;
+    --color-border: #3a3a3a;
+
+    --color-primary: #5FA8A0; 
+    --color-primary-dark: #4c8a83;
+    --color-primary-darker: #3b6d68;
+
+    --color-gray-100: #2d2d2d;
+
+    --color-success: #00c98a;
+    --color-warning: #d39b5f;
+    --color-error: #e57373;
+}

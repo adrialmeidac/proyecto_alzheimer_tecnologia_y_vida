@@ -1,0 +1,64 @@
+
+.newpost-container {
+    max-width: 600px;
+    margin: 120px auto 40px;
+    padding: 30px;
+}
+
+
+
+.newpost-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Etiquetas */
+.form-label {
+    font-size: 18px;
+    color: var(--color-text);
+    font-weight: 600;
+}
+
+/* Inputs y textarea */
+.form-input,
+.form-textarea {
+    width: 100%;
+    padding: 12px;
+    font-size: 18px;
+    border: 2px solid var(--color-primary);
+    border-radius: 10px;
+    background: var(--color-white);
+    color: var(--color-text);
+    transition: 0.2s;
+}
+
+/* Textarea */
+.form-textarea {
+    height: 150px;
+    resize: none;
+}
+
+/* Focus accesible */
+.form-input:focus,
+.form-textarea:focus {
+    border-color: var(--color-primary-dark);
+    outline: none;
+    box-shadow: 0 0 4px rgba(95, 168, 160, 0.6);
+}
+
+.publish-btn {
+    background: var(--color-primary);
+    color: var(--color-white);
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.3s;
+    font-weight: 600;
+}
+
+.publish-btn:hover {
+    background: var(--color-primary-dark);
+}

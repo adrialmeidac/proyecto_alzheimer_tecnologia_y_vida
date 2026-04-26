@@ -1,0 +1,71 @@
+.login-wrapper {
+    padding-top: 80px;
+    padding-bottom: 60px;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 420px;
+    background: var(--color-white);
+    padding: 35px 30px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+.login-card h2 {
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.login-form label {
+    margin-top: 18px;
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.login-form input {
+    width: 100%;
+    padding: 12px;
+    margin-top: 6px;
+    border-radius: 8px;
+    border: 1px solid var(--color-border);
+    font-size: 16px;
+    transition: 0.2s;
+}
+
+.login-form input:focus {
+    border-color: var(--color-primary);
+    outline: none;
+    box-shadow: 0 0 4px rgba(95, 168, 160, 0.4);
+}
+
+.register-text {
+    font-size: 0.95rem;
+    color: var(--color-text-light);
+}
+
+.register-link {
+    color: var(--color-primary);
+    font-weight: 600;
+}
+
+.register-link:hover {
+    color: var(--color-primary-dark);
+}
+
+.back-btn {
+    width: 100%;
+    padding: 10px;
+    background: var(--color-primary);
+    color: var(--color-white);
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.back-btn:hover {
+    background: var(--color-primary-dark);
+}

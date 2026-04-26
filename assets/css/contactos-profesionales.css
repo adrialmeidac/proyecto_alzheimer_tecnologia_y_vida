@@ -1,0 +1,81 @@
+.doctor-card {
+    background: var(--color-white);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: 0.3s;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--color-border);
+    margin-left: 20px;
+    margin-right: 20px;
+    max-width: 33.3%;
+}
+
+.doctor-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    border-color: var(--color-primary);
+    transform: scale(1.02);
+
+}
+
+.doctor-card h3 {
+    font-weight: 600;
+    font-size: 1.25rem;
+    margin-top: 12px;
+    margin-bottom: 5px;
+    margin-left: 10px;
+    text-align: start;
+    color: var(--color-primary);
+
+
+}
+
+.doctor-card p {
+    text-align: start;
+    color: var(--color-text);
+    margin-bottom: 1px;
+    margin-left: 10px;
+    font-size: 0.95rem;
+}
+.doctor-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
+}
+
+
+.specialty, .address, .services {
+    font-size: 14px;
+    color: var(--color-text);
+    margin-bottom: 1px;
+}
+
+.working-hours {
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--color-text);
+}
+
+.working-hours ul {
+    padding-left: 16px;
+    margin: 4px 0 0 0;
+    color: var(--color-text);
+
+}
+
+.working-hours li {
+    margin-bottom: 2px;
+    margin-left: 10px;
+    color: var(--color-text);
+
+}
+
+strong {
+    margin-left: 10px;
+    color: var(--color-text);
+
+}

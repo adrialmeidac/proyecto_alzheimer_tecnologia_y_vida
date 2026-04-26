@@ -1,0 +1,228 @@
+/* ============================
+   LISTA DE TESTS (tarjetas)
+============================ */
+
+.tests-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+    padding: 30px;
+}
+
+.test-card {
+    background: var(--color-white);
+    padding: 25px;
+    border-radius: 12px;
+    border: 2px solid var(--color-primary);
+    text-align: center;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 18px;
+}
+
+.test-card:hover {
+    transform: scale(1.03);
+    border-color: var(--color-success); 
+}
+
+.test-card h3 {
+    margin: 10px 0 5px;
+    color: var(--color-text);
+}
+
+.test-card p {
+    color: var(--color-text-light);
+}
+
+
+/* ============================
+   TEST INDIVIDUAL
+============================ */
+
+.test-container {
+    max-width: 700px;
+    margin: auto;
+    padding: 30px;
+    text-align: center;
+}
+.test-question {
+    font-size: 24px;
+    margin-bottom: 30px;
+    color: var(--color-text);
+}
+
+.estimulo {
+    font-size: 80px;
+    margin-bottom: 20px;
+}
+
+/* ============================
+   OPCIONES DEL TEST
+============================ */
+
+.test-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.test-options h2 {
+    color: var(--color-text);
+}
+
+.test-options p {
+    color: var(--color-text);
+    font-size: 24px;
+    text-align: justify;
+}
+
+.test-option-btn {
+    background: var(--color-white);
+    border: 2px solid var(--color-primary);
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.3s;
+    color: var(--color-text);
+}
+
+.test-option-btn:hover {
+    background: var(--color-primary);
+    color: var(--color-white);
+    transform: translateY(-3px);
+    transition: 0.3s ease;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.18);
+}
+
+
+/* ============================
+   ESTADOS DE RESPUESTA
+============================ */
+
+.test-option-btn.correct {
+    background: var(--color-success) !important; 
+    color: var(--color-white) !important;
+}
+
+.test-option-btn.incorrect {
+    background: var(--color-error) !important; 
+    color: var(--color-white) !important;
+}
+
+.test-option-btn.selected {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    border: 3px solid var(--color-primary-dark);
+    transform: scale(1.07);
+}
+/* ============================
+   MODAL DE INSTRUCCIONES
+============================ */
+/* ============================
+   MODAL DE INSTRUCCIONES — REDISEÑO COMPLETO
+============================ */
+
+#modalInstrucciones .modal-dialog {
+    max-width: 480px;
+}
+
+#modalInstrucciones .modal-content {
+    border-radius: 16px;
+    padding: 10px 5px;
+    border: none;
+    background: var(--color-white);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.25);
+    animation: modalFade 0.25s ease-out;
+}
+
+/* Header */
+#modalInstrucciones .modal-header {
+    border-bottom: none;
+    padding-bottom: 0;
+    justify-content: center;
+}
+
+#modalInstrucciones .modal-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--color-primary);
+}
+
+/* Body */
+#modalInstrucciones .modal-body {
+    padding: 10px 25px 5px;
+}
+
+#modalInstrucciones .modal-body p strong {
+    font-size: 1.25rem;
+    color: var(--color-primary-dark);
+}
+
+#modalInstrucciones .modal-body ul {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 15px;
+}
+
+#modalInstrucciones .modal-body ul li {
+    margin-bottom: 12px;
+    font-size: 1.1rem;
+    color: var(--color-text);
+    padding-left: 28px;
+    position: relative;
+}
+
+/* Icono tipo check */
+#modalInstrucciones .modal-body ul li::before {
+    content: "✔";
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--color-primary);
+    font-weight: bold;
+}
+
+/* Footer */
+#modalInstrucciones .modal-footer {
+    border-top: none;
+    padding: 10px 25px 20px;
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+/* Botones */
+#modalInstrucciones .modal-footer .btn {
+    flex: 1;
+    padding: 14px 0;
+    font-size: 1.1rem;
+    border-radius: 10px;
+}
+
+/* Botón cerrar */
+#modalInstrucciones .btn-secondary {
+    background: #d1d1d1;
+    color: #333;
+    border: none;
+}
+
+#modalInstrucciones .btn-secondary:hover {
+    background: #bcbcbc;
+}
+
+/* Botón entendido */
+#modalInstrucciones .btn-primary {
+    background: var(--color-primary);
+    border: none;
+}
+
+#modalInstrucciones .btn-primary:hover {
+    background: var(--color-primary-dark);
+}
+
+/* Animación */
+@keyframes modalFade {
+    from { opacity: 0; transform: translateY(-10px) scale(0.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}

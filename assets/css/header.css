@@ -1,0 +1,46 @@
+/* HEADER */
+.header {
+    width: 100%;
+    background: var(--color-white);
+    color: var(--color-primary);
+    padding: 15px 25px; /* más aire */
+    box-sizing: border-box;
+    border-bottom: 1px solid #e5e5e5;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 4000;
+}
+
+/* CONTENEDOR INTERNO */
+.header-inner {
+    display: flex;
+    justify-content: center; /* antes estaba a la derecha */
+    align-items: center;
+    width: 100%;
+    position: relative;
+}
+
+/* BOTÓN HAMBURGUESA */
+.menu-toggle {
+    display: none;
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--color-primary);
+    color: var(--color-white);
+    border: none;
+    font-size: 26px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    z-index: 4500;
+}
+
+/* Mostrar solo en móvil */
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: block;
+    }
+}

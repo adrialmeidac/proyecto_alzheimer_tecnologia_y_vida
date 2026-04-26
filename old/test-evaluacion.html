@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluación Cognitiva</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="./assets/css/color.css">
+    <link rel="stylesheet" href="./assets/css/global.css">
+    <link rel="stylesheet" href="./assets/css/header.css">
+    <link rel="stylesheet" href="./assets/css/footer.css">
+    <link rel="stylesheet" href="./assets/css/test.css">
+</head>
+
+<script src="./assets/js/theme.js"></script>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+        <button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
+        <h1 id="tituloTest">Test Cognitivo</h1>
+        <p class="subtitle" id="descripcionTest">Cargando...</p>
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="container test-container">
+
+        <!-- Estímulo -->
+        <section id="estimulo" class="estimulo" style="display:none;"></section>
+
+        <!-- Pregunta -->
+        <section id="pregunta" class="test-question"></section>
+
+        <!-- Opciones -->
+        <section id="opciones" class="test-options"></section>
+
+        <!-- Botón siguiente -->
+        <button class="btn btn-primary mt-4 px-4 py-2" id="btnSiguiente" style="display:none;">
+            Siguiente
+        </button>
+
+    </main>
+
+    <!-- BOTÓN VOLVER -->
+    <div class="text-center mt-4">
+        <button class="btn btn-secondary px-4 py-2" onclick="location.href='dashboard.html'">Volver</button>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer mt-5">
+        <div class="footer-section">
+            <h4>Contactos</h4>
+            <ul>
+                <li><a href="contactos.html">Contactos generales</a></li>
+                <li><a href="contactos-medicos.html">Contactos médicos</a></li>
+                <li><a href="faq.html">Preguntas frecuentes</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-section">
+            <h4>Información legal</h4>
+            <ul>
+                <li><a href="politicas-de-privacidad.html">Políticas de privacidad</a></li>
+                <li><a href="aviso-legal.html">Aviso legal</a></li>
+                <li><a href="politicas-de-cookies.html">Políticas de cookies</a></li>
+                <li><a href="accesibilidad.html">Accesibilidad</a></li>
+            </ul>
+        </div>
+    </footer>
+
+
+
+    <!-- JS del test -->
+    <script src="./assets/js/test-evaluacion.js"></script>
+
+</body>
+
+</html>

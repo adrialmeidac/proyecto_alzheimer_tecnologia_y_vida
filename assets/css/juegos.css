@@ -1,0 +1,39 @@
+/* ============================
+   CONTENEDOR GENERAL
+============================ */
+
+.games-container {
+    max-width: 900px;
+    margin: 120px auto 40px;
+    padding: 30px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 25px;
+}
+
+.game-card {
+    background: var(--color-white);
+    padding: 25px;
+    border-radius: 12px;
+    border: 2px solid var(--color-primary);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+    cursor: pointer;
+    transition: 0.3s;
+    text-align: center;
+}
+
+.game-card:hover {
+    transform: scale(1.03);
+    border-color: var(--color-primary-dark);
+}
+
+.game-card h3 {
+    margin: 0 0 10px;
+    font-size: 22px;
+    color: var(--color-text);
+}
+
+.game-card p {
+    color: var(--color-text-light);
+    font-size: 18px;
+}

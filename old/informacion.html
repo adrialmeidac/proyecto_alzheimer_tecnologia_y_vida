@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Información sobre el Alzheimer</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="./assets/css/color.css">
+    <link rel="stylesheet" href="./assets/css/global.css">
+    <link rel="stylesheet" href="./assets/css/header.css">
+    <link rel="stylesheet" href="./assets/css/footer.css">
+    <link rel="stylesheet" href="./assets/css/informacion.css">
+</head>
+
+<script src="./assets/js/theme.js"></script>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+        <button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
+        <h1>Información sobre el Alzheimer</h1>
+        <p class="subtitle">Documentos y recursos para pacientes y cuidadores</p>
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="container info-container">
+
+        <!-- SECCIÓN 1 -->
+        <section class="info-section">
+            <h2>Fases del Alzheimer</h2>
+            <p>
+                Aprende a identificar los primeros signos de la enfermedad y cómo actuar ante ellos.
+                Este documento explica los síntomas iniciales y ofrece recomendaciones prácticas.
+            </p>
+            <a class="btn btn-info px-4 py-2" href="./assets/pdf/Las-fases-de-la-enfermedad-de-Alzheimer.pdf" target="_blank">
+                Descargar PDF
+            </a>
+        </section>
+
+        <!-- SECCIÓN 2 -->
+        <section class="info-section">
+            <h2>Cuidados para Pacientes</h2>
+            <p>
+                Guía completa para cuidadores: rutinas, seguridad en el hogar, comunicación efectiva
+                y estrategias para mejorar la calidad de vida del paciente.
+            </p>
+            <a class="btn btn-info px-4 py-2" href="./assets/pdf/GuiaCuidadores_2024.pdf" target="_blank">
+                Descargar PDF
+            </a>
+        </section>
+
+        <!-- SECCIÓN 3 -->
+        <section class="info-section">
+            <h2>Tratamiento de la enfermedad de Alzheimer</h2>
+            <p>
+                Documento informativo con una visión global de la enfermedad: clinica y diagnostico, tratamientos disponibles: farmacológicos y no farmacológicos. 
+                          
+            </p>
+            <a class="btn btn-info px-4 py-2" href="./assets/pdf/tratamiento-de-la-enfermedad.pdf" target="_blank">
+                Descargar PDF
+            </a>
+        </section>
+
+        <!-- SECCIÓN 4 -->
+        <section class="info-section">
+            <h2>Avances en la Investigación</h2>
+            <p>
+                Información sobre los últimos avances científicos en el tratamiento y diagnóstico del Alzheimer.
+            </p>
+            <a class="btn btn-info px-4 py-2" href="./assets/pdf/avances-en-la-investigacion.pdf" target="_blank">
+                Descargar PDF
+            </a>
+        </section>
+
+        <!-- BOTONES -->
+        <div class="text-center mt-4">
+            <button class="btn btn-primary px-4 py-2" onclick="location.href='index.html'">Inicio</button>
+            <!--Este botón solo estará disponible si se ha iniciado sesión-->
+            <button class="btn btn-secondary px-4 py-2" onclick="location.href='dashboard.html'">Volver</button>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer mt-5">
+        <div class="footer-section">
+            <h4>Contactos</h4>
+            <ul>
+                <li><a href="contactos.html">Contactos generales</a></li>
+                <li><a href="contactos-medicos.html">Contactos médicos</a></li>
+                <li><a href="faq.html">Preguntas frecuentes</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-section">
+            <h4>Información legal</h4>
+            <ul>
+                <li><a href="politicas-de-privacidad.html">Políticas de privacidad</a></li>
+                <li><a href="aviso-legal.html">Aviso legal</a></li>
+                <li><a href="politicas-de-cookies.html">Políticas de cookies</a></li>
+                <li><a href="accesibilidad.html">Accesibilidad</a></li>
+            </ul>
+        </div>
+    </footer>
+
+</body>
+</html>

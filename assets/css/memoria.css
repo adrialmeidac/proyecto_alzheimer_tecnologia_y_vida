@@ -1,0 +1,33 @@
+
+.memory-container {
+    display: flex;
+    justify-content: center;
+    padding: 30px;
+}
+
+
+.memory-grid {
+    display: grid;
+    gap: 15px;
+    justify-content: center;
+}
+
+.memory-card {
+    width: 100px;
+    height: 100px;
+    background: var(--color-white);
+    border-radius: 10px;
+    border: 3px solid var(--color-primary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.memory-card.revealed {
+    background: var(--color-primary);
+    color: var(--color-white);
+    cursor: default;
+}

@@ -1,0 +1,101 @@
+/* Contenedor general */
+.register-container {
+    margin-top: 120px;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+/* Tarjeta principal */
+.register-card {
+    width: 100%;
+    max-width: 480px;
+    background: var(--color-white);
+    padding: 35px 40px;
+    border-radius: 14px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+/* Título */
+.register-card h2 {
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+/* Subtítulo */
+.register-subtitle {
+    color: var(--color-text-light);
+    margin-bottom: 25px;
+    text-align: center;
+    font-size: 15px;
+}
+
+/* Inputs y selects */
+.register-card input,
+.register-card select {
+    width: 100%;
+    padding: 12px 14px;
+    margin-bottom: 18px;
+    border-radius: 10px;
+    border: 1px solid var(--color-border);
+    background: var(--color-white);
+    font-size: 15px;
+    transition: all 0.2s ease;
+}
+
+/* Efecto focus */
+.register-card input:focus,
+.register-card select:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+    outline: none;
+}
+
+/* Botón principal */
+.register-btn {
+    width: 100%;
+    padding: 12px;
+    background: var(--color-primary);
+    color: var(--color-white);
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.register-btn:hover {
+    background: var(--color-primary-dark);
+}
+
+/* Botón volver */
+.register-login {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.register-login a {
+    color: var(--color-primary);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.register-login a:hover {
+    color: var(--color-primary-dark);
+}
+
+/* Caja de errores */
+.register-errors {
+    background: rgba(255, 0, 0, 0.08);
+    border-left: 4px solid #d9534f;
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    color: #b52b27;
+    font-size: 14px;
+}
