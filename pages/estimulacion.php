@@ -44,7 +44,6 @@
 
         <p class="subtitle">Estimulación cognitiva</p>
 
-        <!-- AQUÍ VA TU CONTENIDO -->
         <section class="content-block">
             <p>Es necesario realizar actividades de estimulación cognitiva 
                 para mantener la salud mental y el bienestar de las personas 

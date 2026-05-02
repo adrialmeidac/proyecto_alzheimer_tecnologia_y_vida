@@ -1,0 +1,109 @@
+
+/* Contenedor principal */
+main.container {
+    max-width: 900px;
+    margin-top: 2rem !important;
+    margin-bottom: 3rem;
+}
+
+/* ================================
+   TÍTULO PRINCIPAL
+   ================================ */
+.subtitle {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 1.2rem;
+}
+
+/* Línea decorativa bajo el título */
+.subtitle::after {
+    content: "";
+    display: block;
+    width: 60px;
+    height: 4px;
+    background: burlywood;
+    margin: 0.6rem auto 1.5rem auto;
+    border-radius: 4px;
+}
+
+/* ================================
+   BLOQUES DE CONTENIDO
+   ================================ */
+.content-block {
+    background: #ffffff;
+    padding: 1.8rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    margin-bottom: 2rem;
+}
+
+/* Texto dentro del bloque */
+.content-block p,
+.content-block li,
+.content-block span {
+    font-size: 1.2rem;
+    line-height: 1.7;
+    color: #333;
+}
+
+/* Espaciado entre párrafos */
+.content-block p {
+    margin-bottom: 1rem;
+}
+
+/* Listas */
+.content-block ul {
+    padding-left: 1.2rem;
+}
+
+.content-block li {
+    margin-bottom: 0.6rem;
+}
+
+/* ================================
+   TITULARES SECUNDARIOS
+   ================================ */
+.content-block h2,
+.content-block h3 {
+    color: #2c3e50;
+    margin-top: 1.4rem;
+    margin-bottom: 0.8rem;
+    font-weight: 600;
+}
+
+.content-block h2 {
+    font-size: 1.6rem;
+}
+
+.content-block h3 {
+    font-size: 1.4rem;
+}
+
+/* ================================
+   IMÁGENES DENTRO DE CONTENIDO
+   ================================ */
+.content-block img {
+    max-width: 100%;
+    border-radius: 10px;
+    margin: 1rem 0;
+}
+
+/* ================================
+   RESPONSIVE
+   ================================ */
+@media (max-width: 768px) {
+    .subtitle {
+        font-size: 1.6rem;
+    }
+
+    .content-block {
+        padding: 1.2rem;
+    }
+
+    .content-block p,
+    .content-block li {
+        font-size: 1.1rem;
+    }
+}

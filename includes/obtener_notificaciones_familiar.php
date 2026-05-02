@@ -10,7 +10,7 @@ function obtenerNotificacionesFamiliar($familiar_id) {
         SELECT n.*
         FROM notificaciones n
         INNER JOIN relaciones_paciente_familiar rpf 
-            ON rpf.paciente_id = n.user_id
+            ON rpf.paciente_id = n.usuario_id
         WHERE rpf.familiar_id = :familiar
         ORDER BY n.fecha DESC
     ");

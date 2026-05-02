@@ -54,7 +54,7 @@
        </ul>
        <h3>Tratamientos no farmacológicos</h3>
        <p>Intervenciones como terapia ocupacional, estimulación cognitiva, ejercicio físico, terapia de reminiscencia y apoyo psicosocial.</p>
-       <h3>Importacia del aompañamiento</h3>
+       <h3>Importancia del acompañamiento</h3>
          <p>El apoyo emocional, social y práctico es fundamental para mejorar la calidad de vida
         </section>
 

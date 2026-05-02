@@ -71,6 +71,43 @@
     <script src="/assets/js/theme.js"></script>
     <script src="../assets/js/actividades.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- MODAL CREAR ACTIVIDAD -->
+<div class="modal fade" id="modalNuevaActividad" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Nueva actividad</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+
+        <label class="form-label">Descripción</label>
+        <input type="text" id="nuevaTexto" class="form-control">
+
+        <label class="form-label mt-3">Fecha</label>
+        <input type="date" id="nuevaFecha" class="form-control">
+
+        <label class="form-label mt-3">Hora límite</label>
+        <input type="time" id="nuevaHora" class="form-control">
+
+        <div class="form-check mt-3">
+          <input type="checkbox" id="nuevaNotif" class="form-check-input">
+          <label class="form-check-label">Notificar si no se realiza</label>
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button class="btn btn-success" id="btnGuardarNueva">Guardar</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 
 </body>
 

@@ -10,11 +10,16 @@ if (!isset($_SESSION["user_id"])) {
     exit;
 }
 
-$action = $_GET["action"] ?? null;
+// ID del usuario
 $userId = $_SESSION["user_id"];
+
+// ID REAL del paciente (si existe)
+$pacienteId = $_SESSION["paciente_id"] ?? $userId;
 
 $db = new Database();
 $conn = $db->connect();
+
+$action = $_GET["action"] ?? null;
 
 switch ($action) {
 
@@ -23,7 +28,7 @@ switch ($action) {
     // ============================
     case "listar":
 
-        // 1) Actividades del paciente (actividades_usuario)
+        // 1) Actividades creadas por el paciente
         $sql1 = $conn->prepare("
             SELECT 
                 id,
@@ -40,22 +45,21 @@ switch ($action) {
         $sql1->execute([$userId]);
         $actividades_paciente = $sql1->fetchAll(PDO::FETCH_ASSOC);
 
-        // 2) Actividades creadas por el familiar (actividades_paciente)
+        // 2) Actividades creadas por el familiar
         $sql2 = $conn->prepare("
-           SELECT 
-        id,
-        descripcion AS texto,
-        completada AS realizada,
-        hora AS hora_limite,
-        0 AS notificar,
-        fecha,
-        'familiar' AS origen
-        FROM actividades_paciente
-
+            SELECT 
+                id,
+                descripcion AS texto,
+                completada AS realizada,
+                hora AS hora_limite,
+                0 AS notificar,
+                fecha,
+                'familiar' AS origen
+            FROM actividades_paciente
             WHERE paciente_id = ?
             ORDER BY id DESC
         ");
-        $sql2->execute([$userId]);
+        $sql2->execute([$pacienteId]);
         $actividades_familiar = $sql2->fetchAll(PDO::FETCH_ASSOC);
 
         // Unir ambas listas
@@ -74,13 +78,14 @@ switch ($action) {
 
 
     // ============================
-    // 2. CREAR ACTIVIDAD
+    // 2. CREAR ACTIVIDAD (CORREGIDO)
     // ============================
     case "crear":
         $data = json_decode(file_get_contents("php://input"), true);
 
         $texto = $data["texto"] ?? "";
         $hora = $data["hora_limite"] ?? null;
+        $fecha = $data["fecha"] ?? date("Y-m-d");   // ← NUEVO
         $notificar = !empty($data["notificar"]) ? 1 : 0;
 
         if (strlen($texto) < 3) {
@@ -90,9 +95,9 @@ switch ($action) {
 
         $sql = $conn->prepare("
             INSERT INTO actividades_usuario (user_id, texto, realizada, hora_limite, notificar, fecha)
-            VALUES (?, ?, 0, ?, ?, CURDATE())
+            VALUES (?, ?, 0, ?, ?, ?)
         ");
-        $sql->execute([$userId, $texto, $hora, $notificar]);
+        $sql->execute([$userId, $texto, $hora, $notificar, $fecha]);
 
         echo json_encode([
             "success" => true,

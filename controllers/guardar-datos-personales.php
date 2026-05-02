@@ -70,6 +70,18 @@ try {
         ":id" => $_SESSION["user_id"]
     ]);
 
+    // ============================================
+    // CREAR REGISTRO EN TABLA PACIENTES SI NO EXISTE
+    // ============================================
+    $check = $conn->prepare("SELECT id FROM pacientes WHERE usuario_id = ?");
+    $check->execute([$_SESSION["user_id"]]);
+    $existe = $check->fetch(PDO::FETCH_ASSOC);
+
+    if (!$existe) {
+        $insert = $conn->prepare("INSERT INTO pacientes (usuario_id) VALUES (?)");
+        $insert->execute([$_SESSION["user_id"]]);
+    }
+
     // Actualizar sesión
     $_SESSION["nombre"] = $nombre;
     $_SESSION["apellido"] = $apellido;

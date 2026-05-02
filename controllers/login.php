@@ -63,6 +63,19 @@ try {
     $_SESSION["rol"] = $user["rol"];
     $_SESSION["perfil_completado"] = $user["perfil_completado"];
 
+    // ============================================
+    // AÑADIDO: OBTENER EL PACIENTE_ID REAL
+    // ============================================
+    if ($user["rol"] === "paciente") {
+        $sqlPaciente = $conn->prepare("SELECT id FROM pacientes WHERE usuario_id = ?");
+        $sqlPaciente->execute([$user["id"]]);
+        $paciente = $sqlPaciente->fetch(PDO::FETCH_ASSOC);
+
+        if ($paciente) {
+            $_SESSION["paciente_id"] = $paciente["id"];
+        }
+    }
+
     // REDIRECCIÓN SEGÚN ROL Y PERFIL COMPLETADO
     $redirect = "/pages/dashboard.php"; // fallback
 
@@ -95,3 +108,4 @@ try {
     http_response_code(500);
     echo json_encode(["success" => false, "error" => "Error interno del servidor"]);
 }
+

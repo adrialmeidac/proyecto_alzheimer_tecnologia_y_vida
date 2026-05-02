@@ -205,5 +205,19 @@ if (!isset($_SESSION["perfil_completado"]) || $_SESSION["perfil_completado"] == 
     <script src="/assets/js/theme.js"></script>
     <script src="/assets/js/emergencias.js"></script>
 
+    <!-- MODAL DE EMERGENCIA -->
+<div id="emergency-modal" class="emergency-modal">
+    <div class="emergency-modal-content">
+        <h2>🚨 Llamada de emergencia</h2>
+        <p>¿Deseas llamar al <strong>112</strong>? Usa esta opción solo en situaciones reales.</p>
+
+        <div class="emergency-buttons">
+            <button class="btn-cancelar" onclick="cerrarModalEmergencia()">Cancelar</button>
+            <button class="btn-llamar" onclick="realizarLlamadaEmergencia()">Llamar</button>
+        </div>
+    </div>
+</div>
+
+
 </body>
 </html>

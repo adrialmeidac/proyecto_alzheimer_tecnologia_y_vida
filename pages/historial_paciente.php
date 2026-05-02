@@ -50,10 +50,10 @@ $historial = $sql->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <title>Historial del Paciente</title>
 
+    <link rel="stylesheet" href="/assets/css/color.css">
     <link rel="stylesheet" href="/assets/css/global.css">
     <link rel="stylesheet" href="/assets/css/header.css">
     <link rel="stylesheet" href="/assets/css/menu.css">
-    <link rel="stylesheet" href="/assets/css/dashboard.css">
 </head>
 
 <body>
@@ -100,6 +100,7 @@ $historial = $sql->fetchAll(PDO::FETCH_ASSOC);
     <?php endif; ?>
 
 </div>
+    <script src="/assets/js/theme.js"></script>
 
 </body>
 </html>

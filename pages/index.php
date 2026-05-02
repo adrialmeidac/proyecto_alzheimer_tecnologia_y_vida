@@ -20,6 +20,8 @@
     <link rel="stylesheet" href="/assets/css/footer.css">
     <link rel="stylesheet" href="/assets/css/cookies.css">
     <link rel="stylesheet" href="/assets/css/index.css">
+    
+
 
     <!-- Fuente -->
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400&display=swap" rel="stylesheet">

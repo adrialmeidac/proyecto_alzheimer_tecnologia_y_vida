@@ -36,9 +36,13 @@ $pacientes = $sql->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <title>Mis Pacientes</title>
 
+    <link rel="stylesheet" href="/assets/css/color.css">
     <link rel="stylesheet" href="/assets/css/global.css">
     <link rel="stylesheet" href="/assets/css/header.css">
+    <link rel="stylesheet" href="/assets/css/banner.css">
     <link rel="stylesheet" href="/assets/css/menu.css">
+    <link rel="stylesheet" href="/assets/css/footer.css">
+    <link rel="stylesheet" href="/assets/css/dashboard.css">
 </head>
 
 <body>
@@ -67,6 +71,7 @@ $pacientes = $sql->fetchAll(PDO::FETCH_ASSOC);
         <?php endforeach; ?>
     <?php endif; ?>
 </div>
+    <script src="/assets/js/theme.js"></script>
 
 </body>
 </html>

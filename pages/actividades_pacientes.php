@@ -50,10 +50,10 @@ $actividades = $sql->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <title>Actividades del Paciente</title>
 
+    <link rel="stylesheet" href="/assets/css/color.css">
     <link rel="stylesheet" href="/assets/css/global.css">
     <link rel="stylesheet" href="/assets/css/header.css">
     <link rel="stylesheet" href="/assets/css/menu.css">
-    <link rel="stylesheet" href="/assets/css/dashboard.css">
 
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -157,6 +157,7 @@ $actividades = $sql->fetchAll(PDO::FETCH_ASSOC);
     <?php endif; ?>
 
 </div>
+    <script src="/assets/js/theme.js"></script>
 
 </body>
 </html>

@@ -25,10 +25,10 @@ $notificaciones = obtenerNotificacionesFamiliar($_SESSION['user_id']);
     <meta charset="UTF-8">
     <title>Notificaciones de mis pacientes</title>
 
-    <link rel="stylesheet" href="../assets/css/global.css">
-    <link rel="stylesheet" href="../assets/css/header.css">
-    <link rel="stylesheet" href="../assets/css/menu.css">
-    <link rel="stylesheet" href="../assets/css/notificaciones.css">
+    <link rel="stylesheet" href="/assets/css/color.css">
+    <link rel="stylesheet" href="/assets/css/global.css">
+    <link rel="stylesheet" href="/assets/css/header.css">
+    <link rel="stylesheet" href="/assets/css/menu.css">
 </head>
 
 <body>
@@ -73,6 +73,7 @@ $notificaciones = obtenerNotificacionesFamiliar($_SESSION['user_id']);
     <?php endif; ?>
 
 </div>
+    <script src="/assets/js/theme.js"></script>
 
 </body>
 </html>

@@ -35,6 +35,8 @@ function renderActivity(act) {
             ${act.texto}
         </h5>
 
+        <p class="text-muted mb-2"><strong>Fecha:</strong> ${act.fecha}</p>
+
         ${isFamiliar ? "" : `
         <div class="mb-2">
             <label class="form-label mb-0"><strong>Hora límite:</strong></label>
@@ -92,21 +94,48 @@ function renderActivity(act) {
 }
 
 // ============================
-// 3. CREAR ACTIVIDAD
+// 3. CREAR ACTIVIDAD (CON MODAL)
 // ============================
 
+// Abrir modal
 addActivityBtn.addEventListener("click", () => {
-    const texto = prompt("Escribe el nombre de la actividad:");
-    if (!texto) return;
+    document.getElementById("nuevaTexto").value = "";
+    document.getElementById("nuevaFecha").value = "";
+    document.getElementById("nuevaHora").value = "";
+    document.getElementById("nuevaNotif").checked = false;
+
+    const modal = new bootstrap.Modal(document.getElementById("modalNuevaActividad"));
+    modal.show();
+});
+
+// Guardar nueva actividad
+document.getElementById("btnGuardarNueva").addEventListener("click", () => {
+
+    const texto = document.getElementById("nuevaTexto").value.trim();
+    const fecha = document.getElementById("nuevaFecha").value;
+    const hora = document.getElementById("nuevaHora").value;
+    const notificar = document.getElementById("nuevaNotif").checked;
+
+    if (!texto || !fecha) {
+        alert("Debes completar al menos descripción y fecha.");
+        return;
+    }
 
     fetch("../controllers/actividades.php?action=crear", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ texto })
+        body: JSON.stringify({
+            texto,
+            fecha,
+            hora_limite: hora,
+            notificar
+        })
     })
         .then(res => res.json())
         .then(data => {
             if (data.success) {
+                const modal = bootstrap.Modal.getInstance(document.getElementById("modalNuevaActividad"));
+                modal.hide();
                 loadActivities();
             }
         });
