@@ -32,8 +32,13 @@
     <?php
     if (!isset($_SESSION["user_id"])) {
         include '../includes/public-menu.php';
+
     } elseif ($_SESSION["rol"] === "admin") {
         include '../includes/menu-admin.php';
+
+    } elseif ($_SESSION["rol"] === "familiar" || $_SESSION["rol"] === "cuidador") {
+        include '../includes/menu-familiar.php';
+
     } else {
         include '../includes/private-menu.php';
     }
@@ -42,8 +47,14 @@
     <!-- MENÚ RESPONSIVE -->
     <?php include '../includes/responsive-menu.php'; ?>
 
-    <!-- BANNER -->
-    <?php include '../includes/public-banner.php'; ?>
+    <!-- BANNER SEGÚN SESIÓN -->
+    <?php
+    if (!isset($_SESSION["user_id"])) {
+        include '../includes/public-banner.php';
+    } else {
+        include '../includes/private-banner.php';
+    }
+    ?>
 
     <h1>Nueva Publicación</h1>
     <p class="subtitle">Comparte tus ideas o experiencias</p>

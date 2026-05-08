@@ -1,7 +1,5 @@
 <?php require_once "../middleware/session-public.php"?>
 
-
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -76,8 +74,7 @@
 
         <!-- BOTÓN VOLVER -->
         <div class="text-center mt-4">
-            <button class="btn btn-secondary px-4 py-2" onclick="location.href='/pages/index.php'">
-                Volver
+            <button class="btn btn-secondary px-4 py-2" onclick="location.href='./index.php'">Volver</button>
             </button>
         </div>
 

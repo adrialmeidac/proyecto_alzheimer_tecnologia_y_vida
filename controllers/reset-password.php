@@ -1,34 +1,41 @@
 <?php
 header("Content-Type: application/json; charset=UTF-8");
-session_start();
 
 require_once "../models/bbdd.php";
 
-// Conexión
-$db = new Database();
-$conn = $db->connect();
-
-// Solo aceptar POST
-if ($_SERVER["REQUEST_METHOD"] !== "POST") {
-    http_response_code(405);
-    echo json_encode(["success" => false, "error" => "Método no permitido"]);
-    exit;
-}
-
-// Obtener datos enviados por fetch()
-$data = json_decode(file_get_contents("php://input"), true);
-
-$token = $data["token"] ?? null;
-$password = $data["password"] ?? null;
-
-// Validación básica
-if (!$token || !$password) {
-    http_response_code(400);
-    echo json_encode(["success" => false, "error" => "Datos incompletos"]);
-    exit;
-}
-
 try {
+
+    // Solo aceptar POST
+    if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+        http_response_code(405);
+        echo json_encode(["success" => false, "error" => "Método no permitido"]);
+        exit;
+    }
+
+    // Obtener datos enviados por fetch()
+    $data = json_decode(file_get_contents("php://input"), true);
+
+    $token = $data["token"] ?? null;
+    $password = $data["password"] ?? null;
+
+    // Validación básica
+    if (!$token || !$password) {
+        http_response_code(400);
+        echo json_encode(["success" => false, "error" => "Datos incompletos"]);
+        exit;
+    }
+
+    // Validar longitud mínima
+    if (strlen($password) < 6) {
+        http_response_code(400);
+        echo json_encode(["success" => false, "error" => "La contraseña debe tener al menos 6 caracteres"]);
+        exit;
+    }
+
+    // Conexión
+    $db = new Database();
+    $conn = $db->connect();
+
     // Buscar usuario por token
     $stmt = $conn->prepare("
         SELECT id, token_expira 
@@ -50,6 +57,15 @@ try {
     $ahora = time();
 
     if ($ahora > $expira) {
+
+        // Limpiar token expirado
+        $clean = $conn->prepare("
+            UPDATE usuarios 
+            SET token_recuperacion = NULL, token_expira = NULL
+            WHERE id = :id
+        ");
+        $clean->execute([":id" => $user["id"]]);
+
         http_response_code(410);
         echo json_encode(["success" => false, "error" => "El enlace ha expirado. Solicita uno nuevo."]);
         exit;
@@ -75,6 +91,10 @@ try {
     ]);
 
 } catch (Exception $e) {
+
     http_response_code(500);
-    echo json_encode(["success" => false, "error" => "Error interno del servidor"]);
+    echo json_encode([
+        "success" => false,
+        "error" => "Error interno del servidor"
+    ]);
 }

@@ -9,10 +9,13 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="../assets/css/global.css">
-    <link rel="stylesheet" href="../assets/css/color.css">
-    <link rel="stylesheet" href="../assets/css/header.css">
-    <link rel="stylesheet" href="../assets/css/footer.css">
+    <link rel="stylesheet" href="/assets/css/global.css">
+    <link rel="stylesheet" href="/assets/css/color.css">
+    <link rel="stylesheet" href="/assets/css/header.css">
+    <link rel="stylesheet" href="/assets/css/footer.css">
+    <link rel="stylesheet" href="/assets/css/admin.css">
+    <link rel="stylesheet" href="/assets/css/menu.css">
+
 
     <style>
         .admin-table {
@@ -67,6 +70,35 @@
         </div>
     </div>
 
+    <!-- FORMULARIO EDITAR CONTENIDO -->
+    <div id="editarContenidoBox" class="card mb-4 d-none">
+        <div class="card-body">
+            <h5 class="card-title">Editar documento</h5>
+            <form id="formEditarContenido">
+                <input type="hidden" name="id">
+
+                <div class="mb-3">
+                    <label class="form-label">Título</label>
+                    <input type="text" name="titulo" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Descripción</label>
+                    <textarea name="descripcion" class="form-control" rows="3" required></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Archivo PDF (opcional)</label>
+                    <input type="file" name="archivo" class="form-control" accept="application/pdf">
+                </div>
+
+                <button type="submit" class="btn btn-warning">Actualizar</button>
+                <button type="button" class="btn btn-secondary" onclick="cerrarEditar()">Cancelar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- TABLA -->
     <div class="admin-table table-responsive">
         <table class="table table-hover align-middle">
             <thead>
@@ -115,9 +147,9 @@ function cargarContenido() {
                 tr.innerHTML = `
                     <td>${c.id}</td>
                     <td>${c.titulo}</td>
-                    <td>${c.descripcion.substring(0, 60)}...</td>
+                    <td>${c.descripcion.length > 60 ? c.descripcion.substring(0, 60) + "..." : c.descripcion}</td>
                     <td><a class="pdf-link" href="${c.archivo}" target="_blank">Ver PDF</a></td>
-                    <td>${c.fecha}</td>
+                    <td>${c.creado_en}</td>
                     <td>
                         <button class="btn btn-sm btn-warning" onclick="abrirEditar(${c.id})">Editar</button>
                         <button class="btn btn-sm btn-danger" onclick="eliminar(${c.id})">Eliminar</button>
@@ -137,7 +169,7 @@ function cargarContenido() {
 cargarContenido();
 
 // ---------------------------------------------------------
-// Crear contenido (formulario)
+// Crear contenido
 // ---------------------------------------------------------
 function abrirCrear() {
     document.getElementById("crearContenidoBox").classList.remove("d-none");
@@ -151,8 +183,7 @@ function cerrarCrear() {
 document.getElementById("formCrearContenido").addEventListener("submit", function(e) {
     e.preventDefault();
 
-    const form = e.target;
-    const formData = new FormData(form);
+    const formData = new FormData(this);
 
     fetch("../controllers/admin-contenido.php?action=crear", {
         method: "POST",
@@ -173,43 +204,53 @@ document.getElementById("formCrearContenido").addEventListener("submit", functio
 });
 
 // ---------------------------------------------------------
-// Editar contenido (sigue con prompt + selector archivo)
+// Editar contenido
 // ---------------------------------------------------------
 function abrirEditar(id) {
-    const nuevoTitulo = prompt("Nuevo título:");
-    if (!nuevoTitulo) return;
-
-    const nuevaDescripcion = prompt("Nueva descripción:");
-    if (!nuevaDescripcion) return;
-
-    const archivo = document.createElement("input");
-    archivo.type = "file";
-    archivo.accept = "application/pdf";
-
-    archivo.onchange = () => {
-        const formData = new FormData();
-        formData.append("id", id);
-        formData.append("titulo", nuevoTitulo);
-        formData.append("descripcion", nuevaDescripcion);
-
-        if (archivo.files.length > 0) {
-            formData.append("archivo", archivo.files[0]);
-        }
-
-        fetch("../controllers/admin-contenido.php?action=editar", {
-            method: "POST",
-            body: formData
-        })
+    fetch("../controllers/admin-contenido.php?action=listar")
         .then(res => res.json())
         .then(data => {
-            alert(data.message || data.error);
-            cargarContenido();
-        });
-    };
+            const doc = data.contenido.find(d => d.id == id);
+            if (!doc) return alert("Documento no encontrado");
 
-    // Opcional: si no quiere cambiar el PDF, simplemente pulsa cancelar en el diálogo
-    archivo.click();
+            const box = document.getElementById("editarContenidoBox");
+            const form = document.getElementById("formEditarContenido");
+
+            form.id.value = doc.id;
+            form.titulo.value = doc.titulo;
+            form.descripcion.value = doc.descripcion;
+
+            box.classList.remove("d-none");
+        });
 }
+
+function cerrarEditar() {
+    document.getElementById("editarContenidoBox").classList.add("d-none");
+    document.getElementById("formEditarContenido").reset();
+}
+
+document.getElementById("formEditarContenido").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+
+    fetch("../controllers/admin-contenido.php?action=editar", {
+        method: "POST",
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        alert(data.message || data.error);
+        if (data.success) {
+            cerrarEditar();
+            cargarContenido();
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        alert("Error al actualizar el contenido");
+    });
+});
 
 // ---------------------------------------------------------
 // Eliminar contenido

@@ -28,96 +28,79 @@ function renderActivity(act) {
     div.style.position = "relative";
     div.dataset.id = act.id;
 
-    const isFamiliar = act.origen === "familiar";
+    const realizada = act.estado === "realizada";
 
     div.innerHTML = `
-        <h5 class="actividad-texto mb-2" contenteditable="${isFamiliar ? "false" : "true"}">
-            ${act.texto}
+        <h5 class="actividad-texto mb-2" contenteditable="true">
+            ${act.titulo}
         </h5>
+
+        <p class="text-muted mb-2"><strong>Descripción:</strong></p>
+        <p class="actividad-descripcion mb-2" contenteditable="true">${act.descripcion || ""}</p>
 
         <p class="text-muted mb-2"><strong>Fecha:</strong> ${act.fecha}</p>
 
-        ${isFamiliar ? "" : `
         <div class="mb-2">
             <label class="form-label mb-0"><strong>Hora límite:</strong></label>
-            <input type="time" class="form-control actividad-hora" value="${act.hora_limite || ""}">
+            <input type="time" class="form-control actividad-hora" value="${act.hora || ""}">
         </div>
-
-        <div class="form-check mb-3">
-            <input class="form-check-input actividad-notif" type="checkbox" ${act.notificar == 1 ? "checked" : ""}>
-            <label class="form-check-label">Notificar si no se realiza</label>
-        </div>
-        `}
 
         <div class="d-flex justify-content-between align-items-center">
 
-            <button class="btn btn-sm ${act.realizada ? "btn-success" : "btn-outline-success"} btn-realizada"
-                ${act.realizada ? "disabled" : ""}>
-                <i class="bi ${act.realizada ? "bi-check-lg" : "bi-square"} check-icon"></i>
-                <span class="realizada-text">${act.realizada ? "Realizada" : "Marcar como realizada"}</span>
+            <button class="btn btn-sm ${realizada ? "btn-success" : "btn-outline-success"} btn-realizada"
+                ${realizada ? "disabled" : ""}>
+                <i class="bi ${realizada ? "bi-check-lg" : "bi-square"} check-icon"></i>
+                <span class="realizada-text">${realizada ? "Realizada" : "Marcar como realizada"}</span>
             </button>
 
-            ${isFamiliar ? "" : `
             <button class="btn btn-sm btn-primary btn-guardar">Guardar</button>
-            `}
 
-            ${isFamiliar ? "" : `
             <button class="btn btn-sm btn-danger btn-eliminar">Eliminar</button>
-            `}
         </div>
     `;
 
     col.appendChild(div);
     activitiesList.appendChild(col);
 
-    // Eventos SOLO si la actividad es del paciente
-    if (!isFamiliar) {
+    // Eventos
+    div.querySelector(".btn-guardar").addEventListener("click", () => {
+        updateActivity(div);
+    });
 
-        div.querySelector(".btn-guardar").addEventListener("click", () => {
-            updateActivity(div);
-        });
+    div.querySelector(".btn-realizada").addEventListener("click", () => {
+        markAsDone(div);
+    });
 
-        div.querySelector(".btn-realizada").addEventListener("click", () => {
-            markAsDone(div);
-        });
+    div.querySelector(".btn-eliminar").addEventListener("click", () => {
+        deleteActivity(div);
+    });
 
-        div.querySelector(".btn-eliminar").addEventListener("click", () => {
-            deleteActivity(div);
-        });
-
-    } else {
-        // Actividades del familiar: solo marcar como realizada
-        div.querySelector(".btn-realizada").addEventListener("click", () => {
-            markAsDone(div);
-        });
-    }
+    if (realizada) aplicarEstilosRealizada(div);
 }
 
 // ============================
-// 3. CREAR ACTIVIDAD (CON MODAL)
+// 3. CREAR ACTIVIDAD (MODAL)
 // ============================
 
-// Abrir modal
 addActivityBtn.addEventListener("click", () => {
     document.getElementById("nuevaTexto").value = "";
+    document.getElementById("nuevaDescripcion").value = "";
     document.getElementById("nuevaFecha").value = "";
     document.getElementById("nuevaHora").value = "";
-    document.getElementById("nuevaNotif").checked = false;
 
     const modal = new bootstrap.Modal(document.getElementById("modalNuevaActividad"));
     modal.show();
 });
 
-// Guardar nueva actividad
 document.getElementById("btnGuardarNueva").addEventListener("click", () => {
 
-    const texto = document.getElementById("nuevaTexto").value.trim();
+    const titulo = document.getElementById("nuevaTexto").value.trim();
+    const descripcion = document.getElementById("nuevaDescripcion").value.trim();
     const fecha = document.getElementById("nuevaFecha").value;
     const hora = document.getElementById("nuevaHora").value;
-    const notificar = document.getElementById("nuevaNotif").checked;
 
-    if (!texto || !fecha) {
-        alert("Debes completar al menos descripción y fecha.");
+    if (!titulo || !fecha) {
+        alert("Debes completar al menos título y fecha.");
         return;
     }
 
@@ -125,10 +108,10 @@ document.getElementById("btnGuardarNueva").addEventListener("click", () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-            texto,
+            titulo,
+            descripcion,
             fecha,
-            hora_limite: hora,
-            notificar
+            hora
         })
     })
         .then(res => res.json())
@@ -147,18 +130,18 @@ document.getElementById("btnGuardarNueva").addEventListener("click", () => {
 
 function updateActivity(div) {
     const id = div.dataset.id;
-    const texto = div.querySelector(".actividad-texto").innerText.trim();
+    const titulo = div.querySelector(".actividad-texto").innerText.trim();
+    const descripcion = div.querySelector(".actividad-descripcion").innerText.trim();
     const hora = div.querySelector(".actividad-hora").value;
-    const notificar = div.querySelector(".actividad-notif").checked;
 
     fetch("../controllers/actividades.php?action=actualizar", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
             id,
-            texto,
-            hora_limite: hora,
-            notificar
+            titulo,
+            descripcion,
+            hora
         })
     })
         .then(res => res.json())
@@ -179,40 +162,47 @@ function markAsDone(div) {
     fetch("../controllers/actividades.php?action=marcar_realizada", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id, realizada: 1 })
+        body: JSON.stringify({ id })
     })
         .then(res => res.json())
         .then(data => {
             if (data.success) {
-
-                const btn = div.querySelector(".btn-realizada");
-                const icon = btn.querySelector(".check-icon");
-                const text = btn.querySelector(".realizada-text");
-
-                btn.classList.remove("btn-outline-success");
-                btn.classList.add("btn-success");
-                btn.classList.add("realizada-bloqueada");
-
-                icon.classList.remove("bi-square");
-                icon.classList.add("bi-check-lg");
-
-                text.textContent = "Realizada";
-
-                div.classList.add("actividad-completada");
-
-                const checkGrande = document.createElement("i");
-                checkGrande.classList.add("bi", "bi-check-circle-fill", "actividad-check-grande");
-                div.appendChild(checkGrande);
-
-                const parent = div.parentElement;
-                parent.remove();
-                activitiesList.appendChild(parent);
+                aplicarEstilosRealizada(div);
             }
         });
 }
 
 // ============================
-// 6. ELIMINAR ACTIVIDAD
+// 6. APLICAR ESTILOS DE REALIZADA
+// ============================
+
+function aplicarEstilosRealizada(div) {
+    const btn = div.querySelector(".btn-realizada");
+    const icon = btn.querySelector(".check-icon");
+    const text = btn.querySelector(".realizada-text");
+
+    btn.classList.remove("btn-outline-success");
+    btn.classList.add("btn-success");
+    btn.classList.add("realizada-bloqueada");
+
+    icon.classList.remove("bi-square");
+    icon.classList.add("bi-check-lg");
+
+    text.textContent = "Realizada";
+
+    div.classList.add("actividad-completada");
+
+    const checkGrande = document.createElement("i");
+    checkGrande.classList.add("bi", "bi-check-circle-fill", "actividad-check-grande");
+    div.appendChild(checkGrande);
+
+    const parent = div.parentElement;
+    parent.remove();
+    activitiesList.appendChild(parent);
+}
+
+// ============================
+// 7. ELIMINAR ACTIVIDAD
 // ============================
 
 function deleteActivity(div) {
@@ -234,7 +224,7 @@ function deleteActivity(div) {
 }
 
 // ============================
-// 7. INICIALIZAR
+// 8. INICIALIZAR
 // ============================
 
 loadActivities();

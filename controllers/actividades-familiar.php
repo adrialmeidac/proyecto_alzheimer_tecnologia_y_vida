@@ -35,7 +35,7 @@ switch ($action) {
 
         // Listar actividades creadas por el familiar
         $sql = $conn->prepare("
-            SELECT *
+            SELECT id, descripcion, fecha, hora, completada
             FROM actividades_paciente
             WHERE paciente_id = ?
             ORDER BY id DESC
@@ -56,7 +56,14 @@ switch ($action) {
         $data = json_decode(file_get_contents("php://input"), true);
 
         $paciente_id = $data["paciente_id"] ?? null;
-        $texto = $data["texto"] ?? "";
+        $texto = trim($data["texto"] ?? "");
+        $fecha = $data["fecha"] ?? date("Y-m-d");
+        $hora = $data["hora"] ?? null;
+
+        if (!$paciente_id || strlen($texto) < 3) {
+            echo json_encode(["success" => false, "error" => "Datos inválidos"]);
+            exit;
+        }
 
         // Validar relación
         $sql = $conn->prepare("
@@ -70,14 +77,17 @@ switch ($action) {
             exit;
         }
 
-        // Crear actividad
+        // Crear actividad con familiar_id
         $sql = $conn->prepare("
-            INSERT INTO actividades_paciente (paciente_id, descripcion, completada, fecha)
-            VALUES (?, ?, 0, CURDATE())
+            INSERT INTO actividades_paciente (paciente_id, familiar_id, descripcion, fecha, hora, completada)
+            VALUES (?, ?, ?, ?, ?, 0)
         ");
-        $sql->execute([$paciente_id, $texto]);
+        $sql->execute([$paciente_id, $familiar_id, $texto, $fecha, $hora]);
 
-        echo json_encode(["success" => true]);
+        echo json_encode([
+            "success" => true,
+            "id" => $conn->lastInsertId()
+        ]);
         break;
 
 

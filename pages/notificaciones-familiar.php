@@ -1,45 +1,53 @@
 <?php
 session_start();
 
-// Solo usuarios loggeados
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+// SOLO familiares/cuidadores
+if (!in_array($_SESSION["rol"], ["familiar", "cuidador"])) {
+    header("Location: /login.php");
     exit();
 }
 
-// Solo familiares pueden ver esta página
-if ($_SESSION['rol'] !== 'familiar') {
-    echo "No tienes permiso para ver esta página.";
-    exit();
-}
-
-require_once __DIR__ . "/../includes/obtener_notificaciones_familiar.php";
+require_once __DIR__ . "./controllers/obtener-notificaciones-familiar.php";
 
 // Obtener todas las notificaciones de los pacientes vinculados
 $notificaciones = obtenerNotificacionesFamiliar($_SESSION['user_id']);
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <title>Notificaciones de mis pacientes</title>
 
+    <!-- CSS globales -->
     <link rel="stylesheet" href="/assets/css/color.css">
     <link rel="stylesheet" href="/assets/css/global.css">
     <link rel="stylesheet" href="/assets/css/header.css">
+    <link rel="stylesheet" href="/assets/css/footer.css">
     <link rel="stylesheet" href="/assets/css/menu.css">
+    <link rel="stylesheet" href="/assets/css/banner.css">
+    <link rel="stylesheet" href="/assets/css/notificaciones.css">
+    <link rel="stylesheet" href="/assets/css/panel-familiar.css">
 </head>
 
 <body>
 
+<!-- HEADER -->
 <?php include "../includes/header.php"; ?>
+
+<!-- BOTÓN MODO OSCURO -->
+<button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
+
+<!-- MENÚ FAMILIAR -->
 <?php include "../includes/menu-familiar.php"; ?>
-    <!-- BOTÓN MODO OSCURO -->
-    <button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
 
+<!-- MENÚ RESPONSIVE -->
+<?php include "../includes/responsive-menu.php"; ?>
 
-<div class="contenedor-notificaciones">
+<!-- BANNER PRIVADO -->
+<?php include "../includes/private-banner.php"; ?>
+
+<div class="panel-familiar-container contenedor-notificaciones">
+
     <h1 class="titulo-notificaciones">🔔 Notificaciones de mis pacientes</h1>
 
     <?php if (empty($notificaciones)): ?>
@@ -48,6 +56,10 @@ $notificaciones = obtenerNotificacionesFamiliar($_SESSION['user_id']);
     <?php else: ?>
         <?php foreach ($notificaciones as $n): ?>
             <div class="notificacion <?php echo $n['leida'] ? 'leida' : 'no-leida'; ?>">
+
+                <p class="paciente">
+                    👤 <strong><?php echo $n['paciente_nombre']; ?></strong>
+                </p>
 
                 <p class="tipo">
                     <?php echo ucfirst(str_replace("_", " ", $n['tipo'])); ?>
@@ -62,7 +74,7 @@ $notificaciones = obtenerNotificacionesFamiliar($_SESSION['user_id']);
                 </p>
 
                 <?php if (!$n['leida']): ?>
-                    <form action="../controllers/marcar-notificacion.php" method="POST">
+                    <form action="/controllers/marcar-notificacion.php" method="POST">
                         <input type="hidden" name="id" value="<?php echo $n['id']; ?>">
                         <button type="submit" class="btn-leida">Marcar como leída</button>
                     </form>
@@ -73,7 +85,11 @@ $notificaciones = obtenerNotificacionesFamiliar($_SESSION['user_id']);
     <?php endif; ?>
 
 </div>
-    <script src="/assets/js/theme.js"></script>
+
+<!-- FOOTER -->
+<?php include "../includes/footer.php"; ?>
+
+<script src="/assets/js/theme.js"></script>
 
 </body>
 </html>

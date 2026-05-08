@@ -1,3 +1,9 @@
+<?php
+if (!isset($_SESSION["rol"]) || $_SESSION["rol"] !== "paciente") {
+    return; 
+}
+?>
+
 <nav id="private-menu" class="private-menu-header" aria-label="Menú privado">
     <ul class="menu-list">
 

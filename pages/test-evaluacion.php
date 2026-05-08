@@ -11,38 +11,41 @@
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- CSS -->
+    <!-- CSS GLOBAL -->
     <link rel="stylesheet" href="/assets/css/color.css">
     <link rel="stylesheet" href="/assets/css/global.css">
     <link rel="stylesheet" href="/assets/css/header.css">
-    <link rel="stylesheet" href="/assets/css/footer.css">
     <link rel="stylesheet" href="/assets/css/menu.css">
     <link rel="stylesheet" href="/assets/css/banner.css">
+    <link rel="stylesheet" href="/assets/css/footer.css">
+
+    <!-- CSS TEST -->
     <link rel="stylesheet" href="/assets/css/test.css">
 </head>
 
 <body>
 
     <!-- HEADER -->
-    <?php include '../includes/header.php'; ?>
+    <?php include $_SERVER["DOCUMENT_ROOT"] . '/includes/header.php'; ?>
+
+    <!-- MENÚ PRIVADO -->
+    <?php include $_SERVER["DOCUMENT_ROOT"] . '/includes/private-menu.php'; ?>
+
+    <!-- MENÚ RESPONSIVE -->
+    <?php include $_SERVER["DOCUMENT_ROOT"] . '/includes/responsive-menu.php'; ?>
+
+    <!-- BANNER PRIVADO -->
+    <?php include $_SERVER["DOCUMENT_ROOT"] . '/includes/private-banner.php'; ?>
 
     <!-- BOTÓN MODO OSCURO -->
     <button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
 
-    <!-- MENÚ PRIVADO -->
-    <?php include '../includes/private-menu.php'; ?>
-
-    <!-- MENÚ RESPONSIVE -->
-    <?php include '../includes/responsive-menu.php'; ?>
-
-    <!-- BANNER PRIVADO -->
-    <?php include '../includes/private-banner.php'; ?>
-
-    <h1 id="tituloTest">Test Cognitivo</h1>
-    <p class="subtitle" id="descripcionTest">Cargando...</p>
-
-    <!-- CONTENIDO PRINCIPAL -->
     <main class="container test-container">
+
+        <div class="text-center mt-4">
+            <h1 id="tituloTest" class="section-title">Test Cognitivo</h1>
+            <p class="subtitle" id="descripcionTest">Cargando...</p>
+        </div>
 
         <!-- Estímulo -->
         <section id="estimulo" class="estimulo" style="display:none;"></section>
@@ -54,25 +57,33 @@
         <section id="opciones" class="test-options"></section>
 
         <!-- Botón siguiente -->
-        <button class="btn btn-primary mt-4 px-4 py-2" id="btnSiguiente" style="display:none;">
-            Siguiente
-        </button>
+        <div class="text-center">
+            <button class="btn btn-primary mt-4 px-4 py-2" id="btnSiguiente" style="display:none;">
+                Siguiente
+            </button>
+        </div>
+
+        <!-- Loader -->
+        <div id="loader" class="text-center mt-4" style="display:none;">
+            <div class="spinner-border text-primary"></div>
+            <p class="mt-2">Cargando...</p>
+        </div>
 
     </main>
 
     <!-- BOTÓN VOLVER -->
-    <div class="text-center mt-4">
+    <div class="text-center mt-4 mb-5">
         <button class="btn btn-secondary px-4 py-2" onclick="location.href='/pages/test.php'">
             Volver
         </button>
     </div>
 
     <!-- FOOTER -->
-    <?php include '../includes/footer.php' ?>
+    <?php include $_SERVER["DOCUMENT_ROOT"] . '/includes/footer.php'; ?>
 
     <!-- JS -->
     <script src="/assets/js/theme.js"></script>
-    <script src="../assets/js/test-evaluacion.js"></script>
+    <script src="/assets/js/test-evaluacion.js"></script>
 
 </body>
 

@@ -42,7 +42,7 @@
 
     <main class="container mt-4">
 
-        <p class="subtitle">Aliimetación para pacientes</p>
+        <p class="subtitle">Alimetación para pacientes</p>
 
         <section class="content-block">
             <p>La alimentación adecuada es fundamental para mantener la salud y el bienestar de 

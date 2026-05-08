@@ -7,12 +7,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Notificaciones</title>
 
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="../assets/css/global.css">
-    <link rel="stylesheet" href="../assets/css/color.css">
-    <link rel="stylesheet" href="../assets/css/header.css">
-    <link rel="stylesheet" href="../assets/css/footer.css">
+    <!-- CSS GLOBAL -->
+    <link rel="stylesheet" href="/assets/css/global.css">
+    <link rel="stylesheet" href="/assets/css/color.css">
+    <link rel="stylesheet" href="/assets/css/header.css">
+    <link rel="stylesheet" href="/assets/css/footer.css">
+    <link rel="stylesheet" href="/assets/css/admin.css">
+    <link rel="stylesheet" href="/assets/css/menu.css">
+
 
     <style>
         .admin-table {
@@ -32,94 +37,103 @@
 
 <body>
 
-<?php include "../includes/header.php"; ?>
-<?php include "../includes/menu-admin.php"; ?>
+    <!-- HEADER -->
+    <?php include $_SERVER["DOCUMENT_ROOT"] . "/includes/header.php"; ?>
 
-<main class="admin-content flex-grow-1">
+    <!-- MENÚ ADMIN -->
+    <?php include $_SERVER["DOCUMENT_ROOT"] . "/includes/menu-admin.php"; ?>
 
-    <h1 class="text-center mb-4">Gestión de Notificaciones</h1>
+    <!-- MENÚ RESPONSIVE -->
+    <?php include $_SERVER["DOCUMENT_ROOT"] . "/includes/responsive-menu.php"; ?>
 
-    <!-- FILTROS -->
-    <div class="card p-3 mb-4">
-        <h5>Filtros</h5>
+    <main class="admin-content flex-grow-1">
 
-        <div class="row g-3">
+        <h1 class="admin-title text-center mb-4">Gestión de Notificaciones</h1>
 
-            <div class="col-md-4">
-                <label class="form-label">Usuario</label>
-                <select id="filtroUsuario" class="form-select">
-                    <option value="">Todos</option>
-                </select>
+        <!-- FILTROS -->
+        <div class="admin-card card p-3 mb-4">
+            <h5>Filtros</h5>
+
+            <div class="row g-3">
+
+                <div class="col-md-4">
+                    <label class="form-label">Usuario</label>
+                    <select id="filtroUsuario" class="form-select">
+                        <option value="">Todos</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Fecha</label>
+                    <input type="date" id="filtroFecha" class="form-control">
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Estado</label>
+                    <select id="filtroEstado" class="form-select">
+                        <option value="">Todos</option>
+                        <option value="1">Leída</option>
+                        <option value="0">No leída</option>
+                    </select>
+                </div>
+
             </div>
 
-            <div class="col-md-4">
-                <label class="form-label">Fecha</label>
-                <input type="date" id="filtroFecha" class="form-control">
+            <div class="text-end mt-3">
+                <button class="btn btn-primary" onclick="cargarNotificaciones()">Aplicar filtros</button>
+                <button class="btn btn-secondary" onclick="limpiarFiltros()">Limpiar</button>
             </div>
-
-            <div class="col-md-4">
-                <label class="form-label">Estado</label>
-                <select id="filtroEstado" class="form-select">
-                    <option value="">Todos</option>
-                    <option value="1">Leída</option>
-                    <option value="0">No leída</option>
-                </select>
-            </div>
-
         </div>
 
-        <div class="text-end mt-3">
-            <button class="btn btn-primary" onclick="cargarNotificaciones()">Aplicar filtros</button>
-            <button class="btn btn-secondary" onclick="limpiarFiltros()">Limpiar</button>
+        <!-- TABLA -->
+        <div class="admin-table table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Usuario</th>
+                        <th>Mensaje</th>
+                        <th>Fecha</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaNotificaciones">
+                    <tr><td colspan="6" class="text-center">Cargando notificaciones...</td></tr>
+                </tbody>
+            </table>
         </div>
-    </div>
 
-    <!-- TABLA -->
-    <div class="admin-table table-responsive">
-        <table class="table table-hover align-middle">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Usuario</th>
-                    <th>Mensaje</th>
-                    <th>Fecha</th>
-                    <th>Estado</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody id="tablaNotificaciones">
-                <tr><td colspan="6" class="text-center">Cargando notificaciones...</td></tr>
-            </tbody>
-        </table>
-    </div>
+        <div class="text-center mt-4">
+            <button class="btn btn-secondary" onclick="location.href='index.php'">Volver</button>
+        </div>
 
-    <div class="text-center mt-4">
-        <button class="btn btn-secondary" onclick="location.href='index.php'">Volver</button>
-    </div>
-</main>
+    </main>
 
-<?php include "../includes/footer.php"; ?>
+    <!-- FOOTER -->
+    <?php include $_SERVER["DOCUMENT_ROOT"] . "/includes/footer.php"; ?>
 
-<script>
-// ---------------------------------------------------------
-// Cargar notificaciones con filtros
-// ---------------------------------------------------------
-function cargarNotificaciones() {
+    <script>
+    // ---------------------------------------------------------
+    // Cargar notificaciones con filtros
+    // ---------------------------------------------------------
+    async function cargarNotificaciones() {
 
-    const usuario = document.getElementById("filtroUsuario").value;
-    const fecha = document.getElementById("filtroFecha").value;
-    const estado = document.getElementById("filtroEstado").value;
+        const usuario = document.getElementById("filtroUsuario").value;
+        const fecha = document.getElementById("filtroFecha").value;
+        const estado = document.getElementById("filtroEstado").value;
 
-    const params = new URLSearchParams();
+        const params = new URLSearchParams();
 
-    if (usuario) params.append("usuario_id", usuario);
-    if (fecha) params.append("fecha", fecha);
-    if (estado !== "") params.append("estado", estado);
+        if (usuario) params.append("usuario_id", usuario);
+        if (fecha) params.append("fecha", fecha);
+        if (estado !== "") params.append("estado", estado);
 
-    fetch("../controllers/admin-notificaciones.php?action=listar&" + params.toString())
-        .then(res => res.json())
-        .then(data => {
-            const tabla = document.getElementById("tablaNotificaciones");
+        const tabla = document.getElementById("tablaNotificaciones");
+
+        try {
+            const res = await fetch("/controllers/admin-notificaciones.php?action=listar&" + params.toString());
+            const data = await res.json();
 
             if (!data.success) {
                 tabla.innerHTML = `<tr><td colspan="6" class="text-danger text-center">${data.error}</td></tr>`;
@@ -129,65 +143,70 @@ function cargarNotificaciones() {
             tabla.innerHTML = "";
 
             data.notificaciones.forEach(n => {
-                const tr = document.createElement("tr");
-
-                tr.innerHTML = `
-                    <td>${n.id}</td>
-                    <td>${n.usuario}</td>
-                    <td>${n.mensaje}</td>
-                    <td>${n.fecha}</td>
-                    <td>
-                        <span class="badge ${n.leida == 1 ? 'badge-leida' : 'badge-no-leida'}">
-                            ${n.leida == 1 ? 'Leída' : 'No leída'}
-                        </span>
-                    </td>
-                    <td>
-                        <button class="btn btn-sm btn-danger" onclick="eliminar(${n.id})">Eliminar</button>
-                    </td>
+                tabla.innerHTML += `
+                    <tr>
+                        <td>${n.id}</td>
+                        <td>${n.usuario}</td>
+                        <td>${n.mensaje}</td>
+                        <td>${n.fecha}</td>
+                        <td>
+                            <span class="badge ${n.leida == 1 ? 'badge-leida' : 'badge-no-leida'}">
+                                ${n.leida == 1 ? 'Leída' : 'No leída'}
+                            </span>
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-danger" onclick="eliminar(${n.id})">Eliminar</button>
+                        </td>
+                    </tr>
                 `;
-
-                tabla.appendChild(tr);
             });
-        });
-}
 
-// ---------------------------------------------------------
-// Limpiar filtros
-// ---------------------------------------------------------
-function limpiarFiltros() {
-    document.getElementById("filtroUsuario").value = "";
-    document.getElementById("filtroFecha").value = "";
-    document.getElementById("filtroEstado").value = "";
-    cargarNotificaciones();
-}
+        } catch (err) {
+            tabla.innerHTML = `<tr><td colspan="6" class="text-danger text-center">Error al cargar notificaciones</td></tr>`;
+        }
+    }
 
-// ---------------------------------------------------------
-// Eliminar notificación
-// ---------------------------------------------------------
-function eliminar(id) {
-    if (!confirm("¿Eliminar esta notificación?")) return;
-
-    const formData = new FormData();
-    formData.append("id", id);
-
-    fetch("../controllers/admin-notificaciones.php?action=eliminar", {
-        method: "POST",
-        body: formData
-    })
-    .then(res => res.json())
-    .then(data => {
-        alert(data.message || data.error);
+    // ---------------------------------------------------------
+    // Limpiar filtros
+    // ---------------------------------------------------------
+    function limpiarFiltros() {
+        document.getElementById("filtroUsuario").value = "";
+        document.getElementById("filtroFecha").value = "";
+        document.getElementById("filtroEstado").value = "";
         cargarNotificaciones();
-    });
-}
+    }
 
-// ---------------------------------------------------------
-// Cargar usuarios para el filtro
-// ---------------------------------------------------------
-function cargarUsuariosFiltro() {
-    fetch("../controllers/admin-obtener-usuario.php")
-        .then(res => res.json())
-        .then(data => {
+    // ---------------------------------------------------------
+    // Eliminar notificación
+    // ---------------------------------------------------------
+    async function eliminar(id) {
+        if (!confirm("¿Eliminar esta notificación?")) return;
+
+        try {
+            const res = await fetch("/controllers/admin-notificaciones.php?action=eliminar", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id })
+            });
+
+            const data = await res.json();
+
+            alert(data.message || data.error);
+            cargarNotificaciones();
+
+        } catch (err) {
+            alert("Error al eliminar la notificación");
+        }
+    }
+
+    // ---------------------------------------------------------
+    // Cargar usuarios para el filtro
+    // ---------------------------------------------------------
+    async function cargarUsuariosFiltro() {
+        try {
+            const res = await fetch("/controllers/admin-obtener-usuario.php");
+            const data = await res.json();
+
             if (!data.success) return;
 
             const select = document.getElementById("filtroUsuario");
@@ -198,14 +217,16 @@ function cargarUsuariosFiltro() {
                 opt.textContent = `${u.nombre} (${u.email})`;
                 select.appendChild(opt);
             });
-        });
-}
 
-// Inicializar
-cargarUsuariosFiltro();
-cargarNotificaciones();
+        } catch (err) {
+            console.error("Error cargando usuarios");
+        }
+    }
 
-</script>
+    // Inicializar
+    cargarUsuariosFiltro();
+    cargarNotificaciones();
+    </script>
 
 </body>
 </html>

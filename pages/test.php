@@ -24,21 +24,21 @@
 <body>
 
     <!-- HEADER -->
-    <?php include '../includes/header.php'; ?> 
+    <?php include "../includes/header.php"; ?> 
 
     <!-- BOTÓN MODO OSCURO -->
     <button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
 
     <!-- MENÚ PRIVADO -->
-    <?php include '../includes/private-menu.php'; ?>
+    <?php include "../includes/private-menu.php"; ?>
 
     <!-- MENÚ RESPONSIVE -->
-    <?php include '../includes/responsive-menu.php'; ?>
+    <?php include "../includes/responsive-menu.php"; ?>
 
     <!-- BANNER PRIVADO -->
-    <?php include '../includes/private-banner.php'; ?>
+    <?php include "../includes/private-banner.php"; ?>
 
-   <p class="subtitle">Selecciona un test para comenzar</p>
+    <p class="subtitle">Selecciona un test para comenzar</p>
         
     <div class="text-center mt-3">
         <button class="btn btn-info px-4 py-2" data-bs-toggle="modal" data-bs-target="#modalInstrucciones">
@@ -50,21 +50,21 @@
     <main class="container tests-container">
 
         <!-- TEST MEMORIA -->
-        <section class="test-card" onclick="location.href='test-evaluacion.php?test=memoria'" role="button"
+        <section class="test-card" onclick="location.href='/pages/test-evaluacion.php?test=memoria'" role="button"
             tabindex="0" aria-label="Test de memoria">
             <h3>🧠 Test de Memoria</h3>
             <p>Evalúa la capacidad de recordar información reciente.</p>
         </section>
 
         <!-- TEST ATENCIÓN -->
-        <section class="test-card" onclick="location.href='test-evaluacion.php?test=atencion'" role="button"
+        <section class="test-card" onclick="location.href='/pages/test-evaluacion.php?test=atencion'" role="button"
             tabindex="0" aria-label="Test de atención">
             <h3>🎯 Test de Atención</h3>
             <p>Mide la concentración y la atención sostenida.</p>
         </section>
 
         <!-- TEST ORIENTACIÓN -->
-        <section class="test-card" onclick="location.href='test-evaluacion.php?test=orientacion'" role="button"
+        <section class="test-card" onclick="location.href='/pages/test-evaluacion.php?test=orientacion'" role="button"
             tabindex="0" aria-label="Test de orientación">
             <h3>🧭 Test de Orientación</h3>
             <p>Evalúa la orientación en tiempo y espacio.</p>
@@ -110,7 +110,7 @@
     </div>
 
     <!-- FOOTER -->
-    <?php include '../includes/footer.php'; ?> 
+    <?php include "../includes/footer.php"; ?> 
 
     <!-- JS -->
     <script src="/assets/js/theme.js"></script>

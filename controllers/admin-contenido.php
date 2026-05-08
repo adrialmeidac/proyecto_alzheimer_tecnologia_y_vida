@@ -1,13 +1,7 @@
 <?php
 header("Content-Type: application/json");
-session_start();
+require_once "../middleware/admin.php"; // Seguridad unificada
 require_once "../models/bbdd.php";
-
-// Solo admin
-if (!isset($_SESSION["user_id"]) || $_SESSION["rol"] !== "admin") {
-    echo json_encode(["success" => false, "error" => "No autorizado"]);
-    exit;
-}
 
 $db = new Database();
 $conn = $db->connect();
@@ -20,7 +14,13 @@ switch ($action) {
     // LISTAR CONTENIDO
     // ---------------------------------------------------------
     case "listar":
-        $sql = $conn->query("SELECT * FROM contenido ORDER BY fecha DESC");
+
+        $sql = $conn->prepare("
+            SELECT id, titulo, descripcion, archivo, categoria, creado_en
+            FROM contenido
+            ORDER BY creado_en DESC
+        ");
+        $sql->execute();
         $data = $sql->fetchAll(PDO::FETCH_ASSOC);
 
         echo json_encode(["success" => true, "contenido" => $data]);
@@ -36,25 +36,52 @@ switch ($action) {
             exit;
         }
 
-        $titulo = $_POST["titulo"];
-        $descripcion = $_POST["descripcion"];
+        $titulo = trim($_POST["titulo"]);
+        $descripcion = trim($_POST["descripcion"]);
 
-        // Subir PDF
+        // Validar archivo
         $file = $_FILES["archivo"];
-        $nombrePDF = time() . "-" . basename($file["name"]);
-        $rutaPDF = "../assets/pdf/" . $nombrePDF;
+
+        if ($file["error"] !== 0) {
+            echo json_encode(["success" => false, "error" => "Error al subir archivo"]);
+            exit;
+        }
+
+        // Validar tipo MIME
+        $mime = mime_content_type($file["tmp_name"]);
+        if ($mime !== "application/pdf") {
+            echo json_encode(["success" => false, "error" => "Solo se permiten archivos PDF"]);
+            exit;
+        }
+
+        // Validar tamaño (máx 10MB)
+        if ($file["size"] > 10 * 1024 * 1024) {
+            echo json_encode(["success" => false, "error" => "El PDF es demasiado grande"]);
+            exit;
+        }
+
+        // Carpeta segura
+        $uploadDir = "../uploads/contenido/";
+        if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
+
+        // Nombre seguro
+        $nombrePDF = time() . "-" . preg_replace("/[^a-zA-Z0-9\.\-_]/", "", basename($file["name"]));
+        $rutaPDF = $uploadDir . $nombrePDF;
 
         if (!move_uploaded_file($file["tmp_name"], $rutaPDF)) {
-            echo json_encode(["success" => false, "error" => "Error al subir el PDF"]);
+            echo json_encode(["success" => false, "error" => "Error al guardar PDF"]);
             exit;
         }
 
         // Guardar en BD
-        $sql = $conn->prepare("INSERT INTO contenido (titulo, descripcion, archivo) VALUES (:t, :d, :a)");
+        $sql = $conn->prepare("
+            INSERT INTO contenido (titulo, descripcion, archivo)
+            VALUES (:t, :d, :a)
+        ");
         $sql->execute([
             ":t" => $titulo,
             ":d" => $descripcion,
-            ":a" => "/assets/pdf/" . $nombrePDF
+            ":a" => "/uploads/contenido/" . $nombrePDF
         ]);
 
         echo json_encode(["success" => true, "message" => "Contenido creado"]);
@@ -71,8 +98,8 @@ switch ($action) {
         }
 
         $id = $_POST["id"];
-        $titulo = $_POST["titulo"];
-        $descripcion = $_POST["descripcion"];
+        $titulo = trim($_POST["titulo"]);
+        $descripcion = trim($_POST["descripcion"]);
 
         // Obtener registro actual
         $sql = $conn->prepare("SELECT archivo FROM contenido WHERE id = :id");
@@ -89,18 +116,27 @@ switch ($action) {
         // Si sube un nuevo PDF
         if (isset($_FILES["archivo"]) && $_FILES["archivo"]["error"] === 0) {
 
+            // Validar tipo MIME
+            $mime = mime_content_type($_FILES["archivo"]["tmp_name"]);
+            if ($mime !== "application/pdf") {
+                echo json_encode(["success" => false, "error" => "Solo se permiten archivos PDF"]);
+                exit;
+            }
+
             // Borrar PDF anterior
             $rutaAnterior = ".." . $actual["archivo"];
             if (file_exists($rutaAnterior)) unlink($rutaAnterior);
 
             // Subir nuevo PDF
-            $file = $_FILES["archivo"];
-            $nombrePDF = time() . "-" . basename($file["name"]);
-            $rutaPDF = "../assets/pdf/" . $nombrePDF;
+            $uploadDir = "../uploads/contenido/";
+            if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
 
-            move_uploaded_file($file["tmp_name"], $rutaPDF);
+            $nombrePDF = time() . "-" . preg_replace("/[^a-zA-Z0-9\.\-_]/", "", basename($_FILES["archivo"]["name"]));
+            $rutaPDF = $uploadDir . $nombrePDF;
 
-            $archivoFinal = "/assets/pdf/" . $nombrePDF;
+            move_uploaded_file($_FILES["archivo"]["tmp_name"], $rutaPDF);
+
+            $archivoFinal = "/uploads/contenido/" . $nombrePDF;
         }
 
         // Actualizar BD
@@ -152,9 +188,6 @@ switch ($action) {
         echo json_encode(["success" => true, "message" => "Contenido eliminado"]);
         break;
 
-    // ---------------------------------------------------------
-    // ACCIÓN INVÁLIDA
-    // ---------------------------------------------------------
     default:
         echo json_encode(["success" => false, "error" => "Acción no válida"]);
 }

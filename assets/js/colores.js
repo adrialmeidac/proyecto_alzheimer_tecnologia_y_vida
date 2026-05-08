@@ -46,6 +46,8 @@ function detenerTemporizador() {
 startBtn.onclick = iniciarJuego;
 
 function iniciarJuego() {
+    startBtn.disabled = true;
+
     detenerTemporizador();
     iniciarTemporizador();
 
@@ -72,6 +74,7 @@ function siguienteNivel() {
 // Reproducir secuencia
 function reproducirSecuencia() {
     let i = 0;
+    bloqueado = true;
 
     const intervalo = setInterval(() => {
         iluminar(secuencia[i]);
@@ -115,6 +118,7 @@ function validar() {
     if (usuario[i] !== secuencia[i]) {
         detenerTemporizador();
         bloqueado = true;
+        startBtn.disabled = false;
         alert("Fallaste. Pulsa START para intentarlo de nuevo.");
         return;
     }
@@ -135,6 +139,7 @@ function validar() {
 function victoria() {
     detenerTemporizador();
     bloqueado = true;
+    startBtn.disabled = false;
 
     guardarResultadoBackend();
 
@@ -156,15 +161,21 @@ function guardarResultadoBackend() {
             tiempo: tiempo,
             puntuacion: nivel
         })
-    })
-    .then(res => res.json())
-    .then(data => {
-        console.log("Resultado guardado:", data);
-    })
-    .catch(err => {
-        console.error("Error al guardar resultado:", err);
     });
 }
 
 // Reiniciar juego
-resetBtn.addEventListener("click", iniciarJuego);
+resetBtn.addEventListener("click", reiniciarJuego);
+
+function reiniciarJuego() {
+    detenerTemporizador();
+    tiempo = 0;
+    timerEl.textContent = "Tiempo: 0s";
+
+    secuencia = [];
+    usuario = [];
+    nivel = 0;
+    bloqueado = false;
+
+    startBtn.disabled = false;
+}

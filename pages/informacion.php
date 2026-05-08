@@ -6,7 +6,11 @@ $db = new Database();
 $conn = $db->connect();
 
 // Obtener contenido dinámico
-$sql = $conn->query("SELECT * FROM contenido ORDER BY fecha DESC");
+$sql = $conn->query("
+    SELECT id, titulo, descripcion, archivo, categoria, creado_en
+    FROM contenido
+    ORDER BY creado_en DESC
+");
 $documentos = $sql->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
@@ -44,15 +48,17 @@ $documentos = $sql->fetchAll(PDO::FETCH_ASSOC);
         include '../includes/public-menu.php';
     } elseif ($_SESSION["rol"] === "admin") {
         include '../includes/menu-admin.php';
+    } elseif (in_array($_SESSION["rol"], ["familiar", "cuidador"])) {
+        include '../includes/menu-familiar.php';
     } else {
-        include '../includes/private-menu.php';
+        include '../includes/private-menu.php'; // paciente
     }
     ?>
 
     <!-- MENÚ RESPONSIVE -->
     <?php include '../includes/responsive-menu.php'; ?>
 
-    <!-- BANNER PÚBLICO -->
+    <!-- BANNER PÚBLICO (solo si no hay sesión) -->
     <?php include '../includes/public-banner.php'; ?>
 
     <h1>Información sobre el Alzheimer</h1>

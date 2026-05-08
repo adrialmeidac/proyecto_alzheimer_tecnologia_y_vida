@@ -35,6 +35,7 @@
     <?php
         // Obtener token desde la URL
         $token = $_GET["token"] ?? null;
+        $tokenValido = $token && preg_match("/^[a-f0-9]{64}$/", $token);
     ?>
 
     <main class="login-wrapper d-flex justify-content-center align-items-start">
@@ -42,8 +43,9 @@
 
             <h2 class="text-center mb-3">Restablecer contraseña</h2>
 
-            <?php if (!$token): ?>
+            <?php if (!$tokenValido): ?>
                 <p class="text-danger text-center">Token inválido o faltante.</p>
+
             <?php else: ?>
 
                 <p class="text-center mb-3">
@@ -55,12 +57,14 @@
                     <input type="hidden" id="token" value="<?= htmlspecialchars($token) ?>">
 
                     <label for="password">Nueva contraseña</label>
-                    <input type="password" id="password" placeholder="Introduce tu nueva contraseña">
+                    <input type="password" id="password" placeholder="Introduce tu nueva contraseña" required minlength="6">
 
                     <label for="password2">Repetir contraseña</label>
-                    <input type="password" id="password2" placeholder="Repite tu nueva contraseña">
+                    <input type="password" id="password2" placeholder="Repite tu nueva contraseña" required minlength="6">
 
-                    <button type="submit" class="main-btn w-100 mt-4">Guardar nueva contraseña</button>
+                    <button type="submit" id="btnSubmit" class="main-btn w-100 mt-4">
+                        Guardar nueva contraseña
+                    </button>
 
                 </form>
 
@@ -85,11 +89,12 @@
             const password2 = document.getElementById("password2").value.trim();
             const token = document.getElementById("token").value;
             const mensaje = document.getElementById("mensaje");
+            const btn = document.getElementById("btnSubmit");
 
             mensaje.innerHTML = "";
 
-            if (!password || !password2) {
-                mensaje.innerHTML = "<p class='text-danger'>Debes completar todos los campos.</p>";
+            if (password.length < 6) {
+                mensaje.innerHTML = "<p class='text-danger'>La contraseña debe tener al menos 6 caracteres.</p>";
                 return;
             }
 
@@ -97,6 +102,9 @@
                 mensaje.innerHTML = "<p class='text-danger'>Las contraseñas no coinciden.</p>";
                 return;
             }
+
+            btn.disabled = true;
+            btn.innerText = "Procesando...";
 
             try {
                 const response = await fetch("/controllers/reset-password.php", {
@@ -124,6 +132,9 @@
             } catch (error) {
                 mensaje.innerHTML = "<p class='text-danger'>Error al procesar la solicitud.</p>";
             }
+
+            btn.disabled = false;
+            btn.innerText = "Guardar nueva contraseña";
         });
     </script>
 

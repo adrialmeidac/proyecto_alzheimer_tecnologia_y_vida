@@ -1,22 +1,14 @@
 <?php
 header("Content-Type: application/json");
-session_start();
-require_once "../models/bbdd.php";
 
-// Solo admin
-if (!isset($_SESSION["user_id"]) || $_SESSION["rol"] !== "admin") {
-    http_response_code(401);
-    echo json_encode(["success" => false, "error" => "No autorizado"]);
-    exit;
-}
-
-$db = new Database();
-$conn = $db->connect();
+require_once "../middleware/admin.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/models/bbdd.php";
 
 // Leer JSON
-$data = json_decode(file_get_contents("php://input"), true);
-$id = $data["id"] ?? null;
-$nuevoRol = $data["rol"] ?? null;
+$input = json_decode(file_get_contents("php://input"), true);
+
+$id = $input["id"] ?? null;
+$nuevoRol = $input["rol"] ?? null;
 
 // Validar ID
 if (!$id || !filter_var($id, FILTER_VALIDATE_INT)) {
@@ -25,7 +17,12 @@ if (!$id || !filter_var($id, FILTER_VALIDATE_INT)) {
     exit;
 }
 
-// Validar rol permitido
+$id = (int)$id;
+
+// Normalizar rol
+$nuevoRol = strtolower(trim($nuevoRol));
+
+// Roles permitidos
 $rolesPermitidos = ["paciente", "familiar", "cuidador", "admin"];
 
 if (!in_array($nuevoRol, $rolesPermitidos)) {
@@ -35,14 +32,17 @@ if (!in_array($nuevoRol, $rolesPermitidos)) {
 }
 
 // Evitar que un admin se cambie su propio rol
-if ($id == $_SESSION["user_id"]) {
+if ($id === $_SESSION["user_id"]) {
     http_response_code(403);
     echo json_encode(["success" => false, "error" => "No puedes cambiar tu propio rol"]);
     exit;
 }
 
 try {
-    // Verificar que el usuario existe
+    $db = new Database();
+    $conn = $db->connect();
+
+    // Verificar existencia del usuario
     $stmt = $conn->prepare("SELECT id FROM usuarios WHERE id = :id");
     $stmt->execute([":id" => $id]);
 
@@ -59,6 +59,7 @@ try {
         ":id" => $id
     ]);
 
+    http_response_code(200);
     echo json_encode([
         "success" => true,
         "message" => "Rol actualizado correctamente",

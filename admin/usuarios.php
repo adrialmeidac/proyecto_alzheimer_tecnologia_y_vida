@@ -1,201 +1,240 @@
-<?php require_once "../middleware/admin.php"; ?>
-
+<?php
+session_start();
+if (!isset($_SESSION["user_id"]) || $_SESSION["rol"] !== "admin") {
+    header("Location: ../index.php");
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Usuarios</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/global.css">
+    <link rel="stylesheet" href="/assets/css/color.css">
+    <link rel="stylesheet" href="/assets/css/header.css">
+    <link rel="stylesheet" href="/assets/css/footer.css">
+    <link rel="stylesheet" href="/assets/css/admin.css">
+    <link rel="stylesheet" href="/assets/css/menu.css">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="../assets/css/global.css">
-    <link rel="stylesheet" href="../assets/css/color.css">
-    <link rel="stylesheet" href="../assets/css/header.css">
-    <link rel="stylesheet" href="../assets/css/footer.css">
-
-    <style>
-        .admin-table {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: var(--shadow);
-        }
-        .role-badge {
-            padding: 5px 10px;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            color: white;
-        }
-        .role-admin { background: #198754; }
-        .role-paciente { background: #0d6efd; }
-        .role-familiar { background: #6f42c1; }
-        .role-cuidador { background: #fd7e14; }
-    </style>
 </head>
 
-<body>
+<body class="bg-light">
 
-<?php include "../includes/header.php"; ?>
-<?php include "../includes/menu-admin.php"; ?>
+<div class="container py-4">
 
-<main class="admin-content flex-grow-1">
-    <h1 class="text-center mb-4">Gestión de Usuarios</h1>
+    <h2 class="mb-4">Gestión de Usuarios</h2>
 
-    <div class="admin-table table-responsive">
-        <table class="table table-hover align-middle">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Email</th>
-                    <th>Nombre</th>
-                    <th>Rol</th>
-                    <th>Actividades</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody id="tablaUsuarios">
-                <tr><td colspan="6" class="text-center">Cargando usuarios...</td></tr>
-            </tbody>
-        </table>
+    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalCrear">
+        Crear Usuario
+    </button>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+
+            <table class="table table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Rol</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaUsuarios"></tbody>
+            </table>
+
+        </div>
     </div>
-
-    <div class="text-center mt-4">
-        <button class="btn btn-secondary" onclick="location.href='index.php'">Volver</button>
-    </div>
-</main>
-
-<?php include "../includes/footer.php"; ?>
-
-<!-- MODAL CAMBIAR ROL -->
-<div class="modal fade" id="modalCambiarRol" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-
-      <div class="modal-header">
-        <h5 class="modal-title">Cambiar Rol del Usuario</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-
-      <div class="modal-body">
-        <input type="hidden" id="usuarioId">
-
-        <label class="form-label">Selecciona el nuevo rol:</label>
-        <select id="nuevoRol" class="form-select">
-            <option value="paciente">Paciente</option>
-            <option value="familiar">Familiar</option>
-            <option value="cuidador">Cuidador</option>
-            <option value="admin">Administrador</option>
-        </select>
-      </div>
-
-      <div class="modal-footer">
-        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button class="btn btn-primary" onclick="guardarNuevoRol()">Guardar cambios</button>
-      </div>
-
-    </div>
-  </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- ============================
+     MODAL CREAR
+============================= -->
+<div class="modal fade" id="modalCrear">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="formCrear">
+                <div class="modal-header">
+                    <h5 class="modal-title">Crear Usuario</h5>
+                </div>
+                <div class="modal-body">
+
+                    <input class="form-control mb-2" name="nombre" placeholder="Nombre" required>
+                    <input class="form-control mb-2" name="email" placeholder="Email" required>
+                    <input class="form-control mb-2" name="password" placeholder="Contraseña" required>
+
+                    <select class="form-select" name="rol" required>
+                        <option value="paciente">Paciente</option>
+                        <option value="familiar">Familiar</option>
+                        <option value="cuidador">Cuidador</option>
+                        <option value="admin">Administrador</option>
+                    </select>
+
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button class="btn btn-primary">Crear</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- ============================
+     MODAL EDITAR
+============================= -->
+<div class="modal fade" id="modalEditar">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="formEditar">
+                <div class="modal-header">
+                    <h5 class="modal-title">Editar Usuario</h5>
+                </div>
+                <div class="modal-body">
+
+                    <input type="hidden" name="id" id="edit_id">
+
+                    <input class="form-control mb-2" name="nombre" id="edit_nombre" required>
+                    <input class="form-control mb-2" name="email" id="edit_email" required>
+
+                    <select class="form-select" name="rol" id="edit_rol" required>
+                        <option value="paciente">Paciente</option>
+                        <option value="familiar">Familiar</option>
+                        <option value="cuidador">Cuidador</option>
+                        <option value="admin">Administrador</option>
+                    </select>
+
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button class="btn btn-primary">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+    <!-- BOTÓN VOLVER -->
+    <div class="text-center mt-4">
+        <button class="btn btn-secondary px-4 py-2" onclick="location.href='/admin/index.php'">
+            Volver
+        </button>
+    </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-// Cargar usuarios desde backend
-fetch("../controllers/admin-obtener-usuarios.php")
-    .then(res => res.json())
-    .then(data => {
-        const tabla = document.getElementById("tablaUsuarios");
+// ===============================
+// LISTAR
+// ===============================
+function cargarUsuarios() {
+    fetch("../controllers/admin-usuarios.php?action=listar")
+        .then(r => r.json())
+        .then(data => {
+            const tbody = document.getElementById("tablaUsuarios");
+            tbody.innerHTML = "";
 
-        if (!data.success) {
-            tabla.innerHTML = `<tr><td colspan="6" class="text-danger text-center">${data.error}</td></tr>`;
-            return;
-        }
-
-        tabla.innerHTML = "";
-
-        data.usuarios.forEach(u => {
-            const tr = document.createElement("tr");
-
-            tr.innerHTML = `
-                <td>${u.id}</td>
-                <td>${u.email}</td>
-                <td>${u.nombre}</td>
-                <td>
-                    <span class="role-badge role-${u.rol}">
-                        ${u.rol}
-                    </span>
-                </td>
-                <td>${u.total_actividades}</td>
-                <td>
-                    <button class="btn btn-sm btn-warning" onclick="cambiarRol(${u.id})">Cambiar rol</button>
-                    <button class="btn btn-sm btn-danger" onclick="eliminarUsuario(${u.id})">Eliminar</button>
-                </td>
-            `;
-
-            tabla.appendChild(tr);
+            data.usuarios.forEach(u => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${u.id}</td>
+                        <td>${u.nombre}</td>
+                        <td>${u.email}</td>
+                        <td>${u.rol}</td>
+                        <td>
+                            <button class="btn btn-warning btn-sm" onclick="abrirEditar(${u.id})">Editar</button>
+                            <button class="btn btn-danger btn-sm" onclick="eliminarUsuario(${u.id})">Eliminar</button>
+                        </td>
+                    </tr>
+                `;
+            });
         });
-    })
-    .catch(err => {
-        console.error(err);
-        document.getElementById("tablaUsuarios").innerHTML =
-            `<tr><td colspan="6" class="text-danger text-center">Error al cargar usuarios</td></tr>`;
-    });
-
-// Modal Bootstrap
-let modalCambiarRol = null;
-
-document.addEventListener("DOMContentLoaded", () => {
-    modalCambiarRol = new bootstrap.Modal(document.getElementById("modalCambiarRol"));
-});
-
-// Abrir modal
-function cambiarRol(id) {
-    document.getElementById("usuarioId").value = id;
-    modalCambiarRol.show();
 }
 
-// Guardar nuevo rol
-function guardarNuevoRol() {
-    const id = document.getElementById("usuarioId").value;
-    const rol = document.getElementById("nuevoRol").value;
+// ===============================
+// CREAR
+// ===============================
+document.getElementById("formCrear").addEventListener("submit", e => {
+    e.preventDefault();
 
-    fetch("../controllers/admin-cambiar-rol.php", {
+    const datos = Object.fromEntries(new FormData(e.target));
+
+    fetch("../controllers/admin-usuarios.php?action=crear", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id, rol })
+        body: JSON.stringify(datos)
     })
-    .then(res => res.json())
+    .then(r => r.json())
     .then(data => {
-        alert(data.message || data.error);
-
-        if (data.success) {
-            modalCambiarRol.hide();
-            location.reload();
-        }
-    })
-    .catch(err => {
-        console.error(err);
-        alert("Error al actualizar el rol");
+        alert(data.message);
+        cargarUsuarios();
     });
-}
+});
 
-// Eliminar usuario
-function eliminarUsuario(id) {
-    if (!confirm("¿Eliminar este usuario? Esta acción no se puede deshacer.")) return;
-
-    fetch("../controllers/admin-eliminar-usuario.php", {
+// ===============================
+// ABRIR MODAL EDITAR
+// ===============================
+function abrirEditar(id) {
+    fetch("../controllers/admin-usuarios.php?action=obtener", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id })
     })
-    .then(res => res.json())
+    .then(r => r.json())
     .then(data => {
-        alert(data.message || data.error);
-        location.reload();
+        const u = data.usuario;
+
+        document.getElementById("edit_id").value = u.id;
+        document.getElementById("edit_nombre").value = u.nombre;
+        document.getElementById("edit_email").value = u.email;
+        document.getElementById("edit_rol").value = u.rol;
+
+        new bootstrap.Modal(document.getElementById("modalEditar")).show();
     });
 }
+
+// ===============================
+// EDITAR
+// ===============================
+document.getElementById("formEditar").addEventListener("submit", e => {
+    e.preventDefault();
+
+    const datos = Object.fromEntries(new FormData(e.target));
+
+    fetch("../controllers/admin-usuarios.php?action=editar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(datos)
+    })
+    .then(r => r.json())
+    .then(data => {
+        alert(data.message);
+        cargarUsuarios();
+    });
+});
+
+// ===============================
+// ELIMINAR
+// ===============================
+function eliminarUsuario(id) {
+    if (!confirm("¿Eliminar este usuario?")) return;
+
+    fetch("../controllers/admin-usuarios.php?action=eliminar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id })
+    })
+    .then(r => r.json())
+    .then(data => {
+        alert(data.message);
+        cargarUsuarios();
+    });
+}
+
+cargarUsuarios();
 </script>
 
 </body>

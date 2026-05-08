@@ -24,19 +24,19 @@
 <body>
 
     <!-- HEADER -->
-    <?php include '../includes/header.php'; ?>
+    <?php include "../includes/header.php"; ?>
 
     <!-- BOTÓN MODO OSCURO -->
     <button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
 
     <!-- MENÚ PRIVADO -->
-    <?php include '../includes/private-menu.php'; ?>
+    <?php include "../includes/private-menu.php"; ?>
 
     <!-- MENÚ RESPONSIVE -->
-    <?php include '../includes/responsive-menu.php'; ?>
+    <?php include "../includes/responsive-menu.php"; ?>
 
     <!-- BANNER PRIVADO -->
-    <?php include '../includes/private-banner.php'; ?>
+    <?php include "../includes/private-banner.php"; ?>
 
     <p class="subtitle">Selecciona un juego para comenzar</p>
 
@@ -45,6 +45,7 @@
 
         <div class="row g-4">
 
+            <!-- ROMPECABEZAS -->
             <div class="col-12 col-md-6 col-lg-4">
                 <section class="game-card" onclick="location.href='/pages/rompecabezas.php'">
                     <h3>🧩 Rompecabezas</h3>
@@ -52,6 +53,7 @@
                 </section>
             </div>
 
+            <!-- MEMORIA -->
             <div class="col-12 col-md-6 col-lg-4">
                 <section class="game-card" onclick="location.href='/pages/memoria.php'">
                     <h3>🧠 Memoria</h3>
@@ -59,6 +61,7 @@
                 </section>
             </div>
 
+            <!-- COLORES -->
             <div class="col-12 col-md-6 col-lg-4">
                 <section class="game-card" onclick="location.href='/pages/colores.php'">
                     <h3>🎨 Secuencia de Colores</h3>
@@ -78,7 +81,7 @@
     </div>
 
     <!-- FOOTER -->
-    <?php include '../includes/footer.php'; ?>
+    <?php include "../includes/footer.php"; ?>
 
     <!-- JS -->
     <script src="/assets/js/theme.js"></script>

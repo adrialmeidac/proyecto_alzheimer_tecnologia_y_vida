@@ -38,8 +38,9 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 try {
     // Buscar usuario
     $stmt = $conn->prepare("SELECT id, nombre, email, password, rol, perfil_completado 
-                            FROM usuarios 
-                            WHERE email = :email LIMIT 1");
+                        FROM usuarios 
+                        WHERE email = :email 
+                        LIMIT 1");
     $stmt->execute([":email" => $email]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -56,56 +57,48 @@ try {
         exit;
     }
 
-    // Crear sesión
-    $_SESSION["user_id"] = $user["id"];
-    $_SESSION["nombre"] = $user["nombre"];
-    $_SESSION["email"] = $user["email"];
-    $_SESSION["rol"] = $user["rol"];
-    $_SESSION["perfil_completado"] = $user["perfil_completado"];
+// Crear sesión
+$_SESSION["user_id"] = $user["id"];
+$_SESSION["nombre"] = $user["nombre"];
+$_SESSION["email"] = $user["email"];
+$_SESSION["rol"] = $user["rol"];
+$_SESSION["perfil_completado"] = $user["perfil_completado"];
 
-    // ============================================
-    // AÑADIDO: OBTENER EL PACIENTE_ID REAL
-    // ============================================
-    if ($user["rol"] === "paciente") {
-        $sqlPaciente = $conn->prepare("SELECT id FROM pacientes WHERE usuario_id = ?");
-        $sqlPaciente->execute([$user["id"]]);
-        $paciente = $sqlPaciente->fetch(PDO::FETCH_ASSOC);
+    // Redirecciones según rol
+// Redirecciones según rol
+if ($user["rol"] === "paciente") {
 
-        if ($paciente) {
-            $_SESSION["paciente_id"] = $paciente["id"];
-        }
+    // Si el paciente ya completó su perfil → dashboard
+    if (!empty($user["perfil_completado"]) && $user["perfil_completado"] == 1) {
+        $redirect = "/pages/dashboard.php";
+    } 
+    // Si NO completó su perfil → datos personales
+    else {
+        $redirect = "/pages/datos-personales.php";
     }
+}
 
-    // REDIRECCIÓN SEGÚN ROL Y PERFIL COMPLETADO
-    $redirect = "/pages/dashboard.php"; // fallback
+if ($user["rol"] === "familiar" || $user["rol"] === "cuidador") {
+    $redirect = "/pages/dashboardFamiliar.php";
+}
 
-    if ($user["rol"] === "admin") {
-        $redirect = "/admin/index.php";
-
-    } elseif ($user["rol"] === "paciente") {
-
-        if ($user["perfil_completado"] == 0) {
-            $redirect = "/pages/datos-personales.php";
-        } else {
-            $redirect = "/pages/dashboard.php";
-        }
-
-    } elseif ($user["rol"] === "familiar" || $user["rol"] === "cuidador") {
-
-        if ($user["perfil_completado"] == 0) {
-            $redirect = "/pages/registro_familiar.php";
-        } else {
-            $redirect = "/pages/dashboard.php";
-        }
-    }
+if ($user["rol"] === "admin") {
+    $redirect = "/admin/index.php";
+}
 
     echo json_encode([
         "success" => true,
-        "redirect" => $redirect
+        "message" => "Inicio de sesión exitoso",
+        "redirect" => $redirect,
+        "data" => [
+            "id" => $user["id"],
+            "nombre" => $user["nombre"],
+            "email" => $user["email"],
+            "rol" => $user["rol"]
+        ]
     ]);
 
 } catch (Exception $e) {
     http_response_code(500);
     echo json_encode(["success" => false, "error" => "Error interno del servidor"]);
 }
-

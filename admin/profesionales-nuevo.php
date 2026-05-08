@@ -8,12 +8,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nuevo Profesional</title>
 
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="../assets/css/global.css">
-    <link rel="stylesheet" href="../assets/css/color.css">
-    <link rel="stylesheet" href="../assets/css/header.css">
-    <link rel="stylesheet" href="../assets/css/footer.css">
+    <!-- CSS GLOBAL -->
+    <link rel="stylesheet" href="/assets/css/global.css">
+    <link rel="stylesheet" href="/assets/css/color.css">
+    <link rel="stylesheet" href="/assets/css/header.css">
+    <link rel="stylesheet" href="/assets/css/footer.css">
+    <link rel="stylesheet" href="/assets/css/admin.css">
+    <link rel="stylesheet" href="/assets/css/menu.css">
 
     <style>
         .form-box {
@@ -33,144 +37,154 @@
 
 <body>
 
-<?php include "../includes/header.php"; ?>
-<?php include "../includes/menu-admin.php"; ?>
+    <!-- HEADER -->
+    <?php include $_SERVER["DOCUMENT_ROOT"] . "/includes/header.php"; ?>
 
-<main class="admin-content flex-grow-1">
-    <h1 class="text-center mb-4">Añadir Profesional</h1>
+    <!-- MENÚ ADMIN -->
+    <?php include $_SERVER["DOCUMENT_ROOT"] . "/includes/menu-admin.php"; ?>
 
-    <div class="form-box">
-        <form id="formProfesional">
+    <!-- MENÚ RESPONSIVE -->
+    <?php include $_SERVER["DOCUMENT_ROOT"] . "/includes/responsive-menu.php"; ?>
 
-            <!-- DATOS BÁSICOS -->
-            <div class="mb-3">
-                <label class="form-label">Nombre</label>
-                <input type="text" id="nombre" class="form-control" required>
-            </div>
+    <main class="admin-content flex-grow-1">
 
-            <div class="mb-3">
-                <label class="form-label">Especialidad</label>
-                <input type="text" id="especialidad" class="form-control" required>
-            </div>
+        <h1 class="admin-title text-center mb-4">Añadir Profesional</h1>
 
-            <div class="mb-3">
-                <label class="form-label">Dirección</label>
-                <input type="text" id="direccion" class="form-control" required>
-            </div>
+        <div class="form-box">
 
-            <!-- SERVICIOS -->
-            <div class="mb-3">
-                <label class="form-label">Servicios ofrecidos</label><br>
+            <div id="mensaje" class="mb-3 text-center"></div>
 
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Fisioterapia" id="srv1">
-                    <label class="form-check-label" for="srv1">Fisioterapia</label>
-                </div>
+            <form id="formProfesional" enctype="multipart/form-data">
 
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Rehabilitación" id="srv2">
-                    <label class="form-check-label" for="srv2">Rehabilitación</label>
-                </div>
-
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Masajes" id="srv3">
-                    <label class="form-check-label" for="srv3">Masajes</label>
-                </div>
-
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Terapia deportiva" id="srv4">
-                    <label class="form-check-label" for="srv4">Terapia deportiva</label>
-                </div>
-
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Podología" id="srv5">
-                    <label class="form-check-label" for="srv5">Podología</label>
-                </div>
-
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Nutrición" id="srv6">
-                    <label class="form-check-label" for="srv6">Nutrición</label>
-                </div>
-            </div>
-
-            <!-- HORARIOS -->
-            <h5 class="mt-4">Horarios</h5>
-
-            <?php
-            $dias = [
-                "lunes" => "Lunes",
-                "martes" => "Martes",
-                "miercoles" => "Miércoles",
-                "jueves" => "Jueves",
-                "viernes" => "Viernes"
-            ];
-            ?>
-
-            <?php foreach ($dias as $key => $label): ?>
+                <!-- DATOS BÁSICOS -->
                 <div class="mb-3">
-                    <label class="form-label day-label"><?= $label ?></label>
-                    <select id="<?= $key ?>" class="form-select">
-                        <option value="Cerrado">Cerrado</option>
-                        <option value="Mañana (08:00–14:00)">Mañana (08:00–14:00)</option>
-                        <option value="Tarde (16:00–20:00)">Tarde (16:00–20:00)</option>
-                        <option value="Completo (08:00–20:00)">Completo (08:00–20:00)</option>
-                    </select>
+                    <label class="form-label">Nombre</label>
+                    <input type="text" id="nombre" class="form-control" required minlength="3">
                 </div>
-            <?php endforeach; ?>
 
-            <div class="text-center mt-4">
-                <button type="submit" class="btn btn-success">Guardar</button>
-                <a href="profesionales.php" class="btn btn-secondary">Cancelar</a>
-            </div>
+                <div class="mb-3">
+                    <label class="form-label">Especialidad</label>
+                    <input type="text" id="especialidad" class="form-control" required minlength="3">
+                </div>
 
-        </form>
-    </div>
-</main>
+                <div class="mb-3">
+                    <label class="form-label">Dirección</label>
+                    <input type="text" id="direccion" class="form-control" required minlength="5">
+                </div>
+               
 
-<?php include "../includes/footer.php"; ?>
+                <!-- SERVICIOS -->
+                <div class="mb-3">
+                    <label class="form-label">Servicios ofrecidos</label><br>
 
-<script>
-document.getElementById("formProfesional").addEventListener("submit", function(e) {
-    e.preventDefault();
+                    <?php
+                    $serviciosLista = [
+                        "Resonancias Magnéticas",
+                        "Rehabilitación",
+                        "Masajes terapeuticos",
+                        "Enfermedades del sistema nervioso central",
+                        "Cefaleas, migrañas",
+                        "Nutrición para mayores"
+                    ];
+                    ?>
 
-    // Obtener servicios seleccionados
-    const servicios = [];
-    document.querySelectorAll(".form-check-input:checked").forEach(chk => {
-        servicios.push(chk.value);
-    });
+                    <?php foreach ($serviciosLista as $i => $srv): ?>
+                        <div class="form-check">
+                            <input class="form-check-input srv-check" type="checkbox" value="<?= $srv ?>" id="srv<?= $i ?>">
+                            <label class="form-check-label" for="srv<?= $i ?>"><?= $srv ?></label>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
 
-    const data = {
-        action: "create",
-        nombre: document.getElementById("nombre").value,
-        especialidad: document.getElementById("especialidad").value,
-        direccion: document.getElementById("direccion").value,
-        servicios: servicios.join(", "),
-        lunes: document.getElementById("lunes").value,
-        martes: document.getElementById("martes").value,
-        miercoles: document.getElementById("miercoles").value,
-        jueves: document.getElementById("jueves").value,
-        viernes: document.getElementById("viernes").value
-    };
+                <!-- HORARIOS -->
+                <h5 class="mt-4">Horarios</h5>
 
-    fetch("../controllers/admin-profesionales.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-    })
-    .then(res => res.json())
-    .then(data => {
-        alert(data.message || data.error);
+                <?php
+                $dias = [
+                    "lunes" => "Lunes",
+                    "martes" => "Martes",
+                    "miercoles" => "Miércoles",
+                    "jueves" => "Jueves",
+                    "viernes" => "Viernes"
+                ];
 
-        if (data.success) {
-            location.href = "profesionales.php";
+                $turnos = [
+                    "Cerrado",
+                    "Mañana (08:00–14:00)",
+                    "Tarde (16:00–20:00)",
+                    "Completo (08:00–20:00)"
+                ];
+                ?>
+
+                <?php foreach ($dias as $key => $label): ?>
+                    <div class="mb-3">
+                        <label class="form-label day-label"><?= $label ?></label>
+                        <select id="<?= $key ?>" class="form-select">
+                            <?php foreach ($turnos as $t): ?>
+                                <option value="<?= $t ?>"><?= $t ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                <?php endforeach; ?>
+
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-success">Guardar</button>
+                    <a href="profesionales.php" class="btn btn-secondary">Cancelar</a>
+                </div>
+
+            </form>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <?php include $_SERVER["DOCUMENT_ROOT"] . "/includes/footer.php"; ?>
+
+    <script>
+    document.getElementById("formProfesional").addEventListener("submit", async e => {
+        e.preventDefault();
+
+        const mensaje = document.getElementById("mensaje");
+
+        const formData = new FormData();
+
+        formData.append("action", "crear");
+        formData.append("nombre", document.getElementById("nombre").value);
+        formData.append("especialidad", document.getElementById("especialidad").value);
+        formData.append("direccion", document.getElementById("direccion").value);
+
+        // Servicios
+        document.querySelectorAll(".srv-check:checked").forEach(chk => {
+            formData.append("servicios[]", chk.value);
+        });
+
+        // Horarios
+        formData.append("horario_lunes", document.getElementById("lunes").value);
+        formData.append("horario_martes", document.getElementById("martes").value);
+        formData.append("horario_miercoles", document.getElementById("miercoles").value);
+        formData.append("horario_jueves", document.getElementById("jueves").value);
+        formData.append("horario_viernes", document.getElementById("viernes").value);
+
+      
+        try {
+            const res = await fetch("/controllers/admin-profesionales.php", {
+                method: "POST",
+                body: formData
+            });
+
+            const data = await res.json();
+
+            if (data.success) {
+                mensaje.innerHTML = "<p class='text-success'>Profesional creado correctamente.</p>";
+                setTimeout(() => location.href = "profesionales.php", 1500);
+            } else {
+                mensaje.innerHTML = `<p class='text-danger'>${data.error}</p>`;
+            }
+
+        } catch (err) {
+            mensaje.innerHTML = "<p class='text-danger'>Error al guardar el profesional.</p>";
         }
-    })
-    .catch(err => {
-        console.error(err);
-        alert("Error al guardar el profesional");
     });
-});
-</script>
+    </script>
 
 </body>
 </html>

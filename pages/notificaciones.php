@@ -3,7 +3,7 @@ session_start();
 
 // Si no hay usuario logueado, redirigir
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: /login.php");
     exit();
 }
 
@@ -51,8 +51,17 @@ $leidas = $sql_leidas->fetchAll(PDO::FETCH_ASSOC);
 
 <body>
 
+<!-- HEADER -->
 <?php include "../includes/header.php"; ?>
+
+<!-- MENÚ PRIVADO -->
 <?php include "../includes/private-menu.php"; ?>
+
+<!-- MENÚ RESPONSIVE -->
+<?php include "../includes/responsive-menu.php"; ?>
+
+<!-- BANNER PRIVADO -->
+<?php include "../includes/private-banner.php"; ?>
 
 <div class="contenedor-notificaciones">
 
@@ -70,7 +79,7 @@ $leidas = $sql_leidas->fetchAll(PDO::FETCH_ASSOC);
                 <p class="mensaje"><?php echo $n['mensaje']; ?></p>
                 <small class="fecha"><?php echo $n['fecha']; ?></small>
 
-                <form action="../controllers/marcar-notificacion.php" method="POST">
+                <form action="/controllers/marcar-notificacion.php" method="POST">
                     <input type="hidden" name="id" value="<?php echo $n['id']; ?>">
                     <button type="submit" class="btn-leida">Marcar como leída</button>
                 </form>
@@ -96,6 +105,9 @@ $leidas = $sql_leidas->fetchAll(PDO::FETCH_ASSOC);
     <?php endif; ?>
 
 </div>
+
+<!-- FOOTER -->
+<?php include "../includes/footer.php"; ?>
 
 </body>
 </html>

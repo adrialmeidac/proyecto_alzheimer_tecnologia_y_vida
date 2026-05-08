@@ -1,22 +1,19 @@
 <?php
 header("Content-Type: application/json");
-session_start();
-require_once "../models/bbdd.php";
 
-// Conexión
-$db = new Database();
-$conn = $db->connect();
+require_once "../middleware/admin.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/models/bbdd.php";
 
-// Solo admin
-if (!isset($_SESSION["user_id"]) || $_SESSION["rol"] !== "admin") {
-    http_response_code(401);
-    echo json_encode(["success" => false, "error" => "No autorizado"]);
+// Leer JSON
+$input = json_decode(file_get_contents("php://input"), true);
+
+if (!$input) {
+    http_response_code(400);
+    echo json_encode(["success" => false, "error" => "Solicitud inválida"]);
     exit;
 }
 
-// Leer JSON
-$data = json_decode(file_get_contents("php://input"), true);
-$id = $data["id"] ?? null;
+$id = $input["id"] ?? null;
 
 // Validar ID
 if (!$id || !filter_var($id, FILTER_VALIDATE_INT)) {
@@ -25,7 +22,12 @@ if (!$id || !filter_var($id, FILTER_VALIDATE_INT)) {
     exit;
 }
 
+$id = (int)$id;
+
 try {
+    $db = new Database();
+    $conn = $db->connect();
+
     // Eliminar resultado
     $stmt = $conn->prepare("DELETE FROM resultados WHERE id = :id");
     $stmt->execute([":id" => $id]);
@@ -36,6 +38,7 @@ try {
         exit;
     }
 
+    http_response_code(200);
     echo json_encode([
         "success" => true,
         "message" => "Resultado eliminado correctamente"

@@ -1,7 +1,5 @@
 <?php require_once "../middleware/session-public.php"?>
 
-
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -47,13 +45,9 @@
     <!-- BANNER PÚBLICO -->
     <?php include '../includes/public-banner.php'; ?>
 
-    <h2 class="text-center mt-5">Políticas de Cookies</h2>
+    <main class="container mt-5">
 
-    <div class="container mt-4">
-
-        <h2>Políticas de Cookies - Alzheimer, tecnología y vida</h2>
-
-        <p><strong>Política de Cookies – Alzheimer, Tecnología y Vida</strong></p>
+        <h1 class="text-center mb-4">Políticas de Cookies</h1>
 
         <p><strong>1. ¿Qué son las cookies?</strong><br>
         Las cookies son pequeños archivos que se almacenan en el dispositivo del usuario al visitar una página web. Sirven para mejorar la experiencia de navegación y obtener información sobre el uso del sitio.</p>
@@ -75,12 +69,12 @@
 
         <!-- BOTÓN VOLVER -->
         <div class="text-center mt-4">
-            <button class="btn btn-secondary px-4 py-2" onclick="location.href='/pages/index.php'">
-                Volver
+            <button class="btn btn-secondary px-4 py-2" onclick="location.href='./index.php'">Volver</button>
+                
             </button>
         </div>
 
-    </div>
+    </main>
 
     <!-- FOOTER -->
     <?php include '../includes/footer.php'; ?>

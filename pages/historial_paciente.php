@@ -15,9 +15,9 @@ $familiar_id = $_SESSION["user_id"];
 
 // OBTENER PACIENTES VINCULADOS
 $sql = $conn->prepare("
-    SELECT u.id, u.nombre, u.apellido
+    SELECT u.id, u.nombre, u.apellidos
     FROM usuarios u
-    INNER JOIN relaciones_paciente_familiar r
+    INNER JOIN relaciones_familiares r
         ON r.paciente_id = u.id
     WHERE r.familiar_id = ?
 ");
@@ -35,9 +35,9 @@ $paciente_id = $_GET["paciente"] ?? $pacientes[0]["id"];
 
 // OBTENER HISTORIAL DEL PACIENTE
 $sql = $conn->prepare("
-    SELECT descripcion, fecha, completada
-    FROM actividades_paciente
-    WHERE paciente_id = ?
+    SELECT descripcion, fecha, estado
+    FROM actividades
+    WHERE usuario_id = ?
     ORDER BY fecha DESC
 ");
 $sql->execute([$paciente_id]);
@@ -50,20 +50,20 @@ $historial = $sql->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <title>Historial del Paciente</title>
 
-    <link rel="stylesheet" href="/assets/css/color.css">
     <link rel="stylesheet" href="/assets/css/global.css">
     <link rel="stylesheet" href="/assets/css/header.css">
     <link rel="stylesheet" href="/assets/css/menu.css">
+    <link rel="stylesheet" href="/assets/css/panel-familiar.css">
 </head>
 
 <body>
 
 <?php include "../includes/header.php"; ?>
 <?php include "../includes/menu-familiar.php"; ?>
-    <!-- BOTÓN MODO OSCURO -->
-    <button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
 
-<div class="container mt-4">
+<button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
+
+<div class="panel-familiar-container">
 
     <h2 class="mb-3">Historial del Paciente</h2>
 
@@ -73,7 +73,7 @@ $historial = $sql->fetchAll(PDO::FETCH_ASSOC);
         <select name="paciente" class="form-select" onchange="this.form.submit()">
             <?php foreach ($pacientes as $p): ?>
                 <option value="<?= $p['id'] ?>" <?= $p['id'] == $paciente_id ? 'selected' : '' ?>>
-                    <?= $p['nombre'] . " " . $p['apellido'] ?>
+                    <?= $p['nombre'] . " " . $p['apellidos'] ?>
                 </option>
             <?php endforeach; ?>
         </select>
@@ -89,7 +89,7 @@ $historial = $sql->fetchAll(PDO::FETCH_ASSOC);
                     <strong><?= $h["descripcion"] ?></strong><br>
                     <small><?= $h["fecha"] ?></small><br>
 
-                    <?php if ($h["completada"]): ?>
+                    <?php if ($h["estado"]): ?>
                         <span class="badge bg-success mt-1">Completada</span>
                     <?php else: ?>
                         <span class="badge bg-warning mt-1">Pendiente</span>
@@ -100,7 +100,8 @@ $historial = $sql->fetchAll(PDO::FETCH_ASSOC);
     <?php endif; ?>
 
 </div>
-    <script src="/assets/js/theme.js"></script>
+
+<script src="/assets/js/theme.js"></script>
 
 </body>
 </html>

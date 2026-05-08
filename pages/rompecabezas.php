@@ -68,7 +68,7 @@
         <!-- COLUMNA 1: Imagen de referencia -->
         <section class="col reference-col">
             <h3>Imagen a armar:</h3>
-            <img id="referenceImg" class="reference-img"   src="/assets/images/perro.jpg"  alt="Imagen de referencia">
+            <img id="referenceImg" class="reference-img" src="/assets/images/perro.jpg" alt="Imagen de referencia">
         </section>
 
         <!-- COLUMNA 2: Tablero del rompecabezas -->
@@ -93,7 +93,7 @@
     <?php include '../includes/footer.php'; ?>
 
     <!-- JS -->
-    <script src="./assets/js/theme.js"></script>
+    <script src="/assets/js/theme.js"></script>
     <script src="../assets/js/rompecabezas.js" defer></script>
 
 </body>

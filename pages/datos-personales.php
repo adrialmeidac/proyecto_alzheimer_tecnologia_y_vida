@@ -1,11 +1,38 @@
-<?php require_once "../middleware/session.php"; ?>
+<?php 
+require_once "../middleware/session.php"; 
 
-<?php
-// SOLO PACIENTES PUEDEN ACCEDER A ESTA PÁGINA
+// SOLO PACIENTES PUEDEN ACCEDER
 if (!isset($_SESSION["rol"]) || $_SESSION["rol"] !== "paciente") {
     header("Location: /pages/dashboard.php");
     exit();
 }
+
+// Si el perfil ya está completado → redirigir
+if (!empty($_SESSION["perfil_completado"]) && $_SESSION["perfil_completado"] == 1) {
+    header("Location: /pages/dashboard.php");
+    exit();
+}
+
+// Cargar datos actuales del paciente (si existen)
+require_once "../models/bbdd.php";
+$db = new Database();
+$conn = $db->connect();
+
+$sql = $conn->prepare("
+    SELECT u.nombre, u.apellidos, u.telefono, p.fecha_nacimiento
+    FROM usuarios u
+    LEFT JOIN pacientes p ON p.user_id = u.id
+    WHERE u.id = :id
+    LIMIT 1
+");
+$sql->execute([":id" => $_SESSION["user_id"]]);
+$datos = $sql->fetch(PDO::FETCH_ASSOC);
+
+$nombre   = htmlspecialchars($datos["nombre"] ?? "");
+$apellido = htmlspecialchars($datos["apellidos"] ?? "");
+$fecha    = htmlspecialchars($datos["fecha_nacimiento"] ?? "");
+$telefono = htmlspecialchars($datos["telefono"] ?? "");
+
 ?>
 
 <!DOCTYPE html>
@@ -24,9 +51,10 @@ if (!isset($_SESSION["rol"]) || $_SESSION["rol"] !== "paciente") {
     <link rel="stylesheet" href="/assets/css/global.css">
     <link rel="stylesheet" href="/assets/css/header.css">
     <link rel="stylesheet" href="/assets/css/footer.css">
+    <link rel="stylesheet" href="/assets/css/menu.css">
+    <link rel="stylesheet" href="/assets/css/banner.css">
     <link rel="stylesheet" href="/assets/css/datos-personales.css">
 
-    <!-- Fuente -->
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400&display=swap" rel="stylesheet">
 </head>
 
@@ -38,7 +66,14 @@ if (!isset($_SESSION["rol"]) || $_SESSION["rol"] !== "paciente") {
     <!-- BOTÓN MODO OSCURO -->
     <button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
 
-    <!-- SIN MENÚ AQUÍ -->
+    <!-- MENÚ PRIVADO -->
+    <?php include '../includes/private-menu.php'; ?>
+
+    <!-- MENÚ RESPONSIVE -->
+    <?php include '../includes/responsive-menu.php'; ?>
+
+    <!-- BANNER PRIVADO -->
+    <?php include '../includes/private-banner.php'; ?>
 
     <main class="register-container">
 
@@ -47,25 +82,21 @@ if (!isset($_SESSION["rol"]) || $_SESSION["rol"] !== "paciente") {
             <h2>Datos personales</h2>
             <p class="register-subtitle">Completa tu información para continuar</p>
 
-            <!-- Caja de errores -->
             <div id="datos-errors" class="register-errors" style="display:none;"></div>
 
-            <!-- Formulario -->
             <form id="datosForm" class="register-form">
 
                 <label for="nombre">Nombre</label>
-                <input type="text" id="nombre" name="nombre" required placeholder="Introduce tu nombre">
+                <input type="text" id="nombre" name="nombre" required value="<?= $nombre ?>" placeholder="Introduce tu nombre">
 
                 <label for="apellido">Apellido</label>
-                <input type="text" id="apellido" name="apellido" required placeholder="Introduce tu apellido">
+                <input type="text" id="apellido" name="apellido" required value="<?= $apellido ?>" placeholder="Introduce tu apellido">
 
                 <label for="fecha">Fecha de nacimiento</label>
-                <input type="date" id="fecha" name="fecha" required>
+                <input type="date" id="fecha" name="fecha" required value="<?= $fecha ?>">
 
                 <label for="telefono">Teléfono</label>
-                <input type="tel" id="telefono" name="telefono" placeholder="Ej: 612345678">
-
-                <!-- ELIMINADO: Campo de rol (ya no se usa aquí) -->
+                <input type="tel" id="telefono" name="telefono" value="<?= $telefono ?>" placeholder="Ej: 612345678">
 
                 <button type="submit" class="register-btn">Guardar datos</button>
 
@@ -84,7 +115,7 @@ if (!isset($_SESSION["rol"]) || $_SESSION["rol"] !== "paciente") {
 
     <!-- JS -->
     <script src="/assets/js/theme.js"></script>
-    <script src="../assets/js/datos_personales.js"></script>
+    <script src="/assets/js/datos_personales.js"></script>
 
 </body>
 

@@ -10,11 +10,11 @@ let cartasBase = [
 
 let cartas = [];
 let seleccionadas = [];
-let bloqueado = false; // 🔓 El jugador puede empezar
+let bloqueado = false;
 let tiempo = 0;
 let timerInterval;
 let timerIniciado = false;
-let parejasObjetivo = 8; // medio por defecto
+let parejasObjetivo = 8;
 
 // ===============================
 //   CAMBIO DE DIFICULTAD
@@ -100,7 +100,6 @@ function revelarCarta(card) {
     if (bloqueado) return;
     if (card.classList.contains("revealed")) return;
 
-    // ⏳ Iniciar timer en el primer clic
     if (!timerIniciado) {
         iniciarTemporizador();
         timerIniciado = true;
@@ -172,10 +171,7 @@ function guardarResultadoBackend() {
             tiempo: tiempo,
             puntuacion: parejasObjetivo
         })
-    })
-    .then(res => res.json())
-    .then(data => console.log("Resultado guardado:", data))
-    .catch(err => console.error("Error al guardar resultado:", err));
+    });
 }
 
 // ===============================

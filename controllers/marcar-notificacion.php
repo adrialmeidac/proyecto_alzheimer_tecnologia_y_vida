@@ -2,12 +2,12 @@
 session_start();
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: ../pages/login.php");
+    header("Location: /pages/login.php");
     exit();
 }
 
 if (!isset($_POST['id'])) {
-    header("Location: ../pages/notificaciones.php");
+    header("Location: /pages/notificaciones.php");
     exit();
 }
 
@@ -16,13 +16,13 @@ require_once __DIR__ . "/../models/bbdd.php";
 $db = new Database();
 $conn = $db->connect();
 
-$notificacion_id = $_POST['id'];
+$notificacion_id = intval($_POST['id']);
 $user_id = $_SESSION['user_id'];
 $rol = $_SESSION['rol'];
 
 // 1. Obtener la notificación
 $sql = $conn->prepare("
-    SELECT id, user_id 
+    SELECT id, usuario_id 
     FROM notificaciones 
     WHERE id = :id
     LIMIT 1
@@ -34,7 +34,7 @@ if (!$notificacion) {
     die("La notificación no existe.");
 }
 
-$paciente_id = $notificacion['user_id'];
+$paciente_id = $notificacion['usuario_id'];
 
 // 2. Validar permisos según el rol
 if ($rol === 'paciente') {
@@ -44,12 +44,12 @@ if ($rol === 'paciente') {
         die("No tienes permiso para marcar esta notificación.");
     }
 
-} elseif ($rol === 'familiar') {
+} elseif (in_array($rol, ['familiar', 'cuidador'])) {
 
-    // El familiar solo puede marcar notificaciones de pacientes vinculados
+    // Familiar o cuidador solo pueden marcar notificaciones de pacientes vinculados
     $sqlCheck = $conn->prepare("
         SELECT 1 
-         FROM relaciones_paciente_familiar
+        FROM relaciones_familiares
         WHERE familiar_id = :familiar
           AND paciente_id = :paciente
         LIMIT 1
@@ -76,10 +76,10 @@ $sqlUpdate = $conn->prepare("
 $sqlUpdate->execute([':id' => $notificacion_id]);
 
 // 4. Redirigir según el rol
-if ($rol === 'familiar') {
-    header("Location: ../pages/notificaciones_familiar.php");
+if (in_array($rol, ['familiar', 'cuidador'])) {
+    header("Location: /pages/notificaciones_familiar.php");
 } else {
-    header("Location: ../pages/notificaciones.php");
+    header("Location: /pages/notificaciones.php");
 }
 
 exit();

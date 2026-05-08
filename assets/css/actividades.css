@@ -1,15 +1,9 @@
-/* ============================
-   CONTENEDOR GENERAL
-============================ */
 .activities-container {
     max-width: 650px;
     margin: 0 auto 40px;
     padding: 20px;
 }
 
-/* ============================
-   TARJETA DE ACTIVIDAD
-============================ */
 .actividad-card {
     background: var(--color-gray-100);
     border-radius: 12px;
@@ -24,11 +18,14 @@
     border-color: var(--color-border-strong);
 }
 
-/* ============================
-   TEXTO Y CAMPOS
-============================ */
+
 .actividad-texto {
     font-weight: 600;
+    color: var(--color-primary-dark);
+    margin-bottom: 10px;
+}
+
+.actividad-descripcion {
     color: var(--color-primary-dark);
     margin-bottom: 10px;
 }
@@ -41,33 +38,25 @@
     padding: 6px 10px;
 }
 
-.form-check-label {
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: var(--color-primary-dark);
-}
 
-/* ============================
-   CONTENEDOR DE BOTONES
-============================ */
+
 .d-flex.justify-content-between {
     display: flex;
     gap: 10px;
     margin-top: 12px;
 }
 
-/* Botón realizada */
+
 .btn-realizada {
     min-width: 150px;
     font-weight: 600;
 }
 
-/* Botón eliminar */
+
 .btn-eliminar {
     font-weight: 600;
 }
 
-/* Responsive */
 @media (max-width: 576px) {
     .btn-realizada,
     .btn-eliminar {
@@ -85,40 +74,23 @@
     margin-right: 6px;
 }
 
-/* ============================
-   ESTADO: ACTIVIDAD COMPLETADA
-============================ */
-
-/* Fondo apagado usando variables */
 .actividad-completada {
     background-color: var(--color-gray-200);
     border-color: var(--color-border-strong);
 }
 
-/* Apagar solo la zona editable */
-.actividad-completada .actividad-editable {
-    background-color: var(--color-gray-200);
-    pointer-events: none;
-    opacity: 0.6;
-}
-
-/* Botones siguen activos excepto los bloqueados */
 .actividad-completada .btn-eliminar {
     pointer-events: auto !important;
     opacity: 1 !important;
     cursor: pointer !important;
 }
 
-/* Hover rojo fuerte */
 .actividad-completada .btn-eliminar:hover {
     background-color: var(--color-error);
     color: var(--color-white);
     opacity: 1;
 }
 
-/* ============================
-   BOTÓN GUARDAR BLOQUEADO
-============================ */
 .btn-guardar {
     min-width: 110px;
 }
@@ -133,9 +105,7 @@
     cursor: not-allowed !important;
 }
 
-/* ============================
-   BOTÓN REALIZADA BLOQUEADO
-============================ */
+
 .realizada-bloqueada {
     pointer-events: none !important;
     background-color: var(--color-success) !important;
@@ -145,9 +115,6 @@
     cursor: not-allowed !important;
 }
 
-/* ============================
-   ICONO GRANDE CHECK
-============================ */
 .actividad-check-grande {
     position: absolute;
     top: 10px;
@@ -155,4 +122,8 @@
     font-size: 28px;
     color: var(--color-primary);
     opacity: 0.9;
+}
+
+.modal-dialog {
+    margin-top: 150px !important; 
 }

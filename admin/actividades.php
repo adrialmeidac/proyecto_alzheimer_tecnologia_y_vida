@@ -1,204 +1,261 @@
-<?php require_once "../middleware/admin.php"; ?>
-
+<?php
+session_start();
+if (!isset($_SESSION["user_id"]) || $_SESSION["rol"] !== "admin") {
+    header("Location: ../index.php");
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Actividades</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/global.css">
+    <link rel="stylesheet" href="/assets/css/color.css">
+    <link rel="stylesheet" href="/assets/css/header.css">
+    <link rel="stylesheet" href="/assets/css/footer.css">
+    <link rel="stylesheet" href="/assets/css/admin.css">
+    <link rel="stylesheet" href="/assets/css/menu.css">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="../assets/css/global.css">
-    <link rel="stylesheet" href="../assets/css/color.css">
-    <link rel="stylesheet" href="../assets/css/header.css">
-    <link rel="stylesheet" href="../assets/css/footer.css">
-
-    <style>
-        .admin-table {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: var(--shadow);
-        }
-    </style>
 </head>
 
-<body>
+<body class="bg-light">
 
-<?php include "../includes/header.php"; ?>
-<?php include "../includes/menu-admin.php"; ?>
+<div class="container py-4">
 
+    <h2 class="mb-4">Gestión de Actividades</h2>
 
+    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalCrear">
+        Crear Actividad
+    </button>
 
-<main class="admin-content flex-grow-1">
+    <div class="card shadow-sm">
+        <div class="card-body">
 
-    <h1 class="text-center mb-4">Gestión de Actividades</h1>
+            <table class="table table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Paciente</th>
+                        <th>Título</th>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaActividades"></tbody>
+            </table>
 
-    <div class="admin-table table-responsive">
-        <table class="table table-hover align-middle">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Usuario</th>
-                    <th>Título</th>
-                    <th>Descripción</th>
-                    <th>Fecha</th>
-                    <th>Hora</th>
-                    <th>Estado</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody id="tablaActividades">
-                <tr><td colspan="8" class="text-center">Cargando actividades...</td></tr>
-            </tbody>
-        </table>
+        </div>
     </div>
+</div>
 
-    <div class="text-center mt-4">
-        <button class="btn btn-secondary" onclick="location.href='index.php'">Volver</button>
-    </div>
-</main>
-
-<?php include "../includes/footer.php"; ?>
-
-<!-- MODAL EDITAR -->
-<div class="modal fade" id="modalEditar" tabindex="-1">
+<!-- ============================
+     MODAL CREAR
+============================= -->
+<div class="modal fade" id="modalCrear">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form id="formEditar">
+            <form id="formCrear">
                 <div class="modal-header">
-                    <h5 class="modal-title">Editar Actividad</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <h5 class="modal-title">Crear Actividad</h5>
                 </div>
-
                 <div class="modal-body">
-                    <input type="hidden" name="id" id="edit_id">
 
-                    <label class="form-label">Título</label>
-                    <input type="text" name="titulo" id="edit_titulo" class="form-control" required>
-
-                    <label class="form-label mt-2">Descripción</label>
-                    <textarea name="descripcion" id="edit_descripcion" class="form-control" rows="3" required></textarea>
-
-                    <label class="form-label mt-2">Fecha</label>
-                    <input type="date" name="fecha" id="edit_fecha" class="form-control" required>
-
-                    <label class="form-label mt-2">Hora</label>
-                    <input type="time" name="hora" id="edit_hora" class="form-control" required>
-
-                    <label class="form-label mt-2">Estado</label>
-                    <select name="estado" id="edit_estado" class="form-control">
-                        <option value="pendiente">Pendiente</option>
-                        <option value="realizada">Realizada</option>
+                    <select class="form-select mb-2" name="usuario_id" required>
+                        <?php
+                        require_once "../models/bbdd.php";
+                        $db = new Database();
+                        $conn = $db->connect();
+                        $pacientes = $conn->query("SELECT id, nombre FROM usuarios WHERE rol='paciente'")->fetchAll();
+                        foreach ($pacientes as $p) {
+                            echo "<option value='{$p['id']}'>{$p['nombre']}</option>";
+                        }
+                        ?>
                     </select>
-                </div>
 
+                    <input class="form-control mb-2" name="titulo" placeholder="Título" required>
+                    <textarea class="form-control mb-2" name="descripcion" placeholder="Descripción"></textarea>
+                    <input class="form-control mb-2" type="date" name="fecha" required>
+                    <input class="form-control mb-2" type="time" name="hora" required>
+
+                </div>
                 <div class="modal-footer">
-                    <button class="btn btn-success" type="submit">Guardar cambios</button>
                     <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button class="btn btn-primary">Crear</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- ============================
+     MODAL EDITAR
+============================= -->
+<div class="modal fade" id="modalEditar">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="formEditar">
+                <div class="modal-header">
+                    <h5 class="modal-title">Editar Actividad</h5>
+                </div>
+                <div class="modal-body">
+
+                    <input type="hidden" name="id" id="edit_id">
+
+                    <select class="form-select mb-2" name="usuario_id" id="edit_usuario_id" required>
+                        <?php
+                        foreach ($pacientes as $p) {
+                            echo "<option value='{$p['id']}'>{$p['nombre']}</option>";
+                        }
+                        ?>
+                    </select>
+
+                    <input class="form-control mb-2" name="titulo" id="edit_titulo" required>
+                    <textarea class="form-control mb-2" name="descripcion" id="edit_descripcion"></textarea>
+                    <input class="form-control mb-2" type="date" name="fecha" id="edit_fecha" required>
+                    <input class="form-control mb-2" type="time" name="hora" id="edit_hora" required>
+
+                    <select class="form-select" name="estado" id="edit_estado">
+                        <option value="pendiente">Pendiente</option>
+                        <option value="realizada">Realizada</option>
+                    </select>
+
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button class="btn btn-primary">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+    <!-- BOTÓN VOLVER -->
+    <div class="text-center mt-4">
+        <button class="btn btn-secondary px-4 py-2" onclick="location.href='/admin/index.php'">
+            Volver
+        </button>
+    </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-// ---------------------------------------------------------
-// Cargar actividades
-// ---------------------------------------------------------
+// ===============================
+// LISTAR
+// ===============================
 function cargarActividades() {
     fetch("../controllers/admin-actividades.php?action=listar")
-        .then(res => res.json())
+        .then(r => r.json())
         .then(data => {
-            const tabla = document.getElementById("tablaActividades");
-
-            if (!data.success) {
-                tabla.innerHTML = `<tr><td colspan="8" class="text-danger text-center">${data.error}</td></tr>`;
-                return;
-            }
-
-            tabla.innerHTML = "";
+            const tbody = document.getElementById("tablaActividades");
+            tbody.innerHTML = "";
 
             data.actividades.forEach(a => {
-                const tr = document.createElement("tr");
-
-                tr.innerHTML = `
-                    <td>${a.id}</td>
-                    <td>${a.usuario}</td>
-                    <td>${a.titulo}</td>
-                    <td>${a.descripcion.substring(0, 50)}...</td>
-                    <td>${a.fecha}</td>
-                    <td>${a.hora}</td>
-                    <td>${a.estado}</td>
-                    <td>
-                        <button class="btn btn-sm btn-warning" onclick="abrirEditar(${a.id}, '${a.titulo}', \`${a.descripcion}\`, '${a.fecha}', '${a.hora}', '${a.estado}')">Editar</button>
-                        <button class="btn btn-sm btn-danger" onclick="eliminar(${a.id})">Eliminar</button>
-                    </td>
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${a.id}</td>
+                        <td>${a.usuario_nombre}</td>
+                        <td>${a.titulo}</td>
+                        <td>${a.fecha}</td>
+                        <td>${a.hora}</td>
+                        <td>${a.estado}</td>
+                        <td>
+                            <button class="btn btn-warning btn-sm" onclick="abrirEditar(${a.id})">Editar</button>
+                            <button class="btn btn-danger btn-sm" onclick="eliminarActividad(${a.id})">Eliminar</button>
+                        </td>
+                    </tr>
                 `;
-
-                tabla.appendChild(tr);
             });
         });
 }
 
-cargarActividades();
-
-// ---------------------------------------------------------
-// Abrir modal editar
-// ---------------------------------------------------------
-function abrirEditar(id, titulo, descripcion, fecha, hora, estado) {
-    document.getElementById("edit_id").value = id;
-    document.getElementById("edit_titulo").value = titulo;
-    document.getElementById("edit_descripcion").value = descripcion;
-    document.getElementById("edit_fecha").value = fecha;
-    document.getElementById("edit_hora").value = hora;
-    document.getElementById("edit_estado").value = estado;
-
-    new bootstrap.Modal(document.getElementById("modalEditar")).show();
-}
-
-// ---------------------------------------------------------
-// Guardar edición
-// ---------------------------------------------------------
-document.getElementById("formEditar").addEventListener("submit", function(e) {
+// ===============================
+// CREAR
+// ===============================
+document.getElementById("formCrear").addEventListener("submit", e => {
     e.preventDefault();
 
-    const formData = new FormData(this);
+    const datos = Object.fromEntries(new FormData(e.target));
 
-    fetch("../controllers/admin-actividades.php?action=editar", {
+    fetch("../controllers/admin-actividades.php?action=crear", {
         method: "POST",
-        body: formData
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(datos)
     })
-    .then(res => res.json())
+    .then(r => r.json())
     .then(data => {
-        alert(data.message || data.error);
+        alert(data.message);
         cargarActividades();
-        bootstrap.Modal.getInstance(document.getElementById("modalEditar")).hide();
     });
 });
 
-// ---------------------------------------------------------
-// Eliminar actividad
-// ---------------------------------------------------------
-function eliminar(id) {
-    if (!confirm("¿Eliminar esta actividad?")) return;
+// ===============================
+// ABRIR EDITAR
+// ===============================
+function abrirEditar(id) {
+    fetch("../controllers/admin-actividades.php?action=obtener", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id })
+    })
+    .then(r => r.json())
+    .then(data => {
+        const a = data.actividad;
 
-    const formData = new FormData();
-    formData.append("id", id);
+        document.getElementById("edit_id").value = a.id;
+        document.getElementById("edit_usuario_id").value = a.usuario_id;
+        document.getElementById("edit_titulo").value = a.titulo;
+        document.getElementById("edit_descripcion").value = a.descripcion;
+        document.getElementById("edit_fecha").value = a.fecha;
+        document.getElementById("edit_hora").value = a.hora;
+        document.getElementById("edit_estado").value = a.estado;
+
+        new bootstrap.Modal(document.getElementById("modalEditar")).show();
+    });
+}
+
+// ===============================
+// EDITAR
+// ===============================
+document.getElementById("formEditar").addEventListener("submit", e => {
+    e.preventDefault();
+
+    const datos = Object.fromEntries(new FormData(e.target));
+
+    fetch("../controllers/admin-actividades.php?action=editar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(datos)
+    })
+    .then(r => r.json())
+    .then(data => {
+        alert(data.message);
+        cargarActividades();
+    });
+});
+
+// ===============================
+// ELIMINAR
+// ===============================
+function eliminarActividad(id) {
+    if (!confirm("¿Eliminar esta actividad?")) return;
 
     fetch("../controllers/admin-actividades.php?action=eliminar", {
         method: "POST",
-        body: formData
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id })
     })
-    .then(res => res.json())
+    .then(r => r.json())
     .then(data => {
-        alert(data.message || data.error);
+        alert(data.message);
         cargarActividades();
     });
 }
+
+cargarActividades();
 </script>
 
 </body>

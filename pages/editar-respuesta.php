@@ -24,37 +24,59 @@ if (!$respuesta) {
     <meta charset="UTF-8">
     <title>Editar Respuesta</title>
 
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- CSS globales -->
+    <link rel="stylesheet" href="/assets/css/color.css">
     <link rel="stylesheet" href="/assets/css/global.css">
+    <link rel="stylesheet" href="/assets/css/header.css">
+    <link rel="stylesheet" href="/assets/css/footer.css">
+    <link rel="stylesheet" href="/assets/css/menu.css">
+    <link rel="stylesheet" href="/assets/css/banner.css">
+    <link rel="stylesheet" href="/assets/css/post.css">
     <link rel="stylesheet" href="/assets/css/foro.css">
 </head>
 
 <body>
 
 <?php include '../includes/header.php'; ?>
-<?php include '../includes/menu-admin.php'; ?>
-    <!-- BOTÓN MODO OSCURO -->
-    <button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
 
+<button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
+
+<!-- MENÚ ADMIN -->
+<?php include '../includes/menu-admin.php'; ?>
+
+<!-- MENÚ RESPONSIVE -->
+<?php include '../includes/responsive-menu.php'; ?>
+
+<!-- BANNER PRIVADO -->
+<?php include '../includes/private-banner.php'; ?>
 
 <div class="container forum-container">
     <h1>Editar Respuesta</h1>
 
     <form action="../controllers/actualizar_respuesta.php" method="POST">
-        <input type="hidden" name="id" value="<?php echo $respuesta['id']; ?>">
-        <input type="hidden" name="tema_id" value="<?php echo $tema_id; ?>">
+        <input type="hidden" name="id" value="<?= $respuesta['id'] ?>">
+        <input type="hidden" name="tema_id" value="<?= $tema_id ?>">
 
-        <label>Contenido</label>
-        <textarea name="contenido" class="form-control" rows="5" required><?php 
-            echo htmlspecialchars($respuesta['contenido']); 
+        <label class="form-label">Contenido</label>
+        <textarea name="respuesta" class="form-control" rows="5" required><?= 
+            htmlspecialchars($respuesta['respuesta']) 
         ?></textarea>
 
         <button type="submit" class="btn btn-primary mt-3">Guardar cambios</button>
     </form>
 
-    <button class="btn btn-secondary mt-3" onclick="location.href='post.php?id=<?php echo $tema_id; ?>'">
+    <button class="btn btn-secondary mt-3"
+            onclick="location.href='post.php?id=<?= $tema_id ?>'">
         Cancelar
     </button>
 </div>
+
+<?php include '../includes/footer.php'; ?>
+
+<script src="/assets/js/theme.js"></script>
 
 </body>
 </html>

@@ -15,9 +15,9 @@ $familiar_id = $_SESSION["user_id"];
 
 // OBTENER PACIENTES VINCULADOS
 $sql = $conn->prepare("
-    SELECT u.id, u.nombre, u.apellido
+    SELECT u.id, u.nombre, u.apellidos
     FROM usuarios u
-    INNER JOIN relaciones_paciente_familiar r
+    INNER JOIN relaciones_familiares r
         ON r.paciente_id = u.id
     WHERE r.familiar_id = ?
 ");
@@ -33,11 +33,11 @@ if (!$pacientes) {
 // SELECCIONAR PACIENTE ACTUAL
 $paciente_id = $_GET["paciente"] ?? $pacientes[0]["id"];
 
-// OBTENER ACTIVIDADES DEL PACIENTE (CREADAS POR EL FAMILIAR)
+// OBTENER ACTIVIDADES DEL PACIENTE
 $sql = $conn->prepare("
     SELECT *
-    FROM actividades_paciente
-    WHERE paciente_id = ?
+    FROM actividades
+    WHERE usuario_id = ?
     ORDER BY fecha DESC, hora ASC
 ");
 $sql->execute([$paciente_id]);
@@ -50,10 +50,10 @@ $actividades = $sql->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <title>Actividades del Paciente</title>
 
-    <link rel="stylesheet" href="/assets/css/color.css">
     <link rel="stylesheet" href="/assets/css/global.css">
     <link rel="stylesheet" href="/assets/css/header.css">
     <link rel="stylesheet" href="/assets/css/menu.css">
+    <link rel="stylesheet" href="/assets/css/panel-familiar.css">
 
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -63,11 +63,10 @@ $actividades = $sql->fetchAll(PDO::FETCH_ASSOC);
 
 <?php include "../includes/header.php"; ?>
 <?php include "../includes/menu-familiar.php"; ?>
-    <!-- BOTÓN MODO OSCURO -->
-    <button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
 
+<button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
 
-<div class="container mt-4">
+<div class="panel-familiar-container">
 
     <h2 class="mb-3">Actividades del Paciente</h2>
 
@@ -77,7 +76,7 @@ $actividades = $sql->fetchAll(PDO::FETCH_ASSOC);
         <select name="paciente" class="form-select" onchange="this.form.submit()">
             <?php foreach ($pacientes as $p): ?>
                 <option value="<?= $p['id'] ?>" <?= $p['id'] == $paciente_id ? 'selected' : '' ?>>
-                    <?= $p['nombre'] . " " . $p['apellido'] ?>
+                    <?= $p['nombre'] . " " . $p['apellidos'] ?>
                 </option>
             <?php endforeach; ?>
         </select>
@@ -87,20 +86,20 @@ $actividades = $sql->fetchAll(PDO::FETCH_ASSOC);
     <div class="card p-4 mb-4 shadow-sm">
         <h4 class="mb-3">Crear nueva actividad</h4>
 
-        <form action="/controllers/crear-actividad-paciente.php" method="POST">
-            <input type="hidden" name="paciente_id" value="<?= $paciente_id ?>">
+<form action="/controllers/actividades-familiares.php?action=crear" method="POST">
+    <input type="hidden" name="paciente_id" value="<?= $paciente_id ?>">
 
-            <label class="form-label">Descripción</label>
-            <input type="text" name="descripcion" class="form-control" required>
+    <label class="form-label">Descripción</label>
+    <input type="text" name="texto" class="form-control" required>
 
-            <label class="form-label mt-3">Fecha</label>
-            <input type="date" name="fecha" class="form-control" required>
+    <label class="form-label mt-3">Fecha</label>
+    <input type="date" name="fecha" class="form-control" required>
 
-            <label class="form-label mt-3">Hora límite</label>
-            <input type="time" name="hora" class="form-control" required>
+    <label class="form-label mt-3">Hora límite</label>
+    <input type="time" name="hora" class="form-control" required>
 
-            <button class="btn btn-primary mt-4 w-100">Guardar actividad</button>
-        </form>
+    <button class="btn btn-primary mt-4 w-100">Guardar actividad</button>
+</form>
     </div>
 
     <!-- LISTA DE ACTIVIDADES -->
@@ -128,8 +127,7 @@ $actividades = $sql->fetchAll(PDO::FETCH_ASSOC);
 
                             <div class="d-flex justify-content-between">
 
-                                <!-- COMPLETAR -->
-                                <?php if ($a["completada"] == 0): ?>
+                                <?php if ($a["estado"] == 0): ?>
                                     <a href="/controllers/completar-actividad.php?id=<?= $a['id'] ?>"
                                        class="btn btn-success btn-sm">
                                         Completar
@@ -138,7 +136,6 @@ $actividades = $sql->fetchAll(PDO::FETCH_ASSOC);
                                     <span class="badge bg-success align-self-center">Completada</span>
                                 <?php endif; ?>
 
-                                <!-- ELIMINAR -->
                                 <a href="/controllers/eliminar-actividad-paciente.php?id=<?= $a['id'] ?>"
                                    class="btn btn-danger btn-sm"
                                    onclick="return confirm('¿Seguro que deseas eliminar esta actividad?')">
@@ -157,7 +154,8 @@ $actividades = $sql->fetchAll(PDO::FETCH_ASSOC);
     <?php endif; ?>
 
 </div>
-    <script src="/assets/js/theme.js"></script>
+
+<script src="/assets/js/theme.js"></script>
 
 </body>
 </html>

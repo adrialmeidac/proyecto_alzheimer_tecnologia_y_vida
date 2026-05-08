@@ -1,82 +1,113 @@
 <?php
 header("Content-Type: application/json");
-session_start();
-require_once "../models/bbdd.php";
 
-// Solo admin
-if (!isset($_SESSION["user_id"]) || $_SESSION["rol"] !== "admin") {
-    echo json_encode(["success" => false, "error" => "No autorizado"]);
+require_once "../middleware/admin.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/models/bbdd.php";
+
+// Leer acción desde GET o JSON
+$input = json_decode(file_get_contents("php://input"), true);
+$action = $_GET["action"] ?? ($input["action"] ?? null);
+
+if (!$action) {
+    http_response_code(400);
+    echo json_encode(["success" => false, "error" => "Acción no especificada"]);
     exit;
 }
 
-$db = new Database();
-$conn = $db->connect();
+try {
+    $db = new Database();
+    $conn = $db->connect();
 
-$action = $_GET["action"] ?? null;
+    switch ($action) {
 
-switch ($action) {
+        // ---------------------------------------------------------
+        // LISTAR NOTIFICACIONES (con filtros)
+        // ---------------------------------------------------------
+        case "listar":
 
-    // ---------------------------------------------------------
-    // LISTAR NOTIFICACIONES (con filtros)
-    // ---------------------------------------------------------
-    case "listar":
+            $usuario = $_GET["usuario_id"] ?? null;
+            $fecha   = $_GET["fecha"] ?? null;
+            $estado  = $_GET["estado"] ?? null;
 
-        $usuario = $_GET["usuario_id"] ?? null;
-        $fecha = $_GET["fecha"] ?? null;
-        $estado = $_GET["estado"] ?? null;
+            $query = "
+                SELECT n.*, u.nombre AS usuario
+                FROM notificaciones n
+                INNER JOIN usuarios u ON u.id = n.usuario_id
+                WHERE 1
+            ";
 
-        $query = "
-            SELECT n.*, u.nombre AS usuario
-            FROM notificaciones n
-            INNER JOIN usuarios u ON u.id = n.usuario_id
-            WHERE 1
-        ";
+            $params = [];
 
-        $params = [];
+            if ($usuario) {
+                $query .= " AND n.usuario_id = :usuario ";
+                $params[":usuario"] = $usuario;
+            }
 
-        if ($usuario) {
-            $query .= " AND n.usuario_id = :usuario ";
-            $params[":usuario"] = $usuario;
-        }
+            if ($fecha) {
+                $query .= " AND DATE(n.fecha) = :fecha ";
+                $params[":fecha"] = $fecha;
+            }
 
-        if ($fecha) {
-            $query .= " AND DATE(n.fecha) = :fecha ";
-            $params[":fecha"] = $fecha;
-        }
+            if ($estado !== null && $estado !== "") {
+                $query .= " AND n.leida = :estado ";
+                $params[":estado"] = $estado;
+            }
 
-        if ($estado !== null && $estado !== "") {
-            $query .= " AND n.leida = :estado ";
-            $params[":estado"] = $estado;
-        }
+            $query .= " ORDER BY n.fecha DESC";
 
-        $query .= " ORDER BY n.fecha DESC";
+            $stmt = $conn->prepare($query);
+            $stmt->execute($params);
 
-        $sql = $conn->prepare($query);
-        $sql->execute($params);
-
-        $data = $sql->fetchAll(PDO::FETCH_ASSOC);
-
-        echo json_encode(["success" => true, "notificaciones" => $data]);
-        break;
-
-
-    // ---------------------------------------------------------
-    // ELIMINAR NOTIFICACIÓN
-    // ---------------------------------------------------------
-    case "eliminar":
-
-        if (!isset($_POST["id"])) {
-            echo json_encode(["success" => false, "error" => "ID no recibido"]);
+            echo json_encode([
+                "success" => true,
+                "notificaciones" => $stmt->fetchAll(PDO::FETCH_ASSOC)
+            ]);
             exit;
-        }
-
-        $sql = $conn->prepare("DELETE FROM notificaciones WHERE id = :id");
-        $sql->execute([":id" => $_POST["id"]]);
-
-        echo json_encode(["success" => true, "message" => "Notificación eliminada"]);
-        break;
 
 
-    default:
-        echo json_encode(["success" => false, "error" => "Acción no válida"]);
+        // ---------------------------------------------------------
+        // ELIMINAR NOTIFICACIÓN
+        // ---------------------------------------------------------
+        case "eliminar":
+
+            $id = $input["id"] ?? null;
+
+            if (!$id || !filter_var($id, FILTER_VALIDATE_INT)) {
+                http_response_code(400);
+                echo json_encode(["success" => false, "error" => "ID inválido"]);
+                exit;
+            }
+
+            $stmt = $conn->prepare("DELETE FROM notificaciones WHERE id = :id");
+            $stmt->execute([":id" => $id]);
+
+            if ($stmt->rowCount() === 0) {
+                http_response_code(404);
+                echo json_encode(["success" => false, "error" => "Notificación no encontrada"]);
+                exit;
+            }
+
+            echo json_encode([
+                "success" => true,
+                "message" => "Notificación eliminada correctamente"
+            ]);
+            exit;
+
+
+        // ---------------------------------------------------------
+        // ACCIÓN NO VÁLIDA
+        // ---------------------------------------------------------
+        default:
+            http_response_code(400);
+            echo json_encode(["success" => false, "error" => "Acción no válida"]);
+            exit;
+    }
+
+} catch (Exception $e) {
+
+    http_response_code(500);
+    echo json_encode([
+        "success" => false,
+        "error" => "Error interno del servidor"
+    ]);
 }

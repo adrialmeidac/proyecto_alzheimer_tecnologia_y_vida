@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function ocultarBotonSiguiente() {
         btnSiguiente.style.display = "none";
+        btnSiguiente.onclick = null;
     }
 
     // Base de tests
@@ -72,6 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
     //   MEMORIA
     // ===============================
     function mostrarPalabrasMemoria() {
+        ocultarBotonSiguiente();
         preguntaDiv.textContent = "Memoriza estas palabras:";
         opcionesDiv.innerHTML = `<h2>${test.palabrasClave.join(" – ")}</h2>`;
 
@@ -133,6 +135,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // ===============================
     let rondaAtencion = 0;
     let colorCorrectoActual = null;
+    let bloqueadoAtencion = false;
 
     function mostrarEstimuloAtencion() {
         rondaAtencion = 0;
@@ -146,6 +149,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
+        bloqueadoAtencion = true;
         ocultarBotonSiguiente();
         opcionesDiv.innerHTML = "";
         preguntaDiv.textContent = "Observa el color:";
@@ -165,6 +169,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function mostrarPreguntaAtencion() {
         preguntaDiv.textContent = "¿Qué color viste?";
         opcionesDiv.innerHTML = "";
+        bloqueadoAtencion = false;
 
         test.estimulos.forEach(opcion => {
             const btn = document.createElement("button");
@@ -178,6 +183,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function seleccionarRespuestaAtencion(btn, opcion) {
+        if (bloqueadoAtencion) return;
+        bloqueadoAtencion = true;
+
         const botones = opcionesDiv.querySelectorAll(".test-option-btn");
         botones.forEach(b => b.disabled = true);
 
@@ -357,7 +365,7 @@ document.addEventListener("DOMContentLoaded", () => {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                tipo: "test",
+                tipo: tipoTest, // 🔥 ahora guarda el tipo real
                 dificultad: "ninguna",
                 tiempo: 0,
                 puntuacion: puntaje
@@ -379,4 +387,3 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 });
-

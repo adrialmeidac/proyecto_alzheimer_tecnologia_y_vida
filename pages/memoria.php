@@ -25,19 +25,19 @@
 <body>
 
     <!-- HEADER -->
-    <?php include '../includes/header.php'; ?>
+    <?php include "../includes/header.php"; ?>
 
     <!-- BOTÓN MODO OSCURO -->
     <button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
 
     <!-- MENÚ PRIVADO -->
-    <?php include '../includes/private-menu.php'; ?>
+    <?php include "../includes/private-menu.php"; ?>
 
     <!-- MENÚ RESPONSIVE -->
-    <?php include '../includes/responsive-menu.php'; ?>
+    <?php include "../includes/responsive-menu.php"; ?>
 
     <!-- BANNER PRIVADO -->
-    <?php include '../includes/private-banner.php'; ?>
+    <?php include "../includes/private-banner.php"; ?>
 
     <p class="subtitle">Encuentra las parejas iguales</p>
 
@@ -74,11 +74,11 @@
     </div>
 
     <!-- FOOTER -->
-    <?php include '../includes/footer.php'; ?>
+    <?php include "../includes/footer.php"; ?>
 
     <!-- JS -->
     <script src="/assets/js/theme.js"></script>
-    <script src="../assets/js/memoria.js"></script>
+    <script src="/assets/js/memoria.js"></script>
 
 </body>
 

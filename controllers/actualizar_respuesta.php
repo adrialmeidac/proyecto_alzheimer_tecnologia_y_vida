@@ -1,29 +1,36 @@
 <?php
-session_start();
-
-if (!isset($_SESSION["rol"]) || $_SESSION["rol"] !== "admin") {
-    die("Acceso denegado.");
-}
-
+require_once "../middleware/session-admin.php"; // SOLO ADMIN
 require_once "../models/bbdd.php";
 
 $db = new Database();
 $conn = $db->connect();
 
-$id = $_POST['id'];
-$tema_id = $_POST['tema_id'];
-$contenido = trim($_POST['contenido']);
+// Recibir datos
+$id = $_POST['id'] ?? null;
+$tema_id = $_POST['tema_id'] ?? null;
+$respuesta = trim($_POST['respuesta'] ?? "");
 
+// Validación
+if (!$id || !$tema_id) {
+    die("Datos incompletos.");
+}
+
+if ($respuesta === "") {
+    die("La respuesta no puede estar vacía.");
+}
+
+// Actualizar respuesta
 $sql = $conn->prepare("
     UPDATE foro_respuestas
-    SET contenido = :contenido
+    SET respuesta = :respuesta
     WHERE id = :id
 ");
 
 $sql->execute([
-    ':contenido' => $contenido,
+    ':respuesta' => $respuesta,
     ':id' => $id
 ]);
 
+// Redirigir al post
 header("Location: ../pages/post.php?id=" . $tema_id);
 exit();

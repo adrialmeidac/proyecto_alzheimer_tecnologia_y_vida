@@ -3,6 +3,7 @@ document.getElementById("registroForm").addEventListener("submit", function (e) 
     e.preventDefault();
 
     const nombre    = document.getElementById("nombre").value.trim();
+    const apellidos = document.getElementById("apellidos").value.trim();
     const email     = document.getElementById("email").value.trim();
     const password  = document.getElementById("password").value.trim();
     const password2 = document.getElementById("password2").value.trim();
@@ -53,6 +54,7 @@ document.getElementById("registroForm").addEventListener("submit", function (e) 
 // FUNCIÓN QUE GOOGLE LLAMA CUANDO EL USUARIO PASA EL RECAPTCHA
 function onSubmit(token) {
     const nombre    = document.getElementById("nombre").value.trim();
+    const apellidos = document.getElementById("apellidos").value.trim();
     const email     = document.getElementById("email").value.trim();
     const password  = document.getElementById("password").value.trim();
     const password2 = document.getElementById("password2").value.trim();
@@ -63,6 +65,7 @@ function onSubmit(token) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
             nombre: nombre,
+            apellidos:apellidos,
             email: email,
             password: password,
             password2: password2,

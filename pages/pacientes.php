@@ -2,13 +2,13 @@
 session_start();
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: /pages/login.php");
     exit();
 }
 
-// SOLO familiares/cuidadores pueden entrar aquí
+// SOLO familiares o cuidadores pueden entrar aquí
 if (!in_array($_SESSION["rol"], ["familiar", "cuidador"])) {
-    header("Location: /pages/dashboard.php");
+    header("Location: /pages/dashboardFamiliar.php");
     exit();
 }
 
@@ -21,8 +21,8 @@ $familiar_id = $_SESSION['user_id'];
 
 // Obtener pacientes vinculados
 $sql = $conn->prepare("
-    SELECT u.id, u.nombre, u.apellido, rf.tipo_relacion
-    FROM relaciones_paciente_familiar rf
+    SELECT u.id, u.nombre, u.apellidos, rf.parentesco
+    FROM relaciones_familiares rf
     INNER JOIN usuarios u ON u.id = rf.paciente_id
     WHERE rf.familiar_id = :id
 ");
@@ -36,33 +36,44 @@ $pacientes = $sql->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <title>Mis Pacientes</title>
 
-    <link rel="stylesheet" href="/assets/css/color.css">
     <link rel="stylesheet" href="/assets/css/global.css">
     <link rel="stylesheet" href="/assets/css/header.css">
-    <link rel="stylesheet" href="/assets/css/banner.css">
     <link rel="stylesheet" href="/assets/css/menu.css">
-    <link rel="stylesheet" href="/assets/css/footer.css">
-    <link rel="stylesheet" href="/assets/css/dashboard.css">
+    <link rel="stylesheet" href="/assets/css/panel-familiar.css">
 </head>
 
 <body>
 
 <?php include "../includes/header.php"; ?>
 <?php include "../includes/menu-familiar.php"; ?>
-    <!-- BOTÓN MODO OSCURO -->
-    <button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
+<?php include "../includes/responsive-menu.php"; ?>
+<?php include "../includes/private-banner.php"; ?>
 
+<button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
 
-<div class="contenedor-notificaciones">
+<div class="panel-familiar-container">
+
+    <?php if (isset($_GET['vinculado'])): ?>
+        <div class="alerta-exito">
+            Paciente vinculado correctamente.
+        </div>
+    <?php endif; ?>
+
     <h1 class="titulo-notificaciones">👨‍⚕️ Mis Pacientes</h1>
+
+    <div class="acciones-pacientes">
+        <a href="/pages/registro_familiar.php" class="btn-agregar-paciente">
+            + Vincular nuevo paciente
+        </a>
+    </div>
 
     <?php if (empty($pacientes)): ?>
         <p>No tienes pacientes vinculados.</p>
     <?php else: ?>
         <?php foreach ($pacientes as $p): ?>
             <div class="notificacion leida">
-                <p><strong><?php echo $p['nombre'] . " " . $p['apellido']; ?></strong></p>
-                <p>Relación: <?php echo $p['tipo_relacion']; ?></p>
+                <p><strong><?php echo $p['nombre'] . " " . $p['apellidos']; ?></strong></p>
+                <p>Relación: <?php echo $p['parentesco']; ?></p>
 
                 <a href="actividades_pacientes.php?paciente=<?php echo $p['id']; ?>" class="btn-leida">
                     Ver actividades
@@ -70,8 +81,10 @@ $pacientes = $sql->fetchAll(PDO::FETCH_ASSOC);
             </div>
         <?php endforeach; ?>
     <?php endif; ?>
+
 </div>
-    <script src="/assets/js/theme.js"></script>
+
+<script src="/assets/js/theme.js"></script>
 
 </body>
 </html>

@@ -10,39 +10,51 @@ if (!isset($_SESSION["user_id"])) {
     exit;
 }
 
-// SOLO PACIENTES PUEDEN USAR ESTE CONTROLADOR
+// SOLO PACIENTES
 if ($_SESSION["rol"] !== "paciente") {
     http_response_code(403);
     echo json_encode(["success" => false, "error" => "Acceso no permitido"]);
     exit;
 }
 
-// Verificar método POST
+// SOLO POST
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     http_response_code(405);
     echo json_encode(["success" => false, "error" => "Método no permitido"]);
     exit;
 }
 
-// Conexión
 $db = new Database();
 $conn = $db->connect();
 
 // Recibir datos
-$nombre = trim($_POST["nombre"] ?? "");
+$nombre   = trim($_POST["nombre"] ?? "");
 $apellido = trim($_POST["apellido"] ?? "");
-$fecha = trim($_POST["fecha"] ?? "");
+$fecha    = trim($_POST["fecha"] ?? "");
 $telefono = trim($_POST["telefono"] ?? "");
 
 // Validaciones
 $errores = [];
 
-if ($nombre === "") $errores[] = "El nombre es obligatorio.";
-if ($apellido === "") $errores[] = "El apellido es obligatorio.";
-if ($fecha === "" || !strtotime($fecha)) $errores[] = "La fecha de nacimiento no es válida.";
+if ($nombre === "" || !preg_match("/^[a-zA-ZÀ-ÿ\s]{2,40}$/", $nombre)) {
+    $errores[] = "El nombre no es válido.";
+}
 
-if ($telefono !== "" && !preg_match("/^[0-9]{9}$/", $telefono)) {
-    $errores[] = "El teléfono debe tener 9 dígitos.";
+if ($apellido === "" || !preg_match("/^[a-zA-ZÀ-ÿ\s]{2,60}$/", $apellido)) {
+    $errores[] = "El apellido no es válido.";
+}
+
+if ($fecha === "" || !strtotime($fecha)) {
+    $errores[] = "La fecha de nacimiento no es válida.";
+} else {
+    // No permitir fechas futuras
+    if ($fecha > date("Y-m-d")) {
+        $errores[] = "La fecha de nacimiento no puede ser futura.";
+    }
+}
+
+if ($telefono !== "" && !preg_match("/^[1-9][0-9]{8}$/", $telefono)) {
+    $errores[] = "El teléfono debe tener 9 dígitos y no comenzar por 0.";
 }
 
 if (!empty($errores)) {
@@ -52,37 +64,50 @@ if (!empty($errores)) {
 }
 
 try {
-    // Actualizar datos del paciente
+
+    // 1. Actualizar datos en usuarios
     $sql = "UPDATE usuarios SET 
                 nombre = :nombre,
-                apellido = :apellido,
-                fecha_nacimiento = :fecha,
+                apellidos = :apellido,
                 telefono = :telefono,
                 perfil_completado = 1
             WHERE id = :id";
 
     $stmt = $conn->prepare($sql);
     $stmt->execute([
-        ":nombre" => $nombre,
+        ":nombre"   => $nombre,
         ":apellido" => $apellido,
-        ":fecha" => $fecha,
         ":telefono" => $telefono,
-        ":id" => $_SESSION["user_id"]
+        ":id"       => $_SESSION["user_id"]
     ]);
 
-    // ============================================
-    // CREAR REGISTRO EN TABLA PACIENTES SI NO EXISTE
-    // ============================================
-    $check = $conn->prepare("SELECT id FROM pacientes WHERE usuario_id = ?");
+    // 2. Verificar si el paciente ya existe
+    $check = $conn->prepare("SELECT id FROM pacientes WHERE user_id = ?");
     $check->execute([$_SESSION["user_id"]]);
     $existe = $check->fetch(PDO::FETCH_ASSOC);
 
     if (!$existe) {
-        $insert = $conn->prepare("INSERT INTO pacientes (usuario_id) VALUES (?)");
-        $insert->execute([$_SESSION["user_id"]]);
+        // 3. Crear registro en pacientes
+        $insert = $conn->prepare("
+            INSERT INTO pacientes (user_id, fecha_nacimiento)
+            VALUES (?, ?)
+        ");
+        $insert->execute([$_SESSION["user_id"], $fecha]);
+
+    } else {
+        // 4. Actualizar fecha_nacimiento si ya existe
+        $updatePaciente = $conn->prepare("
+            UPDATE pacientes 
+            SET fecha_nacimiento = :fecha
+            WHERE user_id = :id
+        ");
+        $updatePaciente->execute([
+            ":fecha" => $fecha,
+            ":id"    => $_SESSION["user_id"]
+        ]);
     }
 
-    // Actualizar sesión
+    // 5. Actualizar sesión
     $_SESSION["nombre"] = $nombre;
     $_SESSION["apellido"] = $apellido;
     $_SESSION["perfil_completado"] = 1;

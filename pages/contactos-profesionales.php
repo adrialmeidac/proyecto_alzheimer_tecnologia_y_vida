@@ -3,11 +3,24 @@
 
 <?php
 // Obtener profesionales desde la BD
-$db = new Database();
-$conn = $db->connect();
+try {
+    $db = new Database();
+    $conn = $db->connect();
 
-$stmt = $conn->query("SELECT * FROM profesionales ORDER BY nombre ASC");
-$profesionales = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt = $conn->prepare("
+        SELECT 
+            id, nombre, especialidad, direccion, servicios,
+            horario_lunes, horario_martes, horario_miercoles,
+            horario_jueves, horario_viernes, foto
+        FROM profesionales
+        ORDER BY nombre ASC
+    ");
+    $stmt->execute();
+    $profesionales = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+} catch (Exception $e) {
+    $profesionales = [];
+}
 ?>
 
 <!DOCTYPE html>
@@ -55,6 +68,13 @@ $profesionales = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <?php if (!empty($profesionales)): ?>
             <?php foreach ($profesionales as $pro): ?>
                 <div class="doctor-card">
+
+                    <?php if (!empty($pro['foto'])): ?>
+                        <img src="/uploads/profesionales/<?= htmlspecialchars($pro['foto']) ?>" 
+                             alt="Foto de <?= htmlspecialchars($pro['nombre']) ?>" 
+                             class="doctor-photo">
+                    <?php endif; ?>
+
                     <h3><?= htmlspecialchars($pro['nombre']) ?></h3>
                     <p class="specialty"><?= htmlspecialchars($pro['especialidad']) ?></p>
                     <p class="address"><?= htmlspecialchars($pro['direccion']) ?></p>
@@ -68,11 +88,11 @@ $profesionales = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <div class="working-hours">
                         <strong>Horario de trabajo:</strong>
                         <ul>
-                            <li>Lunes: <?= $pro['horario_lunes'] ?: "—" ?></li>
-                            <li>Martes: <?= $pro['horario_martes'] ?: "—" ?></li>
-                            <li>Miércoles: <?= $pro['horario_miercoles'] ?: "—" ?></li>
-                            <li>Jueves: <?= $pro['horario_jueves'] ?: "—" ?></li>
-                            <li>Viernes: <?= $pro['horario_viernes'] ?: "—" ?></li>
+                            <li>Lunes: <?= htmlspecialchars($pro['horario_lunes'] ?: "—") ?></li>
+                            <li>Martes: <?= htmlspecialchars($pro['horario_martes'] ?: "—") ?></li>
+                            <li>Miércoles: <?= htmlspecialchars($pro['horario_miercoles'] ?: "—") ?></li>
+                            <li>Jueves: <?= htmlspecialchars($pro['horario_jueves'] ?: "—") ?></li>
+                            <li>Viernes: <?= htmlspecialchars($pro['horario_viernes'] ?: "—") ?></li>
                         </ul>
                     </div>
                 </div>

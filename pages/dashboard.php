@@ -53,7 +53,7 @@ if (!isset($_SESSION["perfil_completado"]) || $_SESSION["perfil_completado"] == 
         include "../includes/private-menu.php";
 
     } elseif ($_SESSION["rol"] === "familiar" || $_SESSION["rol"] === "cuidador") {
-        include "../includes/menu-familiar.php"; // ESTE LO CREAMOS AHORA
+        include "../includes/menu-familiar.php";
 
     } else {
         include "../includes/private-menu.php";
@@ -78,7 +78,7 @@ if (!isset($_SESSION["perfil_completado"]) || $_SESSION["perfil_completado"] == 
 
                 <!-- JUEGOS -->
                 <div class="col-12 col-md-6 col-lg-4">
-                    <section class="dashboard-card" onclick="location.href='juegos.php'">
+                    <section class="dashboard-card" onclick="location.href='/pages/juegos.php'">
                         <div class="carousel">
                             <div class="carousel-track">
                                 <img src="/assets/images/rompe1.jpg">
@@ -96,7 +96,7 @@ if (!isset($_SESSION["perfil_completado"]) || $_SESSION["perfil_completado"] == 
 
                 <!-- ACTIVIDADES -->
                 <div class="col-12 col-md-6 col-lg-4">
-                    <section class="dashboard-card" onclick="location.href='actividades.php'">
+                    <section class="dashboard-card" onclick="location.href='/pages/actividades.php'">
                         <div class="carousel">
                             <div class="carousel-track">
                                 <img src="/assets/images/act-bicicleta.jpg">
@@ -112,7 +112,7 @@ if (!isset($_SESSION["perfil_completado"]) || $_SESSION["perfil_completado"] == 
 
                 <!-- FORO -->
                 <div class="col-12 col-md-6 col-lg-4">
-                    <section class="dashboard-card" onclick="location.href='foro.php'">
+                    <section class="dashboard-card" onclick="location.href='/pages/foro.php'">
                         <div class="carousel">
                             <div class="carousel-track">
                                 <img src="/assets/images/foro-1.jpg">
@@ -127,7 +127,7 @@ if (!isset($_SESSION["perfil_completado"]) || $_SESSION["perfil_completado"] == 
 
                 <!-- INFORMACIÓN -->
                 <div class="col-12 col-md-6 col-lg-4">
-                    <section class="dashboard-card" onclick="location.href='informacion.php'">
+                    <section class="dashboard-card" onclick="location.href='/pages/informacion.php'">
                         <div class="carousel">
                             <div class="carousel-track">
                                 <img src="/assets/images/informacion1.jpg">
@@ -142,7 +142,7 @@ if (!isset($_SESSION["perfil_completado"]) || $_SESSION["perfil_completado"] == 
 
                 <!-- TESTS -->
                 <div class="col-12 col-md-6 col-lg-4">
-                    <section class="dashboard-card" onclick="location.href='test.php'">
+                    <section class="dashboard-card" onclick="location.href='/pages/test.php'">
                         <div class="carousel">
                             <div class="carousel-track">
                                 <img src="/assets/images/test1.jpg">
@@ -168,34 +168,6 @@ if (!isset($_SESSION["perfil_completado"]) || $_SESSION["perfil_completado"] == 
 
             </div>
 
-        <?php else: ?>
-
-            <!-- TARJETAS DEL FAMILIAR / CUIDADOR -->
-            <div class="row g-4">
-
-                <div class="col-12 col-md-6 col-lg-4">
-                    <section class="dashboard-card" onclick="location.href='pacientes.php'">
-                        <h3>Mis Pacientes</h3>
-                        <p>Ver y gestionar pacientes vinculados</p>
-                    </section>
-                </div>
-
-                <div class="col-12 col-md-6 col-lg-4">
-                    <section class="dashboard-card" onclick="location.href='actividades_pacientes.php'">
-                        <h3>Actividades del Paciente</h3>
-                        <p>Crear y revisar actividades</p>
-                    </section>
-                </div>
-
-                <div class="col-12 col-md-6 col-lg-4">
-                    <section class="dashboard-card" onclick="location.href='historial_paciente.php'">
-                        <h3>Historial</h3>
-                        <p>Ver progreso y registros</p>
-                    </section>
-                </div>
-
-            </div>
-
         <?php endif; ?>
 
     </main>
@@ -206,18 +178,20 @@ if (!isset($_SESSION["perfil_completado"]) || $_SESSION["perfil_completado"] == 
     <script src="/assets/js/emergencias.js"></script>
 
     <!-- MODAL DE EMERGENCIA -->
-<div id="emergency-modal" class="emergency-modal">
-    <div class="emergency-modal-content">
-        <h2>🚨 Llamada de emergencia</h2>
-        <p>¿Deseas llamar al <strong>112</strong>? Usa esta opción solo en situaciones reales.</p>
+    <div id="emergency-modal" class="emergency-modal">
+        <div class="emergency-modal-content">
+            <h2>🚨 Llamada de emergencia</h2>
+            <p>¿Deseas llamar al <strong>112</strong>? Usa esta opción solo en situaciones reales.</p>
 
-        <div class="emergency-buttons">
-            <button class="btn-cancelar" onclick="cerrarModalEmergencia()">Cancelar</button>
-            <button class="btn-llamar" onclick="realizarLlamadaEmergencia()">Llamar</button>
+            <div class="emergency-buttons">
+                <button class="btn-cancelar" onclick="cerrarModalEmergencia()">Cancelar</button>
+                <button class="btn-llamar" onclick="realizarLlamadaEmergencia()">Llamar</button>
+            </div>
         </div>
     </div>
-</div>
-
+<script src="/assets/js/theme.js"></script>
+<script src="/assets/js/emergencias.js"></script>
+<script src="/assets/js/dashboard.js"></script>
 
 </body>
 </html>

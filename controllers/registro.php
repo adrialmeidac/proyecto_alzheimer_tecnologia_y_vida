@@ -15,11 +15,14 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
 $data = json_decode(file_get_contents("php://input"), true);
 
 $nombre     = trim($data["nombre"] ?? "");
+$apellidos  = trim($data["apellidos"] ?? ""); // NUEVO
 $email      = trim($data["email"] ?? "");
 $password   = $data["password"] ?? "";
 $password2  = $data["password2"] ?? "";
-$rol        = trim($data["rol"] ?? "paciente"); // NUEVO
+$rol        = trim($data["rol"] ?? "paciente");
 $recaptcha  = $data["recaptcha"] ?? "";
+
+
 
 // ===============================
 // VALIDAR RECAPTCHA
@@ -29,17 +32,19 @@ if (!$recaptcha) {
     exit;
 }
 
-$secretKey = "6LcHlbgsAAAAAKF4z5w4nYQGEvpjq3pjeFwJP_9X"; 
+$secretKey = "6Lfe1tgsAAAAAI7X3U5Zy9plHyPy4ZQixW1XaeMw"; // TU CLAVE SECRETA REAL
 $verifyURL = "https://www.google.com/recaptcha/api/siteverify";
 
 $response = file_get_contents($verifyURL . "?secret=" . $secretKey . "&response=" . $recaptcha);
 $responseKeys = json_decode($response, true);
 
+
+
+
 if (!$responseKeys["success"]) {
     echo json_encode(["success" => false, "error" => "Verificación reCAPTCHA fallida"]);
     exit;
 }
-
 // ===============================
 // VALIDACIONES DEL FORMULARIO
 // ===============================
@@ -47,6 +52,10 @@ $errores = [];
 
 if ($nombre === "" || !preg_match("/^[a-zA-ZÀ-ÿ\s]{2,40}$/", $nombre)) {
     $errores[] = "El nombre no es válido.";
+}
+
+if ($apellidos === "" || !preg_match("/^[a-zA-ZÀ-ÿ\s]{2,60}$/", $apellidos)) {
+    $errores[] = "Los apellidos no son válidos.";
 }
 
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -72,7 +81,6 @@ if (!empty($errores)) {
 }
 
 try {
-    // Conexión
     $db = new Database();
     $conn = $db->connect();
 
@@ -89,38 +97,34 @@ try {
     // Cifrar contraseña
     $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
-    // Insertar usuario con el ROL REAL
+    // Insertar usuario
     $insert = $conn->prepare("
-        INSERT INTO usuarios (nombre, email, password, rol, perfil_completado, fecha_registro)
-        VALUES (:nombre, :email, :password, :rol, 0, NOW())
+        INSERT INTO usuarios (nombre, apellidos, email, password, rol, perfil_completado, fecha_registro)
+        VALUES (:nombre, :apellidos, :email, :password, :rol, 0, NOW())
     ");
 
     $insert->execute([
-        ":nombre"   => $nombre,
-        ":email"    => $email,
-        ":password" => $hashedPassword,
-        ":rol"      => $rol
+        ":nombre"     => $nombre,
+        ":apellidos"  => $apellidos,
+        ":email"      => $email,
+        ":password"   => $hashedPassword,
+        ":rol"        => $rol
     ]);
 
-    // Obtener ID del nuevo usuario
     $user_id = $conn->lastInsertId();
 
-    // ===============================
-    // CREAR SESIÓN
-    // ===============================
-    $_SESSION["user_id"] = $user_id;
+    // Crear sesión
+    $_SESSION["user_id"] = $user_id;    
     $_SESSION["nombre"]  = $nombre;
+    $_SESSION["apellidos"] = $apellidos;
     $_SESSION["email"]   = $email;
-    $_SESSION["rol"]    = $rol;
+    $_SESSION["rol"]     = $rol;
     $_SESSION["perfil_completado"] = 0;
 
-    // ===============================
-    // REDIRECCIÓN SEGÚN EL ROL
-    // ===============================
+    // Redirección según rol
     if ($rol === "paciente") {
         $redirect = "/pages/datos-personales.php";
     } else {
-        // familiar o cuidador
         $redirect = "/pages/registro_familiar.php";
     }
 

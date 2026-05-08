@@ -28,10 +28,11 @@
 <body>
 
     <!-- HEADER -->
-    <?php include $_SERVER["DOCUMENT_ROOT"] . '/includes/header.php'; ?>
+    <?php include '../includes/header.php'; ?>
 
     <!-- MENÚ PÚBLICO -->
-    <?php include $_SERVER["DOCUMENT_ROOT"] . '/includes/public-menu.php'; ?>
+    <?php include '../includes/public-menu.php'; ?>
+
     <!-- BOTÓN MODO OSCURO -->
     <button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
 
@@ -45,6 +46,10 @@
                 <label for="nombre">Nombre completo</label>
                 <input type="text" id="nombre" placeholder="Introduce tu nombre">
 
+                <label for="apellidos">Apellidos</label>
+                <input type="text" id="apellidos" placeholder="Introduce tus apellidos">
+
+
                 <label for="email">Correo electrónico</label>
                 <input type="email" id="email" placeholder="Introduce tu email">
 
@@ -56,7 +61,7 @@
 
                 <!-- NUEVO: Selección de rol -->
                 <label for="rol" class="mt-3">Tipo de cuenta</label>
-                <select id="rol" name ="rol" class="form-select">
+                <select id="rol" name="rol" class="form-select">
                     <option value="paciente">Paciente</option>
                     <option value="familiar">Familiar</option>
                     <option value="cuidador">Cuidador</option>
@@ -64,7 +69,7 @@
 
                 <button 
                     class="g-recaptcha main-btn w-100 mt-4"
-                    data-sitekey="6LcHlbgsAAAAAOZ5avcwIW3sMduPFBvynXZ9fnxK"
+                    data-sitekey="6Lfe1tgsAAAAAIYjl4wkw-Z7Fntx9hXVQNCGvlUZ"
                     data-callback="onSubmit"
                     data-action="submit">
                     Crear cuenta
@@ -75,7 +80,7 @@
                     <a href="/pages/login.php" class="login-link">Inicia sesión aquí</a>
                 </p>
 
-                <button type="button" class="back-btn mt-3" onclick="location.href='/pages/index.php'">
+                <button type="button" class="back-btn mt-3" onclick="location.href='../index.php'">
                     Volver al inicio
                 </button>
 
@@ -85,7 +90,7 @@
     </main>
 
     <!-- FOOTER -->
-    <?php include $_SERVER["DOCUMENT_ROOT"] . '/includes/footer.php'; ?>
+    <?php include '../includes/footer.php'; ?>
 
     <!-- JS -->
     <script src="/assets/js/registro.js"></script>

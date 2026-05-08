@@ -6,7 +6,7 @@ $conn = $db->connect();
 
 // Obtener todos los temas del foro
 $sql = $conn->prepare("
-    SELECT ft.id, ft.titulo, ft.contenido, ft.fecha, u.nombre, u.apellido
+    SELECT ft.id, ft.titulo, ft.contenido, ft.fecha
     FROM foro_temas ft
     INNER JOIN usuarios u ON u.id = ft.usuario_id
     ORDER BY ft.fecha DESC
@@ -46,8 +46,13 @@ $temas = $sql->fetchAll(PDO::FETCH_ASSOC);
     <?php
     if (!isset($_SESSION["user_id"])) {
         include '../includes/public-menu.php';
+
     } elseif ($_SESSION["rol"] === "admin") {
         include '../includes/menu-admin.php';
+
+    } elseif ($_SESSION["rol"] === "familiar" || $_SESSION["rol"] === "cuidador") {
+        include '../includes/menu-familiar.php';
+
     } else {
         include '../includes/private-menu.php';
     }
@@ -62,7 +67,6 @@ $temas = $sql->fetchAll(PDO::FETCH_ASSOC);
     <h1>Foro de la Comunidad</h1>
     <p class="subtitle">Comparte experiencias y apoya a otros usuarios</p>
 
-    <!-- CONTENIDO PRINCIPAL -->
     <main class="container forum-container">
 
         <!-- Crear publicación -->
@@ -76,7 +80,7 @@ $temas = $sql->fetchAll(PDO::FETCH_ASSOC);
             <?php endif; ?>
         </div>
 
-        <!-- LISTA DE POSTS DINÁMICOS -->
+        <!-- LISTA DE POSTS -->
         <section class="post-list">
 
             <?php if (empty($temas)): ?>
@@ -85,43 +89,72 @@ $temas = $sql->fetchAll(PDO::FETCH_ASSOC);
             <?php else: ?>
                 <?php foreach ($temas as $t): ?>
                     <article class="post-card">
-                        <h3><?php echo htmlspecialchars($t['titulo']); ?></h3>
+                        <h3><?= htmlspecialchars($t['titulo']) ?></h3>
 
                         <p class="post-author">
-                            Publicado por: <?php echo htmlspecialchars($t['nombre'] . " " . $t['apellido']); ?>
+                            Publicado por: <?= htmlspecialchars($t['nombre'] . " " . $t['apellidos']) ?>
                         </p>
 
                         <p class="post-preview">
-                            <?php echo htmlspecialchars(substr($t['contenido'], 0, 120)) . "..."; ?>
+                            <?= htmlspecialchars(substr($t['contenido'], 0, 120)) . "..." ?>
                         </p>
 
                         <button class="btn btn-info px-3 py-2"
-                                onclick="location.href='post.php?id=<?php echo $t['id']; ?>'">
+                                onclick="location.href='post.php?id=<?= $t['id'] ?>'">
                             Ver más
                         </button>
+
+                        <!-- SOLO ADMIN PUEDE EDITAR/ELIMINAR -->
+                        <?php if (isset($_SESSION["rol"]) && $_SESSION["rol"] === "admin"): ?>
+                            <div class="mt-2">
+                                <button class="btn btn-warning btn-sm"
+                                        onclick="location.href='editar-post.php?id=<?= $t['id'] ?>'">
+                                    Editar
+                                </button>
+
+                                <button class="btn btn-danger btn-sm"
+                                        onclick="if(confirm('¿Eliminar publicación?')) location.href='../controllers/eliminar-post.php?id=<?= $t['id'] ?>'">
+                                    Eliminar
+                                </button>
+                            </div>
+                        <?php endif; ?>
+
                     </article>
                 <?php endforeach; ?>
             <?php endif; ?>
 
-        </section> 
+        </section>
 
         <!-- BOTÓN VOLVER -->
-<?php if (isset($_SESSION["user_id"])): ?>
-    <button class="text-center mt-4 mb-4 btn btn-secondary" onclick="location.href='/pages/dashboard.php'">
-        Volver
-    </button>
-<?php else: ?>
-    <button class="text-center mt-4 mb-4 btn btn-secondary" onclick="location.href='/pages/index.php'">
-        Volver
-    </button>
-<?php endif; ?>
+<button class="text-center mt-4 mb-4 btn btn-secondary"
+    onclick="location.href='<?php
+        if (!isset($_SESSION['user_id'])) {
+            echo "/pages/index.php";
+        } else {
+            switch ($_SESSION['rol']) {
+                case 'paciente':
+                    echo "/pages/dashboard.php";
+                    break;
+                case 'familiar':
+                case 'cuidador':
+                    echo "/pages/dashboardFamiliar.php";
+                    break;
+                case 'admin':
+                    echo "/admin/index.php";
+                    break;
+                default:
+                    echo "/pages/index.php";
+            }
+        }
+    ?>'">
+    Volver
+</button>
 
     </main>
 
     <!-- FOOTER -->
     <?php include '../includes/footer.php'; ?>
 
-    <!-- JS -->
     <script src="/assets/js/theme.js"></script>
 
 </body>

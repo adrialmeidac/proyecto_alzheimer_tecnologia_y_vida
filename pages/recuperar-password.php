@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="/assets/css/menu.css">
     <link rel="stylesheet" href="/assets/css/footer.css">
 
-    <!-- CSS LOGIN (reutilizamos estilos del login) -->
+    <!-- CSS LOGIN -->
     <link rel="stylesheet" href="/assets/css/login.css">
 
     <!-- Fuente -->
@@ -45,9 +45,16 @@
             <form id="recuperarForm" class="login-form">
 
                 <label for="email">Correo electrónico</label>
-                <input type="email" id="email" placeholder="Introduce tu email">
+                <input 
+                    type="email" 
+                    id="email" 
+                    placeholder="Introduce tu email"
+                    required
+                >
 
-                <button type="submit" class="main-btn w-100 mt-4">Enviar enlace</button>
+                <button type="submit" id="btnSubmit" class="main-btn w-100 mt-4">
+                    Enviar enlace
+                </button>
 
                 <button type="button" class="back-btn mt-3" onclick="location.href='/pages/login.php'">
                     Volver al inicio de sesión
@@ -73,6 +80,7 @@
 
             const email = document.getElementById("email").value.trim();
             const mensaje = document.getElementById("mensaje");
+            const btn = document.getElementById("btnSubmit");
 
             mensaje.innerHTML = "";
 
@@ -80,6 +88,14 @@
                 mensaje.innerHTML = "<p class='text-danger'>Debes introducir un email.</p>";
                 return;
             }
+
+            if (!email.includes("@") || email.length < 6) {
+                mensaje.innerHTML = "<p class='text-danger'>Introduce un email válido.</p>";
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerText = "Enviando...";
 
             try {
                 const response = await fetch("/controllers/solicitar-reset.php", {
@@ -93,10 +109,7 @@
                 if (data.success) {
                     mensaje.innerHTML = `
                         <p class='text-success'>
-                            Se ha enviado un enlace a tu correo.
-                        </p>
-                        <p class='text-muted small'>
-                            (Modo desarrollo: <br>${data.debug_link})
+                            Si el correo está registrado, recibirás un enlace para restablecer tu contraseña.
                         </p>
                     `;
                 } else {
@@ -106,6 +119,9 @@
             } catch (error) {
                 mensaje.innerHTML = "<p class='text-danger'>Error al procesar la solicitud.</p>";
             }
+
+            btn.disabled = false;
+            btn.innerText = "Enviar enlace";
         });
     </script>
 

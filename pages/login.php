@@ -16,8 +16,6 @@
     <link rel="stylesheet" href="/assets/css/header.css">
     <link rel="stylesheet" href="/assets/css/menu.css">
     <link rel="stylesheet" href="/assets/css/footer.css">
-
-    <!-- CSS LOGIN -->
     <link rel="stylesheet" href="/assets/css/login.css">
 
     <!-- Fuente -->
@@ -29,21 +27,27 @@
     <!-- HEADER -->
     <?php include $_SERVER["DOCUMENT_ROOT"] . '/includes/header.php'; ?>
 
+    <!-- BOTÓN MODO OSCURO -->
+    <button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
+
     <!-- MENÚ PÚBLICO -->
     <?php include $_SERVER["DOCUMENT_ROOT"] . '/includes/public-menu.php'; ?>
+
+    <!-- BANNER PÚBLICO -->
+    <?php include $_SERVER["DOCUMENT_ROOT"] . '/includes/public-banner.php'; ?>
 
     <main class="login-wrapper d-flex justify-content-center align-items-start">
         <div class="login-card">
 
             <h2 class="text-center mb-3">Iniciar sesión</h2>
 
-            <form id="loginForm" class="login-form">
+            <form id="loginForm" class="login-form" method="POST" action="#">
 
                 <label for="email">Correo electrónico</label>
-                <input type="email" id="email" placeholder="Introduce tu email">
+                <input type="email" id="email" name="email" placeholder="Introduce tu email" required>
 
                 <label for="password">Contraseña</label>
-                <input type="password" id="password" placeholder="Introduce tu contraseña">
+                <input type="password" id="password" name="password" placeholder="Introduce tu contraseña" required>
 
                 <button type="submit" class="main-btn w-100 mt-4">Entrar</button>
 
@@ -73,7 +77,7 @@
 
     <!-- JS -->
     <script src="/assets/js/theme.js"></script>
-    <script src="../assets/js/login.js"></script>
+    <script src="/assets/js/login.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>

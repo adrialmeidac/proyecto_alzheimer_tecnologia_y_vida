@@ -10,36 +10,57 @@ if (session_status() === PHP_SESSION_NONE) {
 
         <?php if (!isset($_SESSION["user_id"])): ?>
             <!-- MENÚ PÚBLICO -->
-            <li><a href="/pages/alzheimerydemencia.php">Alzheimer y demencia</a></li>
-            <li><a href="/pages/rutina-diaria.php">Rutina diaria en casa</a></li>
-            <li><a href="/pages/cuidador.php">El cuidador</a></li>
+            <li><a href="/pages/index.php">Inicio</a></li>
+            <li><a href="/pages/que-es.php">¿Qué es el Alzheimer?</a></li>
+            <li><a href="/pages/fases.php">Fases</a></li>
+            <li><a href="/pages/prevencion.php">Prevención</a></li>
+            <li><a href="/pages/tratamiento.php">Tratamiento</a></li>
+            <li><a href="/pages/tipos-demencia.php">Tipos de demencia</a></li>
+            <li><a href="/pages/ejercicio.php">Rutina diaria</a></li>
+            <li><a href="/pages/aceptando.php">El cuidador</a></li>
             <li><a href="/pages/informacion.php">Temática descargable</a></li>
             <li><a href="/pages/foro.php">Foro</a></li>
             <li><a href="/pages/contactos-profesionales.php">Contacta a un profesional</a></li>
+            <li><a href="/pages/login.php">Iniciar sesión</a></li>
             <li><a href="/pages/registro.php">Regístrate</a></li>
 
         <?php elseif ($_SESSION["rol"] === "admin"): ?>
             <!-- MENÚ ADMIN -->
-            <li><a href="/admin/index.php">Panel administrativo</a></li>
-            <li><a href="/admin/usuarios.php">Gestión de usuarios</a></li>
-            <li><a href="/admin/resultados.php">Resultados</a></li>
+            <li><a href="/pages/admin-dashboard.php">Panel administrativo</a></li>
+            <li><a href="/pages/admin-usuarios.php">Gestión de usuarios</a></li>
+            <li><a href="/pages/admin-profesionales.php">Profesionales</a></li>
+            <li><a href="/pages/admin-foro.php">Foro</a></li>
+            <li><a href="/pages/admin-contenido.php">Contenido</a></li>
+            <li><a href="/pages/admin-actividades.php">Actividades</a></li>
+            <li><a href="/pages/admin-notificaciones.php">Notificaciones</a></li>
+            <li><a href="/controllers/logout.php">Cerrar sesión</a></li>
+
+        <?php elseif (in_array($_SESSION["rol"], ["familiar", "cuidador"])): ?>
+            <!-- MENÚ FAMILIAR / CUIDADOR -->
+            <li><a href="/pages/dashboard.php">Panel principal</a></li>
+            <li><a href="/pages/pacientes.php">Mis Pacientes</a></li>
+            <li><a href="/pages/actividades_pacientes.php">Actividades del Paciente</a></li>
+            <li><a href="/pages/historial_paciente.php">Historial</a></li>
+            <li><a href="/pages/foro.php">Foro</a></li>
+            <li><a href="/pages/notificaciones-familiar.php">Notificaciones</a></li>
             <li><a href="/controllers/logout.php">Cerrar sesión</a></li>
 
         <?php else: ?>
-            <!-- MENÚ PRIVADO -->
+            <!-- MENÚ PACIENTE -->
             <li><a href="/pages/dashboard.php">Panel principal</a></li>
             <li><a href="/pages/actividades.php">Mis actividades</a></li>
             <li><a href="/pages/historial.php">Historial</a></li>
             <li><a href="/pages/juegos.php">Juegos</a></li>
             <li><a href="/pages/foro.php">Foro</a></li>
+            <li><a href="/pages/notificaciones.php">Notificaciones</a></li>
             <li><a href="/controllers/logout.php">Cerrar sesión</a></li>
 
         <?php endif; ?>
 
     </ul>
 </nav>
-<div id="menu-overlay"></div>
 
+<div id="menu-overlay"></div>
 
 <script>
 const menuBtn = document.getElementById("menu-toggle");

@@ -1,8 +1,9 @@
 <?php
-session_start();
+require_once "../middleware/session.php";
 
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+// Solo familiares o cuidadores
+if (!isset($_SESSION["rol"]) || !in_array($_SESSION["rol"], ["familiar", "cuidador"])) {
+    header("Location: /pages/dashboard.php");
     exit();
 }
 
@@ -10,47 +11,53 @@ require_once __DIR__ . "/../models/bbdd.php";
 
 $db = new Database();
 $conn = $db->connect();
-
-// Solo familiares pueden añadir pacientes
-if ($_SESSION['rol'] !== 'familiar') {
-    echo "No tienes permisos para añadir pacientes.";
-    exit();
-}
-
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Añadir Paciente</title>
+    <title>Añadir paciente</title>
 
-    <link rel="stylesheet" href="../assets/css/global.css">
-    <link rel="stylesheet" href="../assets/css/header.css">
-    <link rel="stylesheet" href="../assets/css/menu.css">
+    <!-- CSS globales -->
+    <link rel="stylesheet" href="/assets/css/color.css">
+    <link rel="stylesheet" href="/assets/css/global.css">
+    <link rel="stylesheet" href="/assets/css/header.css">
+    <link rel="stylesheet" href="/assets/css/footer.css">
+    <link rel="stylesheet" href="/assets/css/menu.css">
+    <link rel="stylesheet" href="/assets/css/banner.css">
+    <link rel="stylesheet" href="/assets/css/panel-familiar.css">
 </head>
 
 <body>
 
 <?php include "../includes/header.php"; ?>
-<?php include "../includes/menu.php"; ?>
-    <!-- BOTÓN MODO OSCURO -->
-    <button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
 
+<!-- MENÚ FAMILIAR -->
+<?php include "../includes/menu-familiar.php"; ?>
+<?php include "../includes/responsive-menu.php"; ?>
+<?php include "../includes/private-banner.php"; ?>
 
-<div class="contenedor-notificaciones">
-    <h1 class="titulo-notificaciones">➕ Añadir paciente</h1>
+<button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
 
-    <form action="../controllers/guardar_relacion.php" method="POST">
-        <label for="email">Email del paciente:</label>
-        <input type="email" name="email" required>
+<div class="panel-familiar-container form-container">
+    <h2 class="text-center">Añadir paciente</h2>
 
-        <label for="tipo_relacion">Relación:</label>
-        <input type="text" name="tipo_relacion" placeholder="hijo, hija, cuidador, etc.">
-
-        <button type="submit" class="btn-leida">Añadir paciente</button>
+    <form action="/pages/registro_familiar.php" method="GET">
+        <p class="text-center">
+            Para vincular un paciente, usa el formulario de <strong>“Vincular Paciente”</strong>.
+        </p>
+        <div class="text-center mt-3">
+            <button type="submit" class="btn btn-primary w-100">
+                Ir a vincular paciente
+            </button>
+        </div>
     </form>
 </div>
+
+<?php include "../includes/footer.php"; ?>
+
+<script src="/assets/js/theme.js"></script>
 
 </body>
 </html>

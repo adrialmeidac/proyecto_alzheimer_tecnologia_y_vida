@@ -1,30 +1,12 @@
 <?php
 header("Content-Type: application/json");
-
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
+require_once "../middleware/admin.php";
 require_once "../models/bbdd.php";
-
-// Verificar si es admin
-if (!isset($_SESSION["user_id"]) || $_SESSION["rol"] !== "admin") {
-    http_response_code(401);
-    echo json_encode(["success" => false, "error" => "No autorizado"]);
-    exit;
-}
 
 $db = new Database();
 $conn = $db->connect();
 
-// Obtener acción
-$action = $_GET["action"] ?? null;
-
-if (!$action) {
-    // Si no viene por GET, intentamos leer JSON del body
-    $json = json_decode(file_get_contents("php://input"), true);
-    $action = $json["action"] ?? null;
-}
+$action = $_GET["action"] ?? ($_POST["action"] ?? null);
 
 if (!$action) {
     echo json_encode(["success" => false, "error" => "Acción no especificada"]);
@@ -34,56 +16,93 @@ if (!$action) {
 try {
 
     // ============================================================
-    // GET
+    // OBTENER UN PROFESIONAL (GET)
     // ============================================================
     if ($action === "get") {
 
-        $sql = "SELECT 
-                    id,
-                    nombre,
-                    especialidad,
-                    direccion,
-                    servicios,
-                    horario_lunes,
-                    horario_martes,
-                    horario_miercoles,
-                    horario_jueves,
-                    horario_viernes
-                FROM profesionales
-                ORDER BY nombre ASC";
+        $id = $_GET["id"] ?? null;
 
-        $stmt = $conn->query($sql);
-        $profesionales = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if (!$id) {
+            echo json_encode(["success" => false, "error" => "ID no especificado"]);
+            exit;
+        }
 
-        echo json_encode(["success" => true, "profesionales" => $profesionales]);
+        $stmt = $conn->prepare("SELECT * FROM profesionales WHERE id = :id");
+        $stmt->execute([":id" => $id]);
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$data) {
+            echo json_encode(["success" => false, "error" => "Profesional no encontrado"]);
+            exit;
+        }
+
+        echo json_encode(["success" => true, "profesional" => $data]);
         exit;
     }
 
     // ============================================================
-    // CREATE
+    // LISTAR PROFESIONALES
     // ============================================================
-    if ($action === "create") {
+    if ($action === "listar") {
 
-        $data = json_decode(file_get_contents("php://input"), true);
+        $stmt = $conn->prepare("
+            SELECT *
+            FROM profesionales
+            ORDER BY nombre ASC
+        ");
+        $stmt->execute();
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        $sql = "INSERT INTO profesionales 
-                (nombre, especialidad, direccion, servicios,
-                 horario_lunes, horario_martes, horario_miercoles, horario_jueves, horario_viernes)
-                VALUES 
-                (:nombre, :especialidad, :direccion, :servicios,
-                 :lunes, :martes, :miercoles, :jueves, :viernes)";
+        echo json_encode(["success" => true, "profesionales" => $data]);
+        exit;
+    }
 
-        $stmt = $conn->prepare($sql);
-        $stmt->execute([
-            ":nombre" => $data["nombre"],
-            ":especialidad" => $data["especialidad"],
-            ":direccion" => $data["direccion"],
-            ":servicios" => $data["servicios"] ?? null,
-            ":lunes" => $data["lunes"] ?? null,
-            ":martes" => $data["martes"] ?? null,
-            ":miercoles" => $data["miercoles"] ?? null,
-            ":jueves" => $data["jueves"] ?? null,
-            ":viernes" => $data["viernes"] ?? null
+    // ============================================================
+    // CREAR PROFESIONAL
+    // ============================================================
+    if ($action === "crear") {
+
+        // Servicios
+        $servicios = isset($_POST["servicios"])
+            ? implode(", ", $_POST["servicios"])
+            : null;
+
+        // Foto
+        $fotoFinal = null;
+
+        if (!empty($_FILES["foto"]["name"])) {
+            $uploadDir = "../uploads/profesionales/";
+            if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
+
+            $nombreFoto = time() . "-" . basename($_FILES["foto"]["name"]);
+            $rutaFoto = $uploadDir . $nombreFoto;
+
+            move_uploaded_file($_FILES["foto"]["tmp_name"], $rutaFoto);
+
+            $fotoFinal = "/uploads/profesionales/" . $nombreFoto;
+        }
+
+        $sql = $conn->prepare("
+            INSERT INTO profesionales 
+            (nombre, especialidad, direccion, servicios,
+             horario_lunes, horario_martes, horario_miercoles,
+             horario_jueves, horario_viernes, foto)
+            VALUES
+            (:nombre, :especialidad, :direccion, :servicios,
+             :lunes, :martes, :miercoles, :jueves, :viernes, :foto)
+        ");
+
+        $sql->execute([
+            ":nombre" => $_POST["nombre"],
+            ":especialidad" => $_POST["especialidad"],
+            ":direccion" => $_POST["direccion"],
+            ":servicios" => $servicios,
+            ":lunes" => $_POST["horario_lunes"] ?? null,
+            ":martes" => $_POST["horario_martes"] ?? null,
+            ":miercoles" => $_POST["horario_miercoles"] ?? null,
+            ":jueves" => $_POST["horario_jueves"] ?? null,
+            ":viernes" => $_POST["horario_viernes"] ?? null,
+            ":foto" => $fotoFinal
         ]);
 
         echo json_encode(["success" => true, "message" => "Profesional creado"]);
@@ -91,36 +110,75 @@ try {
     }
 
     // ============================================================
-    // UPDATE
+    // EDITAR PROFESIONAL
     // ============================================================
-    if ($action === "update") {
+    if ($action === "editar") {
 
-        $data = json_decode(file_get_contents("php://input"), true);
+        $id = $_POST["id"];
 
-        $sql = "UPDATE profesionales SET
-                    nombre = :nombre,
-                    especialidad = :especialidad,
-                    direccion = :direccion,
-                    servicios = :servicios,
-                    horario_lunes = :lunes,
-                    horario_martes = :martes,
-                    horario_miercoles = :miercoles,
-                    horario_jueves = :jueves,
-                    horario_viernes = :viernes
-                WHERE id = :id";
+        // Obtener registro actual
+        $stmt = $conn->prepare("SELECT foto FROM profesionales WHERE id = :id");
+        $stmt->execute([":id" => $id]);
+        $actual = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $stmt = $conn->prepare($sql);
-        $stmt->execute([
-            ":id" => $data["id"],
-            ":nombre" => $data["nombre"],
-            ":especialidad" => $data["especialidad"],
-            ":direccion" => $data["direccion"],
-            ":servicios" => $data["servicios"] ?? null,
-            ":lunes" => $data["lunes"] ?? null,
-            ":martes" => $data["martes"] ?? null,
-            ":miercoles" => $data["miercoles"] ?? null,
-            ":jueves" => $data["jueves"] ?? null,
-            ":viernes" => $data["viernes"] ?? null
+        if (!$actual) {
+            echo json_encode(["success" => false, "error" => "Profesional no encontrado"]);
+            exit;
+        }
+
+        // Servicios
+        $servicios = isset($_POST["servicios"])
+            ? implode(", ", $_POST["servicios"])
+            : null;
+
+        // Foto
+        $fotoFinal = $actual["foto"];
+
+        if (!empty($_FILES["foto"]["name"])) {
+
+            // Borrar foto anterior
+            if ($fotoFinal && file_exists(".." . $fotoFinal)) {
+                unlink(".." . $fotoFinal);
+            }
+
+            $uploadDir = "../uploads/profesionales/";
+            if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
+
+            $nombreFoto = time() . "-" . basename($_FILES["foto"]["name"]);
+            $rutaFoto = $uploadDir . $nombreFoto;
+
+            move_uploaded_file($_FILES["foto"]["tmp_name"], $rutaFoto);
+
+            $fotoFinal = "/uploads/profesionales/" . $nombreFoto;
+        }
+
+        $sql = $conn->prepare("
+            UPDATE profesionales SET
+                nombre = :nombre,
+                especialidad = :especialidad,
+                direccion = :direccion,
+                servicios = :servicios,
+                horario_lunes = :lunes,
+                horario_martes = :martes,
+                horario_miercoles = :miercoles,
+                horario_jueves = :jueves,
+                horario_viernes = :viernes,
+                foto = :foto
+            WHERE id = :id
+        ");
+
+        $sql->execute([
+            ":id" => $id,
+            ":nombre" => $_POST["nombre"],
+            ":especialidad" => $_POST["especialidad"],
+            ":direccion" => $_POST["direccion"],
+            ":servicios" => $servicios,
+            ":lunes" => $_POST["horario_lunes"] ?? null,
+            ":martes" => $_POST["horario_martes"] ?? null,
+            ":miercoles" => $_POST["horario_miercoles"] ?? null,
+            ":jueves" => $_POST["horario_jueves"] ?? null,
+            ":viernes" => $_POST["horario_viernes"] ?? null,
+            ":foto" => $fotoFinal
         ]);
 
         echo json_encode(["success" => true, "message" => "Profesional actualizado"]);
@@ -128,16 +186,23 @@ try {
     }
 
     // ============================================================
-    // DELETE
+    // ELIMINAR PROFESIONAL
     // ============================================================
-    if ($action === "delete") {
+    if ($action === "eliminar") {
 
-        $data = json_decode(file_get_contents("php://input"), true);
+        $id = $_GET["id"] ?? $_POST["id"];
 
-        $sql = "DELETE FROM profesionales WHERE id = :id";
+        // Obtener foto
+        $stmt = $conn->prepare("SELECT foto FROM profesionales WHERE id = :id");
+        $stmt->execute([":id" => $id]);
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $stmt = $conn->prepare($sql);
-        $stmt->execute([":id" => $data["id"]]);
+        if ($data && $data["foto"] && file_exists(".." . $data["foto"])) {
+            unlink(".." . $data["foto"]);
+        }
+
+        $sql = $conn->prepare("DELETE FROM profesionales WHERE id = :id");
+        $sql->execute([":id" => $id]);
 
         echo json_encode(["success" => true, "message" => "Profesional eliminado"]);
         exit;
@@ -149,7 +214,6 @@ try {
     http_response_code(500);
     echo json_encode([
         "success" => false,
-        "error" => $e->getMessage(),
-        "trace" => $e->getTraceAsString()
+        "error" => $e->getMessage()
     ]);
 }

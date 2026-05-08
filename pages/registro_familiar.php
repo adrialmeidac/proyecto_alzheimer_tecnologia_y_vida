@@ -6,7 +6,7 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-// SOLO familiares o cuidadores pueden entrar aquí
+// SOLO familiares o cuidadores
 if (!in_array($_SESSION["rol"], ["familiar", "cuidador"])) {
     header("Location: /pages/dashboard.php");
     exit();
@@ -22,59 +22,75 @@ $mensaje = "";
 $tipo_mensaje = "";
 $exito = false;
 
-// Si el formulario fue enviado
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $email_paciente = trim($_POST["email_paciente"]);
     $tipo_relacion = trim($_POST["tipo_relacion"]);
 
-    // 1. Buscar paciente por correo
-    $sql = $conn->prepare("SELECT id, rol FROM usuarios WHERE email = ?");
-    $sql->execute([$email_paciente]);
-    $paciente = $sql->fetch(PDO::FETCH_ASSOC);
-
-    if (!$paciente) {
-        $mensaje = "No existe un usuario con ese correo.";
+    // Validar email
+    if (!filter_var($email_paciente, FILTER_VALIDATE_EMAIL)) {
+        $mensaje = "El correo no es válido.";
         $tipo_mensaje = "error";
-
-    } elseif ($paciente["rol"] !== "paciente") {
-        $mensaje = "El usuario encontrado no es un paciente.";
-        $tipo_mensaje = "error";
-
     } else {
-        $paciente_id = $paciente["id"];
 
-        // 2. Verificar si ya están vinculados
-        $sql = $conn->prepare("
-            SELECT id FROM relaciones_paciente_familiar
-            WHERE paciente_id = ? AND familiar_id = ?
-        ");
-        $sql->execute([$paciente_id, $familiar_id]);
+        // 1. Buscar paciente
+        $sql = $conn->prepare("SELECT id, rol, perfil_completado FROM usuarios WHERE email = ?");
+        $sql->execute([$email_paciente]);
+        $paciente = $sql->fetch(PDO::FETCH_ASSOC);
 
-        if ($sql->fetch()) {
-            $mensaje = "Este paciente ya está vinculado contigo.";
+        if (!$paciente) {
+            $mensaje = "No existe un usuario con ese correo.";
+            $tipo_mensaje = "error";
+
+        } elseif ($paciente["rol"] !== "paciente") {
+            $mensaje = "El usuario encontrado no es un paciente.";
+            $tipo_mensaje = "error";
+
+        } elseif ($paciente["id"] == $familiar_id) {
+            $mensaje = "No puedes vincularte a ti mismo.";
+            $tipo_mensaje = "error";
+
+        } elseif ($paciente["perfil_completado"] == 0) {
+            $mensaje = "El paciente aún no ha completado su perfil.";
             $tipo_mensaje = "error";
 
         } else {
-            // 3. Insertar relación
+
+            $paciente_id = $paciente["id"];
+
+            // 2. Verificar si ya están vinculados
             $sql = $conn->prepare("
-                INSERT INTO relaciones_paciente_familiar (paciente_id, familiar_id, tipo_relacion)
-                VALUES (?, ?, ?)
+                SELECT id FROM relaciones_familiares
+                WHERE paciente_id = ? AND familiar_id = ?
             ");
-            $sql->execute([$paciente_id, $familiar_id, $tipo_relacion]);
+            $sql->execute([$paciente_id, $familiar_id]);
 
-            // 4. Marcar perfil como completado
-            $update = $conn->prepare("
-                UPDATE usuarios SET perfil_completado = 1
-                WHERE id = ?
-            ");
-            $update->execute([$familiar_id]);
+            if ($sql->fetch()) {
+                $mensaje = "Este paciente ya está vinculado contigo.";
+                $tipo_mensaje = "error";
 
-            $_SESSION["perfil_completado"] = 1;
+            } else {
 
-            $mensaje = "Paciente vinculado correctamente.";
-            $tipo_mensaje = "exito";
-            $exito = true;
+                // 3. Insertar relación
+                $sql = $conn->prepare("
+                    INSERT INTO relaciones_familiares (paciente_id, familiar_id, $tipo_relacion)
+                    VALUES (?, ?, ?)
+                ");
+                $sql->execute([$paciente_id, $familiar_id, $parentesco]);
+
+                // 4. Marcar perfil del familiar como completado
+                $update = $conn->prepare("
+                    UPDATE usuarios SET perfil_completado = 1
+                    WHERE id = ?
+                ");
+                $update->execute([$familiar_id]);
+
+                $_SESSION["perfil_completado"] = 1;
+
+                $mensaje = "Paciente vinculado correctamente.";
+                $tipo_mensaje = "exito";
+                $exito = true;
+            }
         }
     }
 }
@@ -86,39 +102,26 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <meta charset="UTF-8">
     <title>Vincular Paciente</title>
 
+    <!-- CSS globales -->
+    <link rel="stylesheet" href="/assets/css/color.css">
     <link rel="stylesheet" href="/assets/css/global.css">
     <link rel="stylesheet" href="/assets/css/header.css">
+    <link rel="stylesheet" href="/assets/css/footer.css">
     <link rel="stylesheet" href="/assets/css/menu.css">
-
-    <style>
-        .form-container {
-            max-width: 450px;
-            margin: 40px auto;
-            padding: 25px;
-            border-radius: 10px;
-            background: #fff;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        .mensaje {
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-        .error { background: #ffdddd; color: #a30000; }
-        .exito { background: #ddffdd; color: #006600; }
-    </style>
+    <link rel="stylesheet" href="/assets/css/banner.css">
+    <link rel="stylesheet" href="/assets/css/panel-familiar.css">
 </head>
 
 <body>
 
 <?php include "../includes/header.php"; ?>
 <?php include "../includes/menu-familiar.php"; ?>
-    <!-- BOTÓN MODO OSCURO -->
-    <button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
+<?php include "../includes/responsive-menu.php"; ?>
+<?php include "../includes/private-banner.php"; ?>
 
+<button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
 
-<div class="form-container">
+<div class="panel-familiar-container form-container">
     <h2 class="text-center">Vincular Paciente</h2>
 
     <?php if ($mensaje): ?>
@@ -143,14 +146,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             <button class="btn btn-primary w-100 mt-4">Vincular</button>
         </form>
+
     <?php else: ?>
 
-        <div class="text-center mt-3">
+        <div class="text-center mt-4">
             <a href="/pages/dashboard.php" class="btn btn-success w-100">Ir al Dashboard</a>
         </div>
 
     <?php endif; ?>
 </div>
+
+<?php include "../includes/footer.php"; ?>
+
+<script src="/assets/js/theme.js"></script>
 
 </body>
 </html>

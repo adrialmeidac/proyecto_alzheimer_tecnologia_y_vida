@@ -21,47 +21,64 @@ if (!$post) {
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Editar Post</title>
+    <title>Editar Publicación</title>
 
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- CSS -->
     <link rel="stylesheet" href="/assets/css/color.css">
     <link rel="stylesheet" href="/assets/css/global.css">
     <link rel="stylesheet" href="/assets/css/header.css">
     <link rel="stylesheet" href="/assets/css/footer.css">
     <link rel="stylesheet" href="/assets/css/menu.css">
+    <link rel="stylesheet" href="/assets/css/banner.css">
     <link rel="stylesheet" href="/assets/css/post.css">
+    <link rel="stylesheet" href="/assets/css/foro.css">
 </head>
 
 <body>
 
 <?php include '../includes/header.php'; ?>
+
+<button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
+
+<!-- MENÚ ADMIN -->
 <?php include '../includes/menu-admin.php'; ?>
 
-    <!-- BOTÓN MODO OSCURO -->
-    <button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
+<!-- MENÚ RESPONSIVE -->
+<?php include '../includes/responsive-menu.php'; ?>
 
+<!-- BANNER PRIVADO -->
+<?php include '../includes/private-banner.php'; ?>
 
 <div class="container forum-container">
     <h1>Editar Publicación</h1>
 
     <form action="../controllers/actualizar_post.php" method="POST">
-        <input type="hidden" name="id" value="<?php echo $post['id']; ?>">
+        <input type="hidden" name="id" value="<?= $post['id'] ?>">
 
-        <label>Título</label>
-        <input type="text" name="titulo" class="form-control" 
-               value="<?php echo htmlspecialchars($post['titulo']); ?>" required>
+        <label class="form-label">Título</label>
+        <input type="text" name="titulo" class="form-control"
+               value="<?= htmlspecialchars($post['titulo']) ?>" required>
 
-        <label class="mt-3">Contenido</label>
-        <textarea name="contenido" class="form-control" rows="6" required><?php 
-            echo htmlspecialchars($post['contenido']); 
+        <label class="form-label mt-3">Contenido</label>
+        <textarea name="contenido" class="form-control" rows="6" required><?= 
+            htmlspecialchars($post['contenido']) 
         ?></textarea>
 
         <button type="submit" class="btn btn-primary mt-3">Guardar cambios</button>
     </form>
 
-    <button class="btn btn-secondary mt-3" onclick="location.href='post.php?id=<?php echo $post['id']; ?>'">
+    <button class="btn btn-secondary mt-3"
+            onclick="location.href='post.php?id=<?= $post['id'] ?>'">
         Cancelar
     </button>
 </div>
+
+<?php include '../includes/footer.php'; ?>
+
+<script src="/assets/js/theme.js"></script>
 
 </body>
 </html>
