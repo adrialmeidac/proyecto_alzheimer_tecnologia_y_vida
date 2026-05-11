@@ -15,15 +15,15 @@ $conn = $db->connect();
 
 switch ($action) {
 
-    // ============================
-    // 1. LISTAR ACTIVIDADES DEL PACIENTE
-    // ============================
+    
+    
+    
     case "listar":
         $paciente_id = $_GET["paciente_id"] ?? null;
 
-        // Validar relación
+        
         $sql = $conn->prepare("
-            SELECT id FROM relaciones_paciente_familiar
+            SELECT id FROM relaciones_familiares
             WHERE paciente_id = ? AND familiar_id = ?
         ");
         $sql->execute([$paciente_id, $familiar_id]);
@@ -33,10 +33,10 @@ switch ($action) {
             exit;
         }
 
-        // Listar actividades creadas por el familiar
+        
         $sql = $conn->prepare("
             SELECT id, descripcion, fecha, hora, completada
-            FROM actividades_paciente
+            FROM actividades
             WHERE paciente_id = ?
             ORDER BY id DESC
         ");
@@ -49,47 +49,47 @@ switch ($action) {
         break;
 
 
-    // ============================
-    // 2. CREAR ACTIVIDAD PARA EL PACIENTE
-    // ============================
-    case "crear":
-        $data = json_decode(file_get_contents("php://input"), true);
+    
+    
+    
+case "crear":
 
-        $paciente_id = $data["paciente_id"] ?? null;
-        $texto = trim($data["texto"] ?? "");
-        $fecha = $data["fecha"] ?? date("Y-m-d");
-        $hora = $data["hora"] ?? null;
+    // Recibir datos del formulario (POST normal)
+    $paciente_id = $_POST["paciente_id"] ?? null;
+    $texto = trim($_POST["texto"] ?? "");
+    $fecha = $_POST["fecha"] ?? date("Y-m-d");
+    $hora = $_POST["hora"] ?? null;
 
-        if (!$paciente_id || strlen($texto) < 3) {
-            echo json_encode(["success" => false, "error" => "Datos inválidos"]);
-            exit;
-        }
+    // Validar datos
+    if (!$paciente_id || strlen($texto) < 3) {
+        echo json_encode(["success" => false, "error" => "Datos inválidos"]);
+        exit;
+    }
 
-        // Validar relación
-        $sql = $conn->prepare("
-            SELECT id FROM relaciones_paciente_familiar
-            WHERE paciente_id = ? AND familiar_id = ?
-        ");
-        $sql->execute([$paciente_id, $familiar_id]);
+    // Verificar relación familiar
+    $sql = $conn->prepare("
+        SELECT id FROM relaciones_familiares
+        WHERE paciente_id = ? AND familiar_id = ?
+    ");
+    $sql->execute([$paciente_id, $familiar_id]);
 
-        if (!$sql->fetch()) {
-            echo json_encode(["success" => false, "error" => "No tienes permiso"]);
-            exit;
-        }
+    if (!$sql->fetch()) {
+        echo json_encode(["success" => false, "error" => "No tienes permiso"]);
+        exit;
+    }
 
-        // Crear actividad con familiar_id
-        $sql = $conn->prepare("
-            INSERT INTO actividades_paciente (paciente_id, familiar_id, descripcion, fecha, hora, completada)
-            VALUES (?, ?, ?, ?, ?, 0)
-        ");
-        $sql->execute([$paciente_id, $familiar_id, $texto, $fecha, $hora]);
+    // Insertar actividad (usando 'titulo' y 'descripcion' con el mismo texto)
+    $sql = $conn->prepare("
+        INSERT INTO actividades (usuario_id, titulo, descripcion, fecha, hora, estado)
+        VALUES (?, ?, ?, ?, ?, 'pendiente')
+    ");
+    $sql->execute([$paciente_id, $texto, $texto, $fecha, $hora]);
 
-        echo json_encode([
-            "success" => true,
-            "id" => $conn->lastInsertId()
-        ]);
-        break;
-
+    echo json_encode([
+        "success" => true,
+        "id" => $conn->lastInsertId()
+    ]);
+    break;
 
     default:
         echo json_encode(["success" => false, "error" => "Acción inválida"]);

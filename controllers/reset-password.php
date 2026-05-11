@@ -5,38 +5,38 @@ require_once "../models/bbdd.php";
 
 try {
 
-    // Solo aceptar POST
+    
     if ($_SERVER["REQUEST_METHOD"] !== "POST") {
         http_response_code(405);
         echo json_encode(["success" => false, "error" => "Método no permitido"]);
         exit;
     }
 
-    // Obtener datos enviados por fetch()
+    
     $data = json_decode(file_get_contents("php://input"), true);
 
     $token = $data["token"] ?? null;
     $password = $data["password"] ?? null;
 
-    // Validación básica
+    
     if (!$token || !$password) {
         http_response_code(400);
         echo json_encode(["success" => false, "error" => "Datos incompletos"]);
         exit;
     }
 
-    // Validar longitud mínima
+    
     if (strlen($password) < 6) {
         http_response_code(400);
         echo json_encode(["success" => false, "error" => "La contraseña debe tener al menos 6 caracteres"]);
         exit;
     }
 
-    // Conexión
+    
     $db = new Database();
     $conn = $db->connect();
 
-    // Buscar usuario por token
+    
     $stmt = $conn->prepare("
         SELECT id, token_expira 
         FROM usuarios 
@@ -52,13 +52,13 @@ try {
         exit;
     }
 
-    // Verificar expiración del token
+    
     $expira = strtotime($user["token_expira"]);
     $ahora = time();
 
     if ($ahora > $expira) {
 
-        // Limpiar token expirado
+        
         $clean = $conn->prepare("
             UPDATE usuarios 
             SET token_recuperacion = NULL, token_expira = NULL
@@ -71,10 +71,10 @@ try {
         exit;
     }
 
-    // Encriptar nueva contraseña
+    
     $passwordHash = password_hash($password, PASSWORD_DEFAULT);
 
-    // Actualizar contraseña y eliminar token
+    
     $update = $conn->prepare("
         UPDATE usuarios 
         SET password = :password, token_recuperacion = NULL, token_expira = NULL

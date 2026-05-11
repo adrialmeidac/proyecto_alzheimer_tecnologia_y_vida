@@ -16,9 +16,9 @@ let timerInterval;
 let timerIniciado = false;
 let parejasObjetivo = 8;
 
-// ===============================
-//   CAMBIO DE DIFICULTAD
-// ===============================
+
+
+
 difficultyRadios.forEach(radio => {
     radio.addEventListener("change", () => {
         const nivel = radio.value;
@@ -31,9 +31,9 @@ difficultyRadios.forEach(radio => {
     });
 });
 
-// ===============================
-//   GENERAR CARTAS
-// ===============================
+
+
+
 function generarCartas() {
     const seleccion = cartasBase.slice(0, parejasObjetivo);
     cartas = [...seleccion, ...seleccion];
@@ -53,9 +53,9 @@ function mezclarCartas() {
     cartas.sort(() => Math.random() - 0.5);
 }
 
-// ===============================
-//   CREAR TABLERO
-// ===============================
+
+
+
 function crearTablero() {
     grid.innerHTML = "";
     seleccionadas = [];
@@ -76,9 +76,9 @@ function crearTablero() {
     });
 }
 
-// ===============================
-//   TEMPORIZADOR
-// ===============================
+
+
+
 function iniciarTemporizador() {
     tiempo = 0;
     timerEl.textContent = "Tiempo: 0s";
@@ -93,9 +93,9 @@ function detenerTemporizador() {
     clearInterval(timerInterval);
 }
 
-// ===============================
-//   REVELAR CARTA
-// ===============================
+
+
+
 function revelarCarta(card) {
     if (bloqueado) return;
     if (card.classList.contains("revealed")) return;
@@ -114,9 +114,9 @@ function revelarCarta(card) {
     }
 }
 
-// ===============================
-//   VERIFICAR PAREJA
-// ===============================
+
+
+
 function verificarPareja() {
     bloqueado = true;
 
@@ -138,9 +138,9 @@ function verificarPareja() {
     }
 }
 
-// ===============================
-//   VERIFICAR VICTORIA
-// ===============================
+
+
+
 function verificarVictoria() {
     const todas = document.querySelectorAll(".memory-card.revealed");
 
@@ -156,9 +156,9 @@ function verificarVictoria() {
     }
 }
 
-// ===============================
-//   GUARDAR RESULTADO EN BACKEND
-// ===============================
+
+
+
 function guardarResultadoBackend() {
     const dificultad = document.querySelector("input[name='difficulty']:checked").value;
 
@@ -174,9 +174,9 @@ function guardarResultadoBackend() {
     });
 }
 
-// ===============================
-//   REINICIAR JUEGO
-// ===============================
+
+
+
 function reiniciarJuego() {
     detenerTemporizador();
     timerIniciado = false;
@@ -187,7 +187,7 @@ function reiniciarJuego() {
 
 resetBtn.addEventListener("click", reiniciarJuego);
 
-// ===============================
-//   INICIALIZAR
-// ===============================
+
+
+
 crearTablero();

@@ -4,13 +4,13 @@ header("Content-Type: application/json");
 require_once "../middleware/admin.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/models/bbdd.php";
 
-// Leer JSON
+
 $input = json_decode(file_get_contents("php://input"), true);
 
 $id = $input["id"] ?? null;
 $nuevoRol = $input["rol"] ?? null;
 
-// Validar ID
+
 if (!$id || !filter_var($id, FILTER_VALIDATE_INT)) {
     http_response_code(400);
     echo json_encode(["success" => false, "error" => "ID inválido"]);
@@ -19,10 +19,10 @@ if (!$id || !filter_var($id, FILTER_VALIDATE_INT)) {
 
 $id = (int)$id;
 
-// Normalizar rol
+
 $nuevoRol = strtolower(trim($nuevoRol));
 
-// Roles permitidos
+
 $rolesPermitidos = ["paciente", "familiar", "cuidador", "admin"];
 
 if (!in_array($nuevoRol, $rolesPermitidos)) {
@@ -31,7 +31,7 @@ if (!in_array($nuevoRol, $rolesPermitidos)) {
     exit;
 }
 
-// Evitar que un admin se cambie su propio rol
+
 if ($id === $_SESSION["user_id"]) {
     http_response_code(403);
     echo json_encode(["success" => false, "error" => "No puedes cambiar tu propio rol"]);
@@ -42,7 +42,7 @@ try {
     $db = new Database();
     $conn = $db->connect();
 
-    // Verificar existencia del usuario
+    
     $stmt = $conn->prepare("SELECT id FROM usuarios WHERE id = :id");
     $stmt->execute([":id" => $id]);
 
@@ -52,7 +52,7 @@ try {
         exit;
     }
 
-    // Actualizar rol
+    
     $stmt = $conn->prepare("UPDATE usuarios SET rol = :rol WHERE id = :id");
     $stmt->execute([
         ":rol" => $nuevoRol,

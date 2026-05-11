@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// Si no hay usuario logueado, redirigir
+
 if (!isset($_SESSION['user_id'])) {
     header("Location: /login.php");
     exit();
@@ -14,7 +14,7 @@ $conn = $db->connect();
 
 $user_id = $_SESSION['user_id'];
 
-// Obtener notificaciones NO leídas
+
 $sql_no_leidas = $conn->prepare("
     SELECT * FROM notificaciones 
     WHERE usuario_id = :user_id AND leida = 0
@@ -23,7 +23,7 @@ $sql_no_leidas = $conn->prepare("
 $sql_no_leidas->execute([':user_id' => $user_id]);
 $no_leidas = $sql_no_leidas->fetchAll(PDO::FETCH_ASSOC);
 
-// Obtener notificaciones leídas
+
 $sql_leidas = $conn->prepare("
     SELECT * FROM notificaciones 
     WHERE usuario_id = :user_id AND leida = 1
@@ -39,7 +39,7 @@ $leidas = $sql_leidas->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <title>Notificaciones</title>
 
-    <!-- CSS globales -->
+    
     <link rel="stylesheet" href="/assets/css/color.css">
     <link rel="stylesheet" href="/assets/css/global.css">
     <link rel="stylesheet" href="/assets/css/header.css">
@@ -51,23 +51,23 @@ $leidas = $sql_leidas->fetchAll(PDO::FETCH_ASSOC);
 
 <body>
 
-<!-- HEADER -->
+
 <?php include "../includes/header.php"; ?>
 
-<!-- MENÚ PRIVADO -->
+
 <?php include "../includes/private-menu.php"; ?>
 
-<!-- MENÚ RESPONSIVE -->
+
 <?php include "../includes/responsive-menu.php"; ?>
 
-<!-- BANNER PRIVADO -->
+
 <?php include "../includes/private-banner.php"; ?>
 
 <div class="contenedor-notificaciones">
 
     <h1 class="titulo-notificaciones">🔔 Notificaciones</h1>
 
-    <!-- NOTIFICACIONES NO LEÍDAS -->
+    
     <h2 class="subtitulo-notificaciones">No leídas (<?php echo count($no_leidas); ?>)</h2>
 
     <?php if (count($no_leidas) === 0): ?>
@@ -89,7 +89,7 @@ $leidas = $sql_leidas->fetchAll(PDO::FETCH_ASSOC);
 
     <hr>
 
-    <!-- NOTIFICACIONES LEÍDAS -->
+    
     <h2 class="subtitulo-notificaciones">Leídas</h2>
 
     <?php if (count($leidas) === 0): ?>
@@ -97,7 +97,6 @@ $leidas = $sql_leidas->fetchAll(PDO::FETCH_ASSOC);
     <?php else: ?>
         <?php foreach ($leidas as $n): ?>
             <div class="notificacion leida">
-                <p class="tipo"><?php echo ucfirst(str_replace("_", " ", $n['tipo'])); ?></p>
                 <p class="mensaje"><?php echo $n['mensaje']; ?></p>
                 <small class="fecha"><?php echo $n['fecha']; ?></small>
             </div>
@@ -106,7 +105,7 @@ $leidas = $sql_leidas->fetchAll(PDO::FETCH_ASSOC);
 
 </div>
 
-<!-- FOOTER -->
+
 <?php include "../includes/footer.php"; ?>
 
 </body>

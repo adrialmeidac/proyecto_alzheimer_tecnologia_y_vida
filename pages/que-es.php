@@ -8,10 +8,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>¿Qué es el Alzheimer?</title>
 
-    <!-- Bootstrap -->
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- CSS -->
+    
     <link rel="stylesheet" href="/assets/css/color.css">
     <link rel="stylesheet" href="/assets/css/global.css">
     <link rel="stylesheet" href="/assets/css/header.css">
@@ -25,26 +25,26 @@
 
 <body>
 
-    <!-- HEADER -->
+    
     <?php include '../includes/header.php'; ?>
 
-    <!-- BOTÓN MODO OSCURO -->
+    
     <button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
 
-    <!-- MENÚ PÚBLICO -->
+    
     <?php include '../includes/public-menu.php'; ?>
 
-    <!-- MENÚ RESPONSIVE -->
+    
     <?php include '../includes/responsive-menu.php'; ?>
 
-    <!-- BANNER PÚBLICO -->
+    
     <?php include '../includes/public-banner.php'; ?>
 
     <main class="container mt-4">
 
         <p class="subtitle">¿Qué es el Alzheimer?</p>
 
-        <!-- AQUÍ VA TU CONTENIDO -->
+        
         <section class="content-block">
             <p>El Alzheimer es una enfermedad neurodegenerativa que afecta principalmente a la memoria, 
                 el pensamiento y la conducta. Su avance es progresivo, lo que significa que los síntomas
@@ -68,10 +68,10 @@
                         alimentarse o bañarse.</p>  
         </section>
 </main>
-            <!-- FOOTER -->
+            
     <?php include '../includes/footer.php'; ?>
 
-    <!-- JS -->
+    
     <script src="/assets/js/theme.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 

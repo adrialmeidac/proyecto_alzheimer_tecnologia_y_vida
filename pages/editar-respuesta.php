@@ -1,5 +1,5 @@
 <?php
-require_once "../middleware/session-admin.php"; // SOLO ADMIN
+require_once "../middleware/session-admin.php"; 
 require_once "../models/bbdd.php";
 
 $db = new Database();
@@ -8,7 +8,7 @@ $conn = $db->connect();
 $id = $_GET['id'] ?? null;
 $tema_id = $_GET['tema'] ?? null;
 
-// Obtener la respuesta
+
 $sql = $conn->prepare("SELECT * FROM foro_respuestas WHERE id = :id");
 $sql->execute([':id' => $id]);
 $respuesta = $sql->fetch(PDO::FETCH_ASSOC);
@@ -24,10 +24,10 @@ if (!$respuesta) {
     <meta charset="UTF-8">
     <title>Editar Respuesta</title>
 
-    <!-- Bootstrap -->
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- CSS globales -->
+    
     <link rel="stylesheet" href="/assets/css/color.css">
     <link rel="stylesheet" href="/assets/css/global.css">
     <link rel="stylesheet" href="/assets/css/header.css">
@@ -44,13 +44,13 @@ if (!$respuesta) {
 
 <button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
 
-<!-- MENÚ ADMIN -->
+
 <?php include '../includes/menu-admin.php'; ?>
 
-<!-- MENÚ RESPONSIVE -->
+
 <?php include '../includes/responsive-menu.php'; ?>
 
-<!-- BANNER PRIVADO -->
+
 <?php include '../includes/private-banner.php'; ?>
 
 <div class="container forum-container">

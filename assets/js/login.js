@@ -19,7 +19,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
         const data = await response.json();
 
         if (data.success) {
-            // login.php ya calcula la ruta correcta
+            
             window.location.href = data.redirect;
         } else {
             alert(data.error || data.message || "Credenciales incorrectas");

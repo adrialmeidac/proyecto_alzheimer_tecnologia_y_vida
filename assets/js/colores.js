@@ -13,10 +13,10 @@ const difficultyRadios = document.querySelectorAll("input[name='difficulty']");
 let tiempo = 0;
 let timerInterval;
 
-// Niveles según dificultad
-let nivelesMeta = 10; // por defecto (medio)
 
-// Cambiar dificultad sin iniciar el juego
+let nivelesMeta = 10; 
+
+
 difficultyRadios.forEach(radio => {
     radio.addEventListener("change", () => {
         const nivelSel = radio.value;
@@ -27,7 +27,7 @@ difficultyRadios.forEach(radio => {
     });
 });
 
-// Temporizador
+
 function iniciarTemporizador() {
     tiempo = 0;
     timerEl.textContent = "Tiempo: 0s";
@@ -42,7 +42,7 @@ function detenerTemporizador() {
     clearInterval(timerInterval);
 }
 
-// Iniciar juego
+
 startBtn.onclick = iniciarJuego;
 
 function iniciarJuego() {
@@ -59,7 +59,7 @@ function iniciarJuego() {
     siguienteNivel();
 }
 
-// Siguiente nivel
+
 function siguienteNivel() {
     bloqueado = true;
     usuario = [];
@@ -71,7 +71,7 @@ function siguienteNivel() {
     reproducirSecuencia();
 }
 
-// Reproducir secuencia
+
 function reproducirSecuencia() {
     let i = 0;
     bloqueado = true;
@@ -87,7 +87,7 @@ function reproducirSecuencia() {
     }, 800);
 }
 
-// Iluminar color
+
 function iluminar(color) {
     const div = document.querySelector(`.${color}`);
     div.classList.add("activo");
@@ -97,7 +97,7 @@ function iluminar(color) {
     }, 400);
 }
 
-// Clic del usuario
+
 botones.forEach(btn => {
     btn.onclick = () => {
         if (bloqueado) return;
@@ -110,11 +110,11 @@ botones.forEach(btn => {
     };
 });
 
-// Validar jugada
+
 function validar() {
     const i = usuario.length - 1;
 
-    // Fallo
+    
     if (usuario[i] !== secuencia[i]) {
         detenerTemporizador();
         bloqueado = true;
@@ -123,10 +123,10 @@ function validar() {
         return;
     }
 
-    // Secuencia completa
+    
     if (usuario.length === secuencia.length) {
 
-        // Final según dificultad
+        
         if (nivel === nivelesMeta) {
             victoria();
         } else {
@@ -135,7 +135,7 @@ function validar() {
     }
 }
 
-// Victoria
+
 function victoria() {
     detenerTemporizador();
     bloqueado = true;
@@ -148,7 +148,7 @@ function victoria() {
     }, 300);
 }
 
-// Guardar resultado en backend
+
 function guardarResultadoBackend() {
     const dificultad = document.querySelector("input[name='difficulty']:checked").value;
 
@@ -164,7 +164,7 @@ function guardarResultadoBackend() {
     });
 }
 
-// Reiniciar juego
+
 resetBtn.addEventListener("click", reiniciarJuego);
 
 function reiniciarJuego() {

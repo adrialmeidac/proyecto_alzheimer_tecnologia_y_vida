@@ -16,9 +16,9 @@ if (!$action) {
 
 try {
 
-    // ============================================================
-    // LISTAR USUARIOS
-    // ============================================================
+    
+    
+    
     if ($action === "listar") {
 
         $stmt = $conn->prepare("SELECT id, nombre, email, rol FROM usuarios ORDER BY id ASC");
@@ -31,9 +31,9 @@ try {
         exit;
     }
 
-    // ============================================================
-    // CREAR USUARIO
-    // ============================================================
+    
+    
+    
     if ($action === "crear") {
 
         if (!isset($data["nombre"], $data["email"], $data["password"], $data["rol"])) {
@@ -41,26 +41,26 @@ try {
             exit;
         }
 
-        // Validar email
+        
         if (!filter_var($data["email"], FILTER_VALIDATE_EMAIL)) {
             echo json_encode(["success" => false, "error" => "Email inválido"]);
             exit;
         }
 
-        // Validar rol
+        
         $rolesValidos = ["paciente", "familiar", "cuidador", "admin"];
         if (!in_array($data["rol"], $rolesValidos)) {
             echo json_encode(["success" => false, "error" => "Rol inválido"]);
             exit;
         }
 
-        // Validar contraseña
+        
         if (strlen($data["password"]) < 6) {
             echo json_encode(["success" => false, "error" => "La contraseña debe tener al menos 6 caracteres"]);
             exit;
         }
 
-        // Verificar email duplicado
+        
         $check = $conn->prepare("SELECT id FROM usuarios WHERE email = ?");
         $check->execute([$data["email"]]);
 
@@ -69,7 +69,7 @@ try {
             exit;
         }
 
-        // Crear usuario
+        
         $stmt = $conn->prepare("
             INSERT INTO usuarios (nombre, email, password, rol)
             VALUES (?, ?, ?, ?)
@@ -86,9 +86,9 @@ try {
         exit;
     }
 
-    // ============================================================
-    // OBTENER USUARIO
-    // ============================================================
+    
+    
+    
     if ($action === "obtener") {
 
         $stmt = $conn->prepare("SELECT id, nombre, email, rol FROM usuarios WHERE id = ?");
@@ -101,9 +101,9 @@ try {
         exit;
     }
 
-    // ============================================================
-    // EDITAR USUARIO
-    // ============================================================
+    
+    
+    
     if ($action === "editar") {
 
         if (!isset($data["id"], $data["nombre"], $data["email"], $data["rol"])) {
@@ -111,20 +111,20 @@ try {
             exit;
         }
 
-        // Validar email
+        
         if (!filter_var($data["email"], FILTER_VALIDATE_EMAIL)) {
             echo json_encode(["success" => false, "error" => "Email inválido"]);
             exit;
         }
 
-        // Validar rol
+        
         $rolesValidos = ["paciente", "familiar", "cuidador", "admin"];
         if (!in_array($data["rol"], $rolesValidos)) {
             echo json_encode(["success" => false, "error" => "Rol inválido"]);
             exit;
         }
 
-        // Verificar email duplicado (excepto el propio)
+        
         $check = $conn->prepare("SELECT id FROM usuarios WHERE email = ? AND id != ?");
         $check->execute([$data["email"], $data["id"]]);
 
@@ -150,9 +150,9 @@ try {
         exit;
     }
 
-    // ============================================================
-    // ELIMINAR USUARIO
-    // ============================================================
+    
+    
+    
     if ($action === "eliminar") {
 
         if ($data["id"] == $_SESSION["user_id"]) {

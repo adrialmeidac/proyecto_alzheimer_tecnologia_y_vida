@@ -1,19 +1,19 @@
 <?php 
 require_once "../middleware/session.php"; 
 
-// SOLO PACIENTES PUEDEN ACCEDER
+
 if (!isset($_SESSION["rol"]) || $_SESSION["rol"] !== "paciente") {
     header("Location: /pages/dashboard.php");
     exit();
 }
 
-// Si el perfil ya está completado → redirigir
+
 if (!empty($_SESSION["perfil_completado"]) && $_SESSION["perfil_completado"] == 1) {
     header("Location: /pages/dashboard.php");
     exit();
 }
 
-// Cargar datos actuales del paciente (si existen)
+
 require_once "../models/bbdd.php";
 $db = new Database();
 $conn = $db->connect();
@@ -43,10 +43,10 @@ $telefono = htmlspecialchars($datos["telefono"] ?? "");
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Datos personales</title>
 
-    <!-- Bootstrap -->
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- CSS -->
+    
     <link rel="stylesheet" href="/assets/css/color.css">
     <link rel="stylesheet" href="/assets/css/global.css">
     <link rel="stylesheet" href="/assets/css/header.css">
@@ -60,19 +60,19 @@ $telefono = htmlspecialchars($datos["telefono"] ?? "");
 
 <body class="register-body">
 
-    <!-- HEADER -->
+    
     <?php include '../includes/header.php'; ?>
 
-    <!-- BOTÓN MODO OSCURO -->
+    
     <button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
 
-    <!-- MENÚ PRIVADO -->
+    
     <?php include '../includes/private-menu.php'; ?>
 
-    <!-- MENÚ RESPONSIVE -->
+    
     <?php include '../includes/responsive-menu.php'; ?>
 
-    <!-- BANNER PRIVADO -->
+    
     <?php include '../includes/private-banner.php'; ?>
 
     <main class="register-container">
@@ -110,10 +110,10 @@ $telefono = htmlspecialchars($datos["telefono"] ?? "");
 
     </main>
 
-    <!-- FOOTER -->
+    
     <?php include '../includes/footer.php'; ?>
 
-    <!-- JS -->
+    
     <script src="/assets/js/theme.js"></script>
     <script src="/assets/js/datos_personales.js"></script>
 

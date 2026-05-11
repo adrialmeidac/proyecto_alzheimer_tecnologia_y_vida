@@ -12,9 +12,9 @@ if (!$id || !is_numeric($id)) {
 $db = new Database();
 $conn = $db->connect();
 
-// Obtener tema
+
 $stmt = $conn->prepare("
-    SELECT t.*, u.nombre, u.apellido
+    SELECT t.*, u.nombre, u.apellidos
     FROM foro_temas t
     JOIN usuarios u ON t.usuario_id = u.id
     WHERE t.id = ?
@@ -27,9 +27,9 @@ if (!$tema) {
     exit;
 }
 
-// Obtener respuestas
+
 $stmt = $conn->prepare("
-    SELECT r.*, u.nombre, u.apellido
+    SELECT r.*, u.nombre, u.apellidos
     FROM foro_respuestas r
     JOIN usuarios u ON r.usuario_id = u.id
     WHERE r.tema_id = ?
@@ -46,10 +46,10 @@ $respuestas = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalle del tema</title>
 
-    <!-- Bootstrap -->
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- CSS GLOBAL -->
+    
     <link rel="stylesheet" href="/assets/css/global.css">
     <link rel="stylesheet" href="/assets/css/color.css">
     <link rel="stylesheet" href="/assets/css/header.css">
@@ -78,11 +78,13 @@ $respuestas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <body>
 
-    <!-- HEADER -->
+    
     <?php include $_SERVER["DOCUMENT_ROOT"] . "/includes/header.php"; ?>
 
-    <!-- MENÚ ADMIN -->
+    
     <?php include $_SERVER["DOCUMENT_ROOT"] . "/includes/menu-admin.php"; ?>
+    <button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
+
 
     <main class="admin-content flex-grow-1">
 
@@ -92,7 +94,7 @@ $respuestas = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <h3><?= htmlspecialchars($tema["titulo"]) ?></h3>
 
             <p class="text-muted">
-                Por <?= htmlspecialchars($tema["nombre"] . " " . $tema["apellido"]) ?>
+                Por <?= htmlspecialchars($tema["nombre"] . " " . $tema["apellidos"]) ?>
                 · <?= (new DateTime($tema["fecha"]))->format("d/m/Y H:i") ?>
             </p>
 
@@ -115,7 +117,7 @@ $respuestas = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <?php foreach ($respuestas as $r): ?>
                     <div class="respuesta-card">
                         <p class="mb-1">
-                            <strong><?= htmlspecialchars($r["nombre"] . " " . $r["apellido"]) ?></strong>
+                            <strong><?= htmlspecialchars($r["nombre"] . " " . $r["apellidos"]) ?></strong>
                             · <?= (new DateTime($r["fecha"]))->format("d/m/Y H:i") ?>
                         </p>
                         <p><?= nl2br(htmlspecialchars($r["respuesta"])) ?></p>
@@ -133,7 +135,7 @@ $respuestas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     </main>
 
-    <!-- FOOTER -->
+    
     <?php include $_SERVER["DOCUMENT_ROOT"] . "/includes/footer.php"; ?>
 
     <script>
@@ -173,6 +175,7 @@ $respuestas = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
     }
     </script>
+<script src="/assets/js/theme.js"></script>
 
 </body>
 </html>

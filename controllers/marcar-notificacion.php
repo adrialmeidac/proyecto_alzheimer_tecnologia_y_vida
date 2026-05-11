@@ -20,7 +20,7 @@ $notificacion_id = intval($_POST['id']);
 $user_id = $_SESSION['user_id'];
 $rol = $_SESSION['rol'];
 
-// 1. Obtener la notificación
+
 $sql = $conn->prepare("
     SELECT id, usuario_id 
     FROM notificaciones 
@@ -36,17 +36,17 @@ if (!$notificacion) {
 
 $paciente_id = $notificacion['usuario_id'];
 
-// 2. Validar permisos según el rol
+
 if ($rol === 'paciente') {
 
-    // El paciente solo puede marcar sus propias notificaciones
+    
     if ($paciente_id != $user_id) {
         die("No tienes permiso para marcar esta notificación.");
     }
 
 } elseif (in_array($rol, ['familiar', 'cuidador'])) {
 
-    // Familiar o cuidador solo pueden marcar notificaciones de pacientes vinculados
+    
     $sqlCheck = $conn->prepare("
         SELECT 1 
         FROM relaciones_familiares
@@ -67,7 +67,7 @@ if ($rol === 'paciente') {
     die("Rol no autorizado.");
 }
 
-// 3. Marcar como leída
+
 $sqlUpdate = $conn->prepare("
     UPDATE notificaciones
     SET leida = 1
@@ -75,9 +75,9 @@ $sqlUpdate = $conn->prepare("
 ");
 $sqlUpdate->execute([':id' => $notificacion_id]);
 
-// 4. Redirigir según el rol
+
 if (in_array($rol, ['familiar', 'cuidador'])) {
-    header("Location: /pages/notificaciones_familiar.php");
+    header("Location: /pages/notificaciones-familiar.php");
 } else {
     header("Location: /pages/notificaciones.php");
 }

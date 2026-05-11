@@ -7,10 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Notificaciones</title>
 
-    <!-- Bootstrap -->
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- CSS GLOBAL -->
+    
     <link rel="stylesheet" href="/assets/css/global.css">
     <link rel="stylesheet" href="/assets/css/color.css">
     <link rel="stylesheet" href="/assets/css/header.css">
@@ -27,30 +27,32 @@
             box-shadow: var(--shadow);
         }
         .badge-leida {
-            background: #28a745;
+            background: 
         }
         .badge-no-leida {
-            background: #dc3545;
+            background: 
         }
     </style>
 </head>
 
 <body>
 
-    <!-- HEADER -->
+    
     <?php include $_SERVER["DOCUMENT_ROOT"] . "/includes/header.php"; ?>
 
-    <!-- MENÚ ADMIN -->
+    
     <?php include $_SERVER["DOCUMENT_ROOT"] . "/includes/menu-admin.php"; ?>
 
-    <!-- MENÚ RESPONSIVE -->
+    
     <?php include $_SERVER["DOCUMENT_ROOT"] . "/includes/responsive-menu.php"; ?>
+    <button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
+
 
     <main class="admin-content flex-grow-1">
 
         <h1 class="admin-title text-center mb-4">Gestión de Notificaciones</h1>
 
-        <!-- FILTROS -->
+        
         <div class="admin-card card p-3 mb-4">
             <h5>Filtros</h5>
 
@@ -85,7 +87,7 @@
             </div>
         </div>
 
-        <!-- TABLA -->
+        
         <div class="admin-table table-responsive">
             <table class="table table-hover align-middle">
                 <thead>
@@ -110,13 +112,13 @@
 
     </main>
 
-    <!-- FOOTER -->
+    
     <?php include $_SERVER["DOCUMENT_ROOT"] . "/includes/footer.php"; ?>
 
     <script>
-    // ---------------------------------------------------------
-    // Cargar notificaciones con filtros
-    // ---------------------------------------------------------
+    
+    
+    
     async function cargarNotificaciones() {
 
         const usuario = document.getElementById("filtroUsuario").value;
@@ -166,9 +168,9 @@
         }
     }
 
-    // ---------------------------------------------------------
-    // Limpiar filtros
-    // ---------------------------------------------------------
+    
+    
+    
     function limpiarFiltros() {
         document.getElementById("filtroUsuario").value = "";
         document.getElementById("filtroFecha").value = "";
@@ -176,9 +178,9 @@
         cargarNotificaciones();
     }
 
-    // ---------------------------------------------------------
-    // Eliminar notificación
-    // ---------------------------------------------------------
+    
+    
+    
     async function eliminar(id) {
         if (!confirm("¿Eliminar esta notificación?")) return;
 
@@ -199,9 +201,9 @@
         }
     }
 
-    // ---------------------------------------------------------
-    // Cargar usuarios para el filtro
-    // ---------------------------------------------------------
+    
+    
+    
     async function cargarUsuariosFiltro() {
         try {
             const res = await fetch("/controllers/admin-obtener-usuario.php");
@@ -223,10 +225,11 @@
         }
     }
 
-    // Inicializar
+    
     cargarUsuariosFiltro();
     cargarNotificaciones();
     </script>
+<script src="/assets/js/theme.js"></script>
 
 </body>
 </html>

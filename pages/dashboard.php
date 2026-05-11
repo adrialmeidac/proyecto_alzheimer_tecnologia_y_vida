@@ -1,7 +1,7 @@
 <?php 
 require_once "../middleware/session.php"; 
 
-// REDIRECCIÓN SEGÚN PERFIL COMPLETADO
+
 if (!isset($_SESSION["perfil_completado"]) || $_SESSION["perfil_completado"] == 0) {
 
     if ($_SESSION["rol"] === "paciente") {
@@ -23,10 +23,10 @@ if (!isset($_SESSION["perfil_completado"]) || $_SESSION["perfil_completado"] == 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel Principal</title>
 
-    <!-- Bootstrap CSS -->
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- CSS -->
+    
     <link rel="stylesheet" href="/assets/css/color.css">
     <link rel="stylesheet" href="/assets/css/global.css">
     <link rel="stylesheet" href="/assets/css/header.css">
@@ -38,14 +38,14 @@ if (!isset($_SESSION["perfil_completado"]) || $_SESSION["perfil_completado"] == 
 
 <body>
 
-    <!-- HEADER -->
+    
     <?php include "../includes/header.php"; ?>
 
-    <!-- BOTÓN MODO OSCURO -->
+    
     <button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
 
     <?php
-    // MENÚ SEGÚN ROL
+    
     if ($_SESSION["rol"] === "admin") {
         include "../includes/menu-admin.php";
 
@@ -60,23 +60,23 @@ if (!isset($_SESSION["perfil_completado"]) || $_SESSION["perfil_completado"] == 
     }
     ?>
 
-    <!-- MENÚ RESPONSIVE -->
+    
     <?php include "../includes/responsive-menu.php"; ?>
 
-    <!-- BANNER PRIVADO -->
+    
     <?php include "../includes/private-banner.php"; ?>
 
     <h2 class="subtitle mt-3">¿Qué haremos hoy?</h2>
 
-    <!-- CONTENIDO PRINCIPAL -->
+    
     <main class="dashboard-container container mt-4">
 
         <?php if ($_SESSION["rol"] === "paciente"): ?>
 
-            <!-- TARJETAS DEL PACIENTE -->
+            
             <div class="row g-4">
 
-                <!-- JUEGOS -->
+                
                 <div class="col-12 col-md-6 col-lg-4">
                     <section class="dashboard-card" onclick="location.href='/pages/juegos.php'">
                         <div class="carousel">
@@ -94,7 +94,7 @@ if (!isset($_SESSION["perfil_completado"]) || $_SESSION["perfil_completado"] == 
                     </section>
                 </div>
 
-                <!-- ACTIVIDADES -->
+                
                 <div class="col-12 col-md-6 col-lg-4">
                     <section class="dashboard-card" onclick="location.href='/pages/actividades.php'">
                         <div class="carousel">
@@ -110,7 +110,7 @@ if (!isset($_SESSION["perfil_completado"]) || $_SESSION["perfil_completado"] == 
                     </section>
                 </div>
 
-                <!-- FORO -->
+                
                 <div class="col-12 col-md-6 col-lg-4">
                     <section class="dashboard-card" onclick="location.href='/pages/foro.php'">
                         <div class="carousel">
@@ -125,7 +125,7 @@ if (!isset($_SESSION["perfil_completado"]) || $_SESSION["perfil_completado"] == 
                     </section>
                 </div>
 
-                <!-- INFORMACIÓN -->
+                
                 <div class="col-12 col-md-6 col-lg-4">
                     <section class="dashboard-card" onclick="location.href='/pages/informacion.php'">
                         <div class="carousel">
@@ -140,7 +140,7 @@ if (!isset($_SESSION["perfil_completado"]) || $_SESSION["perfil_completado"] == 
                     </section>
                 </div>
 
-                <!-- TESTS -->
+                
                 <div class="col-12 col-md-6 col-lg-4">
                     <section class="dashboard-card" onclick="location.href='/pages/test.php'">
                         <div class="carousel">
@@ -155,7 +155,7 @@ if (!isset($_SESSION["perfil_completado"]) || $_SESSION["perfil_completado"] == 
                     </section>
                 </div>
 
-                <!-- EMERGENCIA -->
+                
                 <div class="col-12 col-md-6 col-lg-4">
                     <section class="dashboard-card" onclick="confirmarEmergencia()">
                         <div class="img-emergencia">
@@ -177,7 +177,7 @@ if (!isset($_SESSION["perfil_completado"]) || $_SESSION["perfil_completado"] == 
     <script src="/assets/js/theme.js"></script>
     <script src="/assets/js/emergencias.js"></script>
 
-    <!-- MODAL DE EMERGENCIA -->
+    
     <div id="emergency-modal" class="emergency-modal">
         <div class="emergency-modal-content">
             <h2>🚨 Llamada de emergencia</h2>

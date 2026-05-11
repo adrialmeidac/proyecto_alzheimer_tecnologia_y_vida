@@ -2,7 +2,7 @@
     padding: 40px 20px;
 }
 
-/* Separación entre filas */
+
 .row.g-4 {
     row-gap: 40px;
 }
@@ -43,7 +43,7 @@
     font-size:16px;
 }
 
-/* Carrusel */
+
 .carousel {
     position: relative;
     width: 100%;
@@ -87,7 +87,7 @@
     background: rgba(0,0,0,0.6);
 }
 
-/* Imagen emergencia */
+
 .img-emergencia img {
     width: 100%;
     height: 180px;
@@ -95,7 +95,7 @@
     border-radius: 10px;
 }
 
-/* Responsive */
+
 @media (max-width: 768px) {
     .dashboard-card {
         padding: 16px;
@@ -109,7 +109,7 @@
     }
 }
 
-/* Modal emergencia */
+
 .emergency-modal {
     position: fixed;
     top: 0;
@@ -183,7 +183,7 @@
 }
 
 
-/* ⭐ OCULTAR TODAS LAS SECCIONES DEL DASHBOARD */
+
 .seccion {
     display: none;
 }

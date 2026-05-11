@@ -1,5 +1,5 @@
 .login-wrapper {
-    padding-top: 170px;
+    padding-top: 60px;
     padding-bottom: 60px;
 }
 
@@ -69,3 +69,4 @@
 .back-btn:hover {
     background: var(--color-primary-dark);
 }
+

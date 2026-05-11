@@ -7,7 +7,7 @@ function obtenerNotificacionesFamiliar($familiar_id)
     $db = new Database();
     $conn = $db->connect();
 
-    // Consulta segura y optimizada
+    
     $sql = $conn->prepare("
 SELECT 
     n.id,

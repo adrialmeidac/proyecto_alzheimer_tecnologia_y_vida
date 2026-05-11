@@ -13,14 +13,14 @@
     gap: 20px;
 }
 
-/* Etiquetas */
+
 .form-label {
     font-size: 18px;
     color: var(--color-text);
     font-weight: 600;
 }
 
-/* Inputs y textarea */
+
 .form-input,
 .form-textarea {
     width: 100%;
@@ -33,13 +33,13 @@
     transition: 0.2s;
 }
 
-/* Textarea */
+
 .form-textarea {
     height: 150px;
     resize: none;
 }
 
-/* Focus accesible */
+
 .form-input:focus,
 .form-textarea:focus {
     border-color: var(--color-primary-dark);

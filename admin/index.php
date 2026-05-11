@@ -8,10 +8,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel Administrativo</title>
 
-    <!-- Bootstrap -->
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- CSS GLOBAL -->
+    
     <link rel="stylesheet" href="/assets/css/global.css">
     <link rel="stylesheet" href="/assets/css/color.css">
     <link rel="stylesheet" href="/assets/css/header.css">
@@ -24,21 +24,23 @@
 
 <body>
 
-    <!-- HEADER -->
+    
     <?php include $_SERVER["DOCUMENT_ROOT"] . "/includes/header.php"; ?>
 
-    <!-- MENÚ ADMIN -->
+    
     <?php include $_SERVER["DOCUMENT_ROOT"] . "/includes/menu-admin.php"; ?>
 
-    <!-- MENÚ RESPONSIVE -->
+    
     <?php include $_SERVER["DOCUMENT_ROOT"] . "/includes/responsive-menu.php"; ?>
+    <button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
+
 
     <main class="admin-content flex-grow-1">
 
         <div class="container mt-5">
 
             <div class="admin-hero">
-                <h1 class="admin-title">Panel Administrativo</h1>
+                <h1 class="admin-title1">Panel Administrativo</h1>
                 <h3>Gestiona usuarios, contenido y actividades desde un solo lugar.</h3>
             </div>
 
@@ -110,8 +112,9 @@
 
     </main>
 
-    <!-- FOOTER -->
+    
     <?php include $_SERVER["DOCUMENT_ROOT"] . "/includes/footer.php"; ?>
+<script src="/assets/js/theme.js"></script>
 
 </body>
 </html>

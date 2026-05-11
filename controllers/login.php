@@ -4,31 +4,31 @@ session_start();
 
 require_once "../models/bbdd.php";
 
-// Conexión
+
 $db = new Database();
 $conn = $db->connect();
 
-// Solo aceptar POST
+
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     http_response_code(405);
     echo json_encode(["success" => false, "error" => "Método no permitido"]);
     exit;
 }
 
-// Obtener datos enviados por fetch()
+
 $data = json_decode(file_get_contents("php://input"), true);
 
 $email = $data["email"] ?? null;
 $password = $data["password"] ?? null;
 
-// Validación básica
+
 if (!$email || !$password) {
     http_response_code(400);
     echo json_encode(["success" => false, "error" => "Debes completar todos los campos"]);
     exit;
 }
 
-// Validar email real
+
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     http_response_code(400);
     echo json_encode(["success" => false, "error" => "Email no válido"]);
@@ -36,7 +36,7 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 }
 
 try {
-    // Buscar usuario
+    
     $stmt = $conn->prepare("SELECT id, nombre, email, password, rol, perfil_completado 
                         FROM usuarios 
                         WHERE email = :email 
@@ -50,29 +50,29 @@ try {
         exit;
     }
 
-    // Verificar contraseña
+    
     if (!password_verify($password, $user["password"])) {
         http_response_code(401);
         echo json_encode(["success" => false, "error" => "Contraseña incorrecta"]);
         exit;
     }
 
-// Crear sesión
+
 $_SESSION["user_id"] = $user["id"];
 $_SESSION["nombre"] = $user["nombre"];
 $_SESSION["email"] = $user["email"];
 $_SESSION["rol"] = $user["rol"];
 $_SESSION["perfil_completado"] = $user["perfil_completado"];
 
-    // Redirecciones según rol
-// Redirecciones según rol
+    
+
 if ($user["rol"] === "paciente") {
 
-    // Si el paciente ya completó su perfil → dashboard
+    
     if (!empty($user["perfil_completado"]) && $user["perfil_completado"] == 1) {
         $redirect = "/pages/dashboard.php";
     } 
-    // Si NO completó su perfil → datos personales
+    
     else {
         $redirect = "/pages/datos-personales.php";
     }

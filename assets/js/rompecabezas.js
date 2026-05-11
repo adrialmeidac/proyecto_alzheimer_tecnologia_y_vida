@@ -13,14 +13,14 @@ const imagenCompleta = {
 let correctPieces = 0;
 let time = 0;
 let timerInterval;
-let timerStarted = false; // ⏱️ Timer inicia con el primer movimiento
-let bloqueado = false;    // 🔓 Ya no usamos START
+let timerStarted = false; 
+let bloqueado = false;    
 
 const imagenes = ["perro", "globoaereo"];
 let indiceImagen = 0;
 let piezasTotales = 9;
 
-// Tabla de nombres REALES según tus carpetas
+
 const nombresPiezas = {
     perro: {
         2: ["perro1.jpg", "perro1-1.jpg", "perro1-2.jpg", "perro1-3.jpg"],
@@ -44,9 +44,9 @@ function obtenerCarpetaImagen(nombre, columnas) {
     return `../assets/images/${nombre}_${columnas}x${columnas}`;
 }
 
-// ===============================
-//   CAMBIO DE DIFICULTAD
-// ===============================
+
+
+
 difficultyRadios.forEach(radio => {
     radio.addEventListener("change", () => {
         const nivel = radio.value;
@@ -61,9 +61,9 @@ difficultyRadios.forEach(radio => {
     });
 });
 
-// ===============================
-//   CREAR PIEZAS
-// ===============================
+
+
+
 function crearPiezas() {
     piecesContainer.innerHTML = "";
     dropzonesContainer.innerHTML = "";
@@ -98,12 +98,12 @@ function crearPiezas() {
     }
 
     activarEventos();
-    mezclarPiezas(); // 🔥 Mezcla automática
+    mezclarPiezas(); 
 }
 
-// ===============================
-//   MEZCLAR PIEZAS
-// ===============================
+
+
+
 function mezclarPiezas() {
     const piezas = Array.from(piecesContainer.children);
 
@@ -114,9 +114,9 @@ function mezclarPiezas() {
     }
 }
 
-// ===============================
-//   TEMPORIZADOR
-// ===============================
+
+
+
 function iniciarTemporizador() {
     time = 0;
     timerEl.textContent = "Tiempo: 0s";
@@ -131,9 +131,9 @@ function detenerTemporizador() {
     clearInterval(timerInterval);
 }
 
-// ===============================
-//   DRAG & DROP
-// ===============================
+
+
+
 function activarEventos() {
     const pieces = document.querySelectorAll(".piece");
     const dropzones = document.querySelectorAll(".dropzone");
@@ -141,7 +141,7 @@ function activarEventos() {
     pieces.forEach(piece => {
         piece.addEventListener("dragstart", e => {
 
-            // ⏱️ Iniciar timer al primer movimiento
+            
             if (!timerStarted) {
                 iniciarTemporizador();
                 timerStarted = true;
@@ -171,9 +171,9 @@ function activarEventos() {
     });
 }
 
-// ===============================
-//   GUARDAR RESULTADO
-// ===============================
+
+
+
 function guardarResultadoBackend() {
     const dificultad = document.querySelector("input[name='difficulty']:checked").value;
 
@@ -203,16 +203,16 @@ function verificarVictoria() {
     }
 }
 
-// ===============================
-//   RESET
-// ===============================
+
+
+
 resetBtn.addEventListener("click", () => {
     detenerTemporizador();
     timerStarted = false;
     crearPiezas();
 });
 
-// ===============================
-//   INICIALIZAR
-// ===============================
+
+
+
 crearPiezas();

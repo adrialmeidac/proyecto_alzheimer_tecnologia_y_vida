@@ -7,10 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aviso Legal</title>
 
-    <!-- Bootstrap -->
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- CSS GLOBAL -->
+    
     <link rel="stylesheet" href="/assets/css/color.css">
     <link rel="stylesheet" href="/assets/css/global.css">
     <link rel="stylesheet" href="/assets/css/header.css">
@@ -22,13 +22,13 @@
 
 <body>
 
-    <!-- HEADER -->
+    
     <?php include $_SERVER["DOCUMENT_ROOT"] . "/includes/header.php"; ?>
 
-    <!-- BOTÓN MODO OSCURO -->
+    
     <button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
 
-    <!-- MENÚ SEGÚN SESIÓN -->
+    
     <?php
         if (!isset($_SESSION["user_id"])) {
             include $_SERVER["DOCUMENT_ROOT"] . "/includes/public-menu.php";
@@ -39,10 +39,10 @@
         }
     ?>
 
-    <!-- MENÚ RESPONSIVE -->
+    
     <?php include $_SERVER["DOCUMENT_ROOT"] . "/includes/responsive-menu.php"; ?>
 
-    <!-- BANNER PÚBLICO -->
+    
     <?php include $_SERVER["DOCUMENT_ROOT"] . "/includes/public-banner.php"; ?>
 
     <main class="public-content container mt-5">
@@ -122,14 +122,14 @@
             Las políticas de privacidad, cookies y accesibilidad están disponibles en secciones independientes del sitio.
         </p>
 
-        <!-- BOTÓN VOLVER -->
+        
         <div class="text-center mt-4">
             <button class="btn btn-secondary px-4 py-2" onclick="location.href='./index.php'">Volver</button>
         </div>
 
     </main>
 
-    <!-- FOOTER -->
+    
     <?php include $_SERVER["DOCUMENT_ROOT"] . "/includes/footer.php"; ?>
 
     <script src="/assets/js/theme.js"></script>

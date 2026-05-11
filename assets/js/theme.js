@@ -9,13 +9,11 @@
 })();
 
 
-// ===============================
-//   FUNCIÓN PARA CAMBIAR TEMA
-// ===============================
+
 function toggleTheme() {
     document.body.classList.toggle("dark");
 
-    // Guardar preferencia
+    
     if (document.body.classList.contains("dark")) {
         localStorage.setItem("theme", "dark");
     } else {
@@ -26,17 +24,17 @@ function toggleTheme() {
 }
 
 
-// ===============================
-//   ACTUALIZAR ICONO DEL BOTÓN
-// ===============================
+
+
+
 function updateThemeIcon() {
     const btn = document.querySelector(".theme-toggle");
     if (!btn)
     return;
 
     if (document.body.classList.contains("dark")) {
-        btn.textContent = "Modo claro"; // modo oscuro → mostrar sol
+        btn.textContent = "Modo claro"; 
     } else {
-        btn.textContent = "Modo oscuro"; // modo claro → mostrar luna
+        btn.textContent = "Modo oscuro"; 
     }
 }

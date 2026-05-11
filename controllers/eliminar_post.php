@@ -19,7 +19,7 @@ $conn = $db->connect();
 
 try {
 
-    // Verificar que el post existe
+    
     $stmt = $conn->prepare("SELECT id FROM foro_temas WHERE id = ?");
     $stmt->execute([$id]);
 
@@ -31,11 +31,11 @@ try {
         exit;
     }
 
-    // Eliminar respuestas asociadas
+    
     $delResp = $conn->prepare("DELETE FROM foro_respuestas WHERE tema_id = ?");
     $delResp->execute([$id]);
 
-    // Eliminar el tema
+    
     $delTema = $conn->prepare("DELETE FROM foro_temas WHERE id = ?");
     $delTema->execute([$id]);
 

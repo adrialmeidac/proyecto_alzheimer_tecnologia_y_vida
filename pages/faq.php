@@ -7,10 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Preguntas Frecuentes</title>
 
-    <!-- Bootstrap CSS -->
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- CSS -->
+    
     <link rel="stylesheet" href="/assets/css/color.css">
     <link rel="stylesheet" href="/assets/css/global.css">
     <link rel="stylesheet" href="/assets/css/header.css">
@@ -21,13 +21,13 @@
 
 <body>
 
-    <!-- HEADER -->
+    
     <?php include '../includes/header.php'; ?>
 
-    <!-- BOTÓN MODO OSCURO -->
+    
     <button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
 
-    <!-- MENÚ SEGÚN SESIÓN -->
+    
     <?php
     if (!isset($_SESSION["user_id"])) {
         include '../includes/public-menu.php';
@@ -38,26 +38,24 @@
     }
     ?>
 
-    <!-- MENÚ RESPONSIVE -->
+    
     <?php include '../includes/responsive-menu.php'; ?>
 
-    <!-- BANNER PÚBLICO -->
+    
     <?php include '../includes/public-banner.php'; ?>
 
     <h2 class="text-center mt-5">Preguntas Frecuentes</h2>
 
     <div class="container mt-4 mb-5">
 
-        <!-- ACORDEÓN FAQ -->
+        
         <div class="accordion" id="faqAccordion">
 
-            <!-- ============================
-                 PREGUNTAS SOBRE ALZHEIMER
-            ============================= -->
+            
 
             <h3 class="mt-4 mb-3">Sobre el Alzheimer</h3>
 
-            <!-- 1 -->
+            
             <div class="accordion-item">
                 <h2 class="accordion-header" id="faq1">
                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1">
@@ -71,7 +69,7 @@
                 </div>
             </div>
 
-            <!-- 2 -->
+            
             <div class="accordion-item">
                 <h2 class="accordion-header" id="faq2">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2">
@@ -85,7 +83,7 @@
                 </div>
             </div>
 
-            <!-- 3 -->
+            
             <div class="accordion-item">
                 <h2 class="accordion-header" id="faq3">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3">
@@ -99,7 +97,7 @@
                 </div>
             </div>
 
-            <!-- 4 -->
+            
             <div class="accordion-item">
                 <h2 class="accordion-header" id="faq4">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4">
@@ -113,13 +111,11 @@
                 </div>
             </div>
 
-            <!-- ============================
-                 PREGUNTAS SOBRE LA WEB
-            ============================= -->
+            
 
             <h3 class="mt-5 mb-3">Sobre el uso de la web</h3>
 
-            <!-- 5 -->
+            
             <div class="accordion-item">
                 <h2 class="accordion-header" id="faq5">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse5">
@@ -133,7 +129,7 @@
                 </div>
             </div>
 
-            <!-- 6 -->
+            
             <div class="accordion-item">
                 <h2 class="accordion-header" id="faq6">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse6">
@@ -147,7 +143,7 @@
                 </div>
             </div>
 
-            <!-- 7 -->
+            
             <div class="accordion-item">
                 <h2 class="accordion-header" id="faq7">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse7">
@@ -161,7 +157,7 @@
                 </div>
             </div>
 
-            <!-- 8 -->
+            
             <div class="accordion-item">
                 <h2 class="accordion-header" id="faq8">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse8">
@@ -177,7 +173,7 @@
 
         </div>
 
-        <!-- BOTÓN VOLVER -->
+        
         <div class="text-center mt-4">
             <button class="btn btn-secondary px-4 py-2" onclick="location.href='/pages/index.php'">
                 Volver
@@ -186,10 +182,10 @@
 
     </div>
 
-    <!-- FOOTER -->
+    
     <?php include '../includes/footer.php'; ?>
 
-    <!-- JS -->
+    
     <script src="/assets/js/theme.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 

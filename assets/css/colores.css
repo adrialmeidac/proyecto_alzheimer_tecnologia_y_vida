@@ -21,7 +21,7 @@
     border: 3px solid var(--color-primary);
 }
 
-/* Colores base */
+
 .rojo { background: var(--color-red); }
 .azul { background: var(--color-blue); }
 .verde { background: var(--color-green); }

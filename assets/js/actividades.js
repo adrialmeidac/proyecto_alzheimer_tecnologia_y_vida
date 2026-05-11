@@ -1,9 +1,9 @@
 const activitiesList = document.getElementById("activitiesList");
 const addActivityBtn = document.getElementById("addActivityBtn");
 
-// ============================
-// 1. CARGAR ACTIVIDADES
-// ============================
+
+
+
 
 function loadActivities() {
     fetch("../controllers/actividades.php?action=listar")
@@ -14,9 +14,9 @@ function loadActivities() {
         });
 }
 
-// ============================
-// 2. CREAR TARJETA DE ACTIVIDAD
-// ============================
+
+
+
 
 function renderActivity(act) {
 
@@ -62,7 +62,7 @@ function renderActivity(act) {
     col.appendChild(div);
     activitiesList.appendChild(col);
 
-    // Eventos
+    
     div.querySelector(".btn-guardar").addEventListener("click", () => {
         updateActivity(div);
     });
@@ -78,9 +78,9 @@ function renderActivity(act) {
     if (realizada) aplicarEstilosRealizada(div);
 }
 
-// ============================
-// 3. CREAR ACTIVIDAD (MODAL)
-// ============================
+
+
+
 
 addActivityBtn.addEventListener("click", () => {
     document.getElementById("nuevaTexto").value = "";
@@ -124,9 +124,9 @@ document.getElementById("btnGuardarNueva").addEventListener("click", () => {
         });
 });
 
-// ============================
-// 4. ACTUALIZAR ACTIVIDAD
-// ============================
+
+
+
 
 function updateActivity(div) {
     const id = div.dataset.id;
@@ -152,9 +152,9 @@ function updateActivity(div) {
         });
 }
 
-// ============================
-// 5. MARCAR COMO REALIZADA
-// ============================
+
+
+
 
 function markAsDone(div) {
     const id = div.dataset.id;
@@ -172,9 +172,9 @@ function markAsDone(div) {
         });
 }
 
-// ============================
-// 6. APLICAR ESTILOS DE REALIZADA
-// ============================
+
+
+
 
 function aplicarEstilosRealizada(div) {
     const btn = div.querySelector(".btn-realizada");
@@ -201,9 +201,9 @@ function aplicarEstilosRealizada(div) {
     activitiesList.appendChild(parent);
 }
 
-// ============================
-// 7. ELIMINAR ACTIVIDAD
-// ============================
+
+
+
 
 function deleteActivity(div) {
     const id = div.dataset.id;
@@ -223,8 +223,8 @@ function deleteActivity(div) {
         });
 }
 
-// ============================
-// 8. INICIALIZAR
-// ============================
+
+
+
 
 loadActivities();

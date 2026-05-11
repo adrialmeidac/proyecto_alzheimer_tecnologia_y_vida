@@ -1,4 +1,4 @@
-/* Contenedor general */
+
 .register-container {
     margin-top: 120px;
     display: flex;
@@ -6,7 +6,7 @@
     padding: 20px;
 }
 
-/* Tarjeta principal */
+
 .register-card {
     width: 100%;
     max-width: 480px;
@@ -17,7 +17,7 @@
     border: 1px solid rgba(0,0,0,0.05);
 }
 
-/* Título */
+
 .register-card h2 {
     font-size: 30px;
     font-weight: 700;
@@ -26,7 +26,7 @@
     text-align: center;
 }
 
-/* Subtítulo */
+
 .register-subtitle {
     color: var(--color-text-light);
     margin-bottom: 25px;
@@ -34,7 +34,7 @@
     font-size: 15px;
 }
 
-/* Inputs y selects */
+
 .register-card input,
 .register-card select {
     width: 100%;
@@ -47,7 +47,7 @@
     transition: all 0.2s ease;
 }
 
-/* Efecto focus */
+
 .register-card input:focus,
 .register-card select:focus {
     border-color: var(--color-primary);
@@ -55,7 +55,7 @@
     outline: none;
 }
 
-/* Botón principal */
+
 .register-btn {
     width: 100%;
     padding: 12px;
@@ -73,7 +73,7 @@
     background: var(--color-primary-dark);
 }
 
-/* Botón volver */
+
 .register-login {
     margin-top: 15px;
     text-align: center;
@@ -89,7 +89,7 @@
     color: var(--color-primary-dark);
 }
 
-/* Caja de errores */
+
 .register-errors {
     background: rgba(255, 0, 0, 0.08);
     border-left: 4px solid #d9534f;

@@ -36,27 +36,27 @@ h1{
 }
 
 
-/* Enlaces globales */
+
 a {
     text-decoration: none;
     color: inherit;
 }
 
-/* Imágenes responsivas */
+
 img {
     max-width: 100%;
     display: block;
 }
 
-/* UTILIDADES GENERALES*/
 
-/* Ocultar visualmente pero accesible para lectores de pantalla */
+
+
 .visually-hidden {
     position: absolute;
     left: -9999px;
 }
 
-/* Subtítulos globales */
+
 .subtitle {
     font-size: 36px;
     padding: 10px;
@@ -66,18 +66,18 @@ img {
     font-weight: 600;
 }
 
-/* Centrado rápido */
+
 .center {
     text-align: center;
 }
 
-/* Espaciados reutilizables */
+
 .mt-20 { margin-top: 20px; }
 .mt-40 { margin-top: 40px; }
 .mb-20 { margin-bottom: 20px; }
 .mb-40 { margin-bottom: 40px; }
 
-/* BOTONES GLOBALES*/
+
 
 .btn {
     padding: 12px 20px;
@@ -88,7 +88,7 @@ img {
     border: none;
     
 }
-/* Botón principal */
+
 .btn-primary {
     background:var(--color-primary);
     color: var(--color-white);
@@ -100,7 +100,7 @@ img {
     background: var(--color-btn-primary-hover);
 }
 
-/* Botón outline */
+
 .btn-outline {
     background: var(--color-white);
     color: var(--color-primary);
@@ -112,7 +112,7 @@ img {
     color: var(--color-white);
 }
 
-/*Botón guardar acttividad*/
+
 .btn-success{
     background: var(--color-primary);
     color: var(--color-white);
@@ -129,7 +129,7 @@ img {
     background: var(--color-primary);
     color: var(--color-white);
     font-size: 20px;
-    width: 15%; 
+    width: auto; 
 }
 
 .btn-warning:hover {
@@ -140,7 +140,7 @@ img {
 .btn-secondary{
     background: var(--color-btn-secondary);
     color: var(--color-white);   
-    width: 15%;
+    width: auto;
     font-size: 20px;
 }
 
@@ -214,7 +214,7 @@ select{
     right: 20px;
 
 }
-/*Radio de dificultad*/
+
 .difficulty-row{
     position:relative;
     margin-left: 45%;
@@ -222,12 +222,39 @@ select{
 }
 
 .admin-content {
-    margin-left: 90px; /* espacio para el menú compacto */
+    margin-top: 50px;
+    margin-left: 90px; 
     padding: 20px;
     transition: margin-left 0.3s ease;
 }
 
 .admin-sidebar:hover ~ .admin-content {
-    margin-left: 240px; /* cuando el menú se expande */
+    margin-left: 240px; 
+}
+.modal-footer {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;            
+}
+
+.modal-footer .btn {
+    min-width: 120px;               
+}
+
+.modal-content{
+    margin-top: 150px;
+}
+
+.admin-content {
+    margin-top: 120px;
+}
+
+.grecaptcha-badge{
+    margin-bottom: 150px;
+}
+.text-end.mt-3 {
+display: flex; 
+justify-content: space-between;
+       flex-shrink: 0;
 }
 

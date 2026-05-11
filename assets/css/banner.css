@@ -4,10 +4,10 @@
     height: 340px; 
     overflow: hidden;
     z-index: 1;
-    margin-top: 110px;
+    margin-top: 150px;
     border-radius: 4px; }
 
-/* Oscurecer imagen con degradado suave */
+
 .top-banner::before {
     content: "";
     position: absolute;
@@ -20,7 +20,7 @@
     z-index: 2;
 }
 
-/* Imagen del banner */
+
 .top-banner img {
     width: 100%;
     height: 100%;
@@ -42,7 +42,7 @@
 }
 
 
-/* Texto del saludo */
+
 .titulo-banner {
     position: absolute;
     bottom: 20px;

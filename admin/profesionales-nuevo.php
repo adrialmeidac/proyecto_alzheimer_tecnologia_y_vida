@@ -8,10 +8,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nuevo Profesional</title>
 
-    <!-- Bootstrap -->
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- CSS GLOBAL -->
+    
     <link rel="stylesheet" href="/assets/css/global.css">
     <link rel="stylesheet" href="/assets/css/color.css">
     <link rel="stylesheet" href="/assets/css/header.css">
@@ -37,14 +37,16 @@
 
 <body>
 
-    <!-- HEADER -->
+    
     <?php include $_SERVER["DOCUMENT_ROOT"] . "/includes/header.php"; ?>
 
-    <!-- MENÚ ADMIN -->
+    
     <?php include $_SERVER["DOCUMENT_ROOT"] . "/includes/menu-admin.php"; ?>
 
-    <!-- MENÚ RESPONSIVE -->
+    
     <?php include $_SERVER["DOCUMENT_ROOT"] . "/includes/responsive-menu.php"; ?>
+    <button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
+
 
     <main class="admin-content flex-grow-1">
 
@@ -56,7 +58,7 @@
 
             <form id="formProfesional" enctype="multipart/form-data">
 
-                <!-- DATOS BÁSICOS -->
+                
                 <div class="mb-3">
                     <label class="form-label">Nombre</label>
                     <input type="text" id="nombre" class="form-control" required minlength="3">
@@ -73,7 +75,7 @@
                 </div>
                
 
-                <!-- SERVICIOS -->
+                
                 <div class="mb-3">
                     <label class="form-label">Servicios ofrecidos</label><br>
 
@@ -96,7 +98,7 @@
                     <?php endforeach; ?>
                 </div>
 
-                <!-- HORARIOS -->
+                
                 <h5 class="mt-4">Horarios</h5>
 
                 <?php
@@ -136,7 +138,7 @@
         </div>
     </main>
 
-    <!-- FOOTER -->
+    
     <?php include $_SERVER["DOCUMENT_ROOT"] . "/includes/footer.php"; ?>
 
     <script>
@@ -152,12 +154,12 @@
         formData.append("especialidad", document.getElementById("especialidad").value);
         formData.append("direccion", document.getElementById("direccion").value);
 
-        // Servicios
+        
         document.querySelectorAll(".srv-check:checked").forEach(chk => {
             formData.append("servicios[]", chk.value);
         });
 
-        // Horarios
+        
         formData.append("horario_lunes", document.getElementById("lunes").value);
         formData.append("horario_martes", document.getElementById("martes").value);
         formData.append("horario_miercoles", document.getElementById("miercoles").value);
@@ -185,6 +187,7 @@
         }
     });
     </script>
+<script src="/assets/js/theme.js"></script>
 
 </body>
 </html>

@@ -1,5 +1,5 @@
 <?php
-// Mostrar solo si hay sesión y el rol es válido
+
 if (!isset($_SESSION["rol"]) || !in_array($_SESSION["rol"], ["paciente", "familiar", "cuidador", "admin"])) {
     return;
 }

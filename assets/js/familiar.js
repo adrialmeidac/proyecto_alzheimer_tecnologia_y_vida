@@ -1,168 +1,166 @@
-  
-  
-    // ===============================
-    // MOSTRAR SECCIONES
-    // ===============================
-    function mostrar(id) {
-        document.getElementById("dashboard").style.display = "none";
-        document.querySelectorAll(".seccion").forEach(s => s.style.display = "none");
-        document.getElementById(id).style.display = "block";
+function mostrar(id) {
+    document.getElementById("dashboard").style.display = "none";
+    document.querySelectorAll(".seccion").forEach(s => s.style.display = "none");
+    document.getElementById(id).style.display = "block";
 
-        if (id === "pacientes") cargarPacientes();
-        if (id === "actividades") cargarPacientesSelect("selectPacienteActividades");
-        if (id === "crearActividad") cargarPacientesSelect("selectPacienteCrear");
-        if (id === "historial") cargarPacientesSelect("selectPacienteHistorial");
-    }
+    if (id === "pacientes") cargarPacientes();
+    if (id === "actividades") cargarPacientesSelect("selectPacienteActividades");
+    if (id === "historial") cargarPacientesSelect("selectPacienteHistorial");
+}
 
-    function volver() {
-        document.querySelectorAll(".seccion").forEach(s => s.style.display = "none");
-        document.getElementById("dashboard").style.display = "flex";
-    }
+function volver() {
+    document.querySelectorAll(".seccion").forEach(s => s.style.display = "none");
+    document.getElementById("dashboard").style.display = "flex";
+}
 
-    // ===============================
-    // LISTAR PACIENTES
-    // ===============================
-    function cargarPacientes() {
-        fetch("/controllers/familiar.php?action=listar_pacientes")
-            .then(r => r.json())
-            .then(data => {
-                const tbody = document.getElementById("tablaPacientes");
-                tbody.innerHTML = "";
-
-                if (!data.success) return;
-
-                data.pacientes.forEach(p => {
-                    tbody.innerHTML += `
-                        <tr>
-                            <td>${p.nombre}</td>
-                            <td>${p.email}</td>
-                        </tr>
-                    `;
-                });
-            });
-    }
-
-    function cargarPacientesSelect(idSelect) {
-        fetch("/controllers/familiar.php?action=listar_pacientes")
-            .then(r => r.json())
-            .then(data => {
-                const select = document.getElementById(idSelect);
-                select.innerHTML = "";
-
-                if (!data.success) return;
-
-                data.pacientes.forEach(p => {
-                    select.innerHTML += `<option value="${p.id}">${p.nombre}</option>`;
-                });
-
-                // Disparar carga inicial de actividades/historial si aplica
-                if (idSelect === "selectPacienteActividades") cargarActividades();
-                if (idSelect === "selectPacienteHistorial") cargarHistorial();
-            });
-    }
-
-    // ===============================
-    // ACTIVIDADES DEL PACIENTE
-    // ===============================
-    document.getElementById("selectPacienteActividades").addEventListener("change", cargarActividades);
-
-    function cargarActividades() {
-        const id = document.getElementById("selectPacienteActividades").value;
-        if (!id) return;
-
-        fetch("/controllers/familiar.php?action=actividades_paciente", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ paciente_id: id })
-        })
+function cargarPacientes() {
+    fetch("/controllers/familiar.php?action=listar_pacientes")
         .then(r => r.json())
         .then(data => {
-            const tbody = document.getElementById("tablaActividades");
+            const tbody = document.getElementById("tablaPacientes");
             tbody.innerHTML = "";
 
             if (!data.success) return;
 
-            data.actividades.forEach(a => {
+            data.pacientes.forEach(p => {
                 tbody.innerHTML += `
                     <tr>
-                        <td>${a.titulo}</td>
-                        <td>${a.fecha}</td>
-                        <td>${a.hora}</td>
-                        <td>${a.estado ?? ""}</td>
+                        <td>${p.nombre}</td>
+                        <td>${p.email}</td>
                     </tr>
                 `;
             });
         });
-    }
+}
 
-    // ===============================
-    // CREAR ACTIVIDAD
-    // ===============================
-    document.getElementById("formCrearActividad").addEventListener("submit", e => {
-        e.preventDefault();
-
-        const datos = Object.fromEntries(new FormData(e.target));
-
-        fetch("/controllers/familiar.php?action=crear_actividad", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(datos)
-        })
+function cargarPacientesSelect(idSelect) {
+    fetch("/controllers/familiar.php?action=listar_pacientes")
         .then(r => r.json())
         .then(data => {
-            alert(data.message || data.error);
-        });
-    });
-
-    // ===============================
-    // HISTORIAL
-    // ===============================
-    document.getElementById("selectPacienteHistorial").addEventListener("change", cargarHistorial);
-
-    function cargarHistorial() {
-        const id = document.getElementById("selectPacienteHistorial").value;
-        if (!id) return;
-
-        fetch("/controllers/familiar.php?action=historial_paciente", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ paciente_id: id })
-        })
-        .then(r => r.json())
-        .then(data => {
-            const tbody = document.getElementById("tablaHistorial");
-            tbody.innerHTML = "";
+            const select = document.getElementById(idSelect);
+            select.innerHTML = "";
 
             if (!data.success) return;
 
-            data.historial.forEach(a => {
-                tbody.innerHTML += `
-                    <tr>
-                        <td>${a.titulo}</td>
-                        <td>${a.fecha}</td>
-                        <td>${a.hora}</td>
-                    </tr>
-                `;
+            data.pacientes.forEach(p => {
+                select.innerHTML += `<option value="${p.id}">${p.nombre}</option>`;
             });
+
+            if (idSelect === "selectPacienteActividades") cargarActividades();
+            if (idSelect === "selectPacienteHistorial") cargarHistorial();
         });
-    }
+}
 
-    // ===============================
-    // VINCULAR PACIENTE
-    // ===============================
-    document.getElementById("formVincular").addEventListener("submit", e => {
-        e.preventDefault();
+document.getElementById("selectPacienteActividades")?.addEventListener("change", cargarActividades);
 
-        const datos = Object.fromEntries(new FormData(e.target));
+function cargarActividades() {
+    const id = document.getElementById("selectPacienteActividades")?.value;
+    if (!id) return;
 
-        fetch("/controllers/familiar.php?action=vincular", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(datos)
-        })
-        .then(r => r.json())
-        .then(data => {
-            alert(data.message || data.error);
+    fetch("/controllers/familiar.php?action=actividades_paciente", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ paciente_id: id })
+    })
+    .then(r => r.json())
+    .then(data => {
+        const tbody = document.getElementById("tablaActividades");
+        tbody.innerHTML = "";
+
+        if (!data.success) return;
+
+        data.actividades.forEach(a => {
+            tbody.innerHTML += `
+                <tr>
+                    <td>${a.titulo}</td>
+                    <td>${a.fecha}</td>
+                    <td>${a.hora}</td>
+                    <td>${a.estado ?? ""}</td>
+                </tr>
+            `;
         });
     });
+}
 
+document.getElementById("selectPacienteHistorial")?.addEventListener("change", cargarHistorial);
+
+function cargarHistorial() {
+    const id = document.getElementById("selectPacienteHistorial")?.value;
+    if (!id) return;
+
+    fetch("/controllers/familiar.php?action=historial_paciente", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ paciente_id: id })
+    })
+    .then(r => r.json())
+    .then(data => {
+        const tbody = document.getElementById("tablaHistorial");
+        tbody.innerHTML = "";
+
+        if (!data.success) return;
+
+        data.historial.forEach(a => {
+            tbody.innerHTML += `
+                <tr>
+                    <td>${a.titulo}</td>
+                    <td>${a.fecha}</td>
+                    <td>${a.hora}</td>
+                </tr>
+            `;
+        });
+    });
+}
+
+/* ⭐ CORREGIDO: evitar error si formVincular NO existe */
+const formVincular = document.getElementById("formVincular");
+if (formVincular) {
+    formVincular.addEventListener("submit", async function(e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+
+        const response = await fetch("../controllers/vincular_paciente.php", {
+            method: "POST",
+            body: formData
+        });
+
+        const text = await response.text();
+        const msgBox = document.getElementById("msgVincular");
+
+        if (text.includes("correctamente")) {
+            msgBox.innerHTML = `<div class="alert alert-success mt-2">${text}</div>`;
+            this.reset();
+            cargarPacientes();
+        } else {
+            msgBox.innerHTML = `<div class="alert alert-danger mt-2">${text}</div>`;
+        }
+    });
+}
+
+/* ⭐⭐ CREAR ACTIVIDAD — AHORA FUNCIONA PERFECTO ⭐⭐ */
+document.addEventListener("DOMContentLoaded", () => {
+    const formCrear = document.querySelector("form[action*='actividades-familiar.php']");
+    if (!formCrear) return;
+
+    formCrear.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(formCrear);
+
+        const response = await fetch(formCrear.action, {
+            method: "POST",
+            body: formData
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            alert("Actividad creada correctamente");
+            formCrear.reset();
+            location.reload();
+        } else {
+            alert("Error: " + result.error);
+        }
+    });
+});

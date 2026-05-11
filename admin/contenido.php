@@ -25,7 +25,7 @@
             box-shadow: var(--shadow);
         }
         .pdf-link {
-            color: #0d6efd;
+            color: 
             text-decoration: underline;
         }
     </style>
@@ -35,6 +35,8 @@
 
 <?php include "../includes/header.php"; ?>
 <?php include "../includes/menu-admin.php"; ?>
+<button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
+
 
 <main class="admin-content flex-grow-1">
 
@@ -44,7 +46,7 @@
         <button class="btn btn-primary" onclick="abrirCrear()">➕ Nuevo Documento</button>
     </div>
 
-    <!-- FORMULARIO CREAR CONTENIDO -->
+    
     <div id="crearContenidoBox" class="card mb-4 d-none">
         <div class="card-body">
             <h5 class="card-title">Nuevo documento</h5>
@@ -70,7 +72,7 @@
         </div>
     </div>
 
-    <!-- FORMULARIO EDITAR CONTENIDO -->
+    
     <div id="editarContenidoBox" class="card mb-4 d-none">
         <div class="card-body">
             <h5 class="card-title">Editar documento</h5>
@@ -98,7 +100,7 @@
         </div>
     </div>
 
-    <!-- TABLA -->
+    
     <div class="admin-table table-responsive">
         <table class="table table-hover align-middle">
             <thead>
@@ -125,9 +127,9 @@
 <?php include "../includes/footer.php"; ?>
 
 <script>
-// ---------------------------------------------------------
-// Cargar contenido
-// ---------------------------------------------------------
+
+
+
 function cargarContenido() {
     fetch("../controllers/admin-contenido.php?action=listar")
         .then(res => res.json())
@@ -168,9 +170,9 @@ function cargarContenido() {
 
 cargarContenido();
 
-// ---------------------------------------------------------
-// Crear contenido
-// ---------------------------------------------------------
+
+
+
 function abrirCrear() {
     document.getElementById("crearContenidoBox").classList.remove("d-none");
 }
@@ -203,9 +205,9 @@ document.getElementById("formCrearContenido").addEventListener("submit", functio
     });
 });
 
-// ---------------------------------------------------------
-// Editar contenido
-// ---------------------------------------------------------
+
+
+
 function abrirEditar(id) {
     fetch("../controllers/admin-contenido.php?action=listar")
         .then(res => res.json())
@@ -252,9 +254,9 @@ document.getElementById("formEditarContenido").addEventListener("submit", functi
     });
 });
 
-// ---------------------------------------------------------
-// Eliminar contenido
-// ---------------------------------------------------------
+
+
+
 function eliminar(id) {
     if (!confirm("¿Eliminar este documento?")) return;
 
@@ -272,6 +274,7 @@ function eliminar(id) {
     });
 }
 </script>
+<script src="/assets/js/theme.js"></script>
 
 </body>
 </html>

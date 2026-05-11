@@ -1,5 +1,5 @@
 <?php
-// Si el usuario está loggeado, NO mostrar banner público
+
 if (isset($_SESSION["rol"])) {
     return;
 }

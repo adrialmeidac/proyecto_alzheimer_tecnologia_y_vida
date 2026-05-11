@@ -48,10 +48,10 @@ $medicos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <h2 class="mb-4">Gestión de Profesionales Médicos</h2>
 
-    <!-- BOTÓN AÑADIR -->
+    
     <a href="/pages/admin/medicos-add.php" class="btn btn-primary mb-3">➕ Añadir profesional</a>
 
-    <!-- TABLA -->
+    
     <div class="table-responsive">
         <table class="table table-hover align-middle">
             <thead>

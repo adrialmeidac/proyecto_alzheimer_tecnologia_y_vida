@@ -8,10 +8,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Historial</title>
 
-    <!-- Bootstrap -->
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- CSS -->
+    
     <link rel="stylesheet" href="/assets/css/color.css">
     <link rel="stylesheet" href="/assets/css/global.css">
     <link rel="stylesheet" href="/assets/css/header.css">
@@ -19,25 +19,24 @@
     <link rel="stylesheet" href="/assets/css/menu.css">
     <link rel="stylesheet" href="/assets/css/banner.css">
     <link rel="stylesheet" href="/assets/css/historial.css">
-    <link rel="stylesheet" href="/assets/css/actividades.css">
-    <link rel="stylesheet" href="/assets/css/timer.css">
-</head>
+    
+    </head>
 
 <body>
 
-    <!-- HEADER -->
+    
     <?php include '../includes/header.php'; ?>
 
-    <!-- BOTÓN MODO OSCURO -->
+    
     <button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
 
-    <!-- MENÚ PRIVADO -->
+    
     <?php include '../includes/private-menu.php'; ?>
 
-    <!-- MENÚ RESPONSIVE -->
+    
     <?php include '../includes/responsive-menu.php'; ?>
 
-    <!-- BANNER PRIVADO -->
+    
     <?php include '../includes/private-banner.php'; ?>
 
     <p class="subtitle">Historial de actividades, juegos y tests</p>
@@ -66,10 +65,10 @@
         </button>
     </div>
 
-    <!-- FOOTER -->
+    
     <?php include '../includes/footer.php'; ?>
 
-    <!-- JS -->
+    
     <script src="/assets/js/theme.js"></script>
     <script src="/assets/js/historial.js"></script>
 

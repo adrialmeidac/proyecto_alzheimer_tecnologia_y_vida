@@ -1,7 +1,7 @@
 <?php
-// Validar sesión y rol
+
 if (!isset($_SESSION["rol"]) || !in_array($_SESSION["rol"], ["familiar", "cuidador"])) {
-    return; // No mostrar menú si no es familiar/cuidador
+    return; 
 }
 ?>
 
@@ -10,7 +10,7 @@ if (!isset($_SESSION["rol"]) || !in_array($_SESSION["rol"], ["familiar", "cuidad
 
         <li><a href="/pages/dashboardFamiliar.php">Panel principal</a></li>
         <li><a href="/pages/pacientes.php">Mis Pacientes</a></li>
-        <li><a href="/pages/actividades_pacientes.php">Actividades del Paciente</a></li>
+        <li><a href="/pages/actividades_pacientes.php">Crear Actividades</a></li>
         <li><a href="/pages/historial_paciente.php">Historial</a></li>
         <li><a href="/pages/foro.php">Foro</a></li>
         <li><a href="/pages/notificaciones-familiar.php">Notificaciones</a></li>

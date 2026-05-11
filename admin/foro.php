@@ -7,10 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión del Foro</title>
 
-    <!-- Bootstrap -->
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- CSS GLOBAL -->
+    
     <link rel="stylesheet" href="/assets/css/global.css">
     <link rel="stylesheet" href="/assets/css/color.css">
     <link rel="stylesheet" href="/assets/css/header.css">
@@ -31,11 +31,13 @@
 
 <body>
 
-    <!-- HEADER -->
+    
     <?php include $_SERVER["DOCUMENT_ROOT"] . "/includes/header.php"; ?>
 
-    <!-- MENÚ ADMIN -->
+    
     <?php include $_SERVER["DOCUMENT_ROOT"] . "/includes/menu-admin.php"; ?>
+    <button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
+
 
     <main class="admin-content flex-grow-1">
 
@@ -71,16 +73,16 @@
 
     </main>
 
-    <!-- FOOTER -->
+    
     <?php include $_SERVER["DOCUMENT_ROOT"] . "/includes/footer.php"; ?>
 
     <script>
-    // Cargar temas del foro
+    
     async function cargarTemas() {
         const tabla = document.getElementById("tablaTemas");
 
         try {
-            const res = await fetch("/controllers/admin-foro.php?action=get_temas");
+    const res = await fetch("../controllers/admin-foro.php?action=get_temas");
             const data = await res.json();
 
             if (!data.success) {
@@ -102,7 +104,7 @@
                     <tr>
                         <td>${t.id}</td>
                         <td>${t.titulo}</td>
-                        <td>${t.nombre} ${t.apellido}</td>
+                        <td>${t.nombre} ${t.apellidos}</td>
                         <td>${fecha}</td>
                         <td>${t.respuestas}</td>
                         <td>
@@ -126,27 +128,29 @@
     }
 
     async function eliminarTema(id) {
-        if (!confirm("¿Eliminar este tema y todas sus respuestas?")) return;
+    if (!confirm("¿Eliminar este tema y todas sus respuestas?")) return;
 
-        try {
-            const res = await fetch("/controllers/admin-foro.php", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ action: "delete_tema", id })
-            });
+    try {
+        const res = await fetch(`/controllers/admin-foro.php?action=delete_tema`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id })
+        });
 
-            const data = await res.json();
+        const data = await res.json();
 
-            alert(data.message || data.error);
+        alert(data.message || data.error);
 
-            if (data.success) cargarTemas();
+        if (data.success) cargarTemas();
 
-        } catch (err) {
-            console.error(err);
-            alert("Error al eliminar el tema");
-        }
+    } catch (err) {
+        console.error(err);
+        alert("Error al eliminar el tema");
     }
+}
+
     </script>
+<script src="/assets/js/theme.js"></script>
 
 </body>
 </html>

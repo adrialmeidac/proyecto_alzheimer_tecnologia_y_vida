@@ -1,13 +1,13 @@
 <?php
 session_start();
 
-// Eliminar todas las variables de sesión
+
 session_unset();
 
-// Destruir la sesión
+
 session_destroy();
 
-// Eliminar cookie de sesión (opcional pero profesional)
+
 if (ini_get("session.use_cookies")) {
     $params = session_get_cookie_params();
     setcookie(
@@ -21,6 +21,6 @@ if (ini_get("session.use_cookies")) {
     );
 }
 
-// Redirigir al usuario al inicio
+
 header("Location: /pages/index.php");
 exit;

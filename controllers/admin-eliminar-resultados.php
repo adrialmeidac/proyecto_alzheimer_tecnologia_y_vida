@@ -4,7 +4,7 @@ header("Content-Type: application/json");
 require_once "../middleware/admin.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/models/bbdd.php";
 
-// Leer JSON
+
 $input = json_decode(file_get_contents("php://input"), true);
 
 if (!$input) {
@@ -15,7 +15,7 @@ if (!$input) {
 
 $id = $input["id"] ?? null;
 
-// Validar ID
+
 if (!$id || !filter_var($id, FILTER_VALIDATE_INT)) {
     http_response_code(400);
     echo json_encode(["success" => false, "error" => "ID inválido"]);
@@ -28,7 +28,7 @@ try {
     $db = new Database();
     $conn = $db->connect();
 
-    // Eliminar resultado
+    
     $stmt = $conn->prepare("DELETE FROM resultados WHERE id = :id");
     $stmt->execute([":id" => $id]);
 

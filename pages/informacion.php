@@ -5,7 +5,7 @@ require_once "../models/bbdd.php";
 $db = new Database();
 $conn = $db->connect();
 
-// Obtener contenido dinámico
+
 $sql = $conn->query("
     SELECT id, titulo, descripcion, archivo, categoria, creado_en
     FROM contenido
@@ -21,10 +21,10 @@ $documentos = $sql->fetchAll(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Información sobre el Alzheimer</title>
 
-    <!-- Bootstrap -->
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- CSS -->
+    
     <link rel="stylesheet" href="/assets/css/color.css">
     <link rel="stylesheet" href="/assets/css/global.css">
     <link rel="stylesheet" href="/assets/css/header.css">
@@ -36,13 +36,13 @@ $documentos = $sql->fetchAll(PDO::FETCH_ASSOC);
 
 <body>
 
-    <!-- HEADER -->
+    
     <?php include '../includes/header.php'; ?>
 
-    <!-- BOTÓN MODO OSCURO -->
+    
     <button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
 
-    <!-- MENÚ SEGÚN SESIÓN -->
+    
     <?php
     if (!isset($_SESSION["user_id"])) {
         include '../includes/public-menu.php';
@@ -51,20 +51,20 @@ $documentos = $sql->fetchAll(PDO::FETCH_ASSOC);
     } elseif (in_array($_SESSION["rol"], ["familiar", "cuidador"])) {
         include '../includes/menu-familiar.php';
     } else {
-        include '../includes/private-menu.php'; // paciente
+        include '../includes/private-menu.php'; 
     }
     ?>
 
-    <!-- MENÚ RESPONSIVE -->
+    
     <?php include '../includes/responsive-menu.php'; ?>
 
-    <!-- BANNER PÚBLICO (solo si no hay sesión) -->
+    
     <?php include '../includes/public-banner.php'; ?>
 
     <h1>Información sobre el Alzheimer</h1>
     <p class="subtitle">Documentos y recursos para pacientes y cuidadores</p>
 
-    <!-- CONTENIDO DINÁMICO -->
+    
     <main class="container info-container">
 
         <?php if (empty($documentos)): ?>
@@ -87,7 +87,7 @@ $documentos = $sql->fetchAll(PDO::FETCH_ASSOC);
 
         <?php endif; ?>
 
-        <!-- BOTONES -->
+        
         <div class="text-center mt-4">
             <button class="btn btn-primary px-4 py-2" onclick="location.href='/pages/index.php'">Inicio</button>
 
@@ -98,10 +98,10 @@ $documentos = $sql->fetchAll(PDO::FETCH_ASSOC);
 
     </main>
 
-    <!-- FOOTER -->
+    
     <?php include '../includes/footer.php'; ?>
 
-    <!-- JS -->
+    
     <script src="/assets/js/theme.js"></script>
 
 </body>

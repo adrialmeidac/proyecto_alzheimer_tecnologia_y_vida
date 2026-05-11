@@ -15,16 +15,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const STORAGE_KEY = "cookies-preferences";
 
-    // ================================
-    // 1. Mostrar banner si no hay preferencias
-    // ================================
+    
+    
+    
     if (!localStorage.getItem(STORAGE_KEY)) {
         banner.style.display = "block";
     }
 
-    // ================================
-    // 2. Aceptar todas
-    // ================================
+    
+    
+    
     btnAccept.addEventListener("click", () => {
         const prefs = {
             analytics: true,
@@ -37,9 +37,9 @@ document.addEventListener("DOMContentLoaded", () => {
         settings.style.display = "none";
     });
 
-    // ================================
-    // 3. Rechazar todas
-    // ================================
+    
+    
+    
     btnReject.addEventListener("click", () => {
         const prefs = {
             analytics: false,
@@ -52,17 +52,17 @@ document.addEventListener("DOMContentLoaded", () => {
         settings.style.display = "none";
     });
 
-    // ================================
-    // 4. Abrir configuración desde el banner
-    // ================================
+    
+    
+    
     btnConfigure.addEventListener("click", () => {
         banner.style.display = "none";
         settings.style.display = "flex";
     });
 
-    // ================================
-    // 5. Guardar configuración
-    // ================================
+    
+    
+    
     btnSave.addEventListener("click", () => {
         const prefs = {
             analytics: chkAnalytics.checked,
@@ -74,9 +74,9 @@ document.addEventListener("DOMContentLoaded", () => {
         settings.style.display = "none";
     });
 
-    // ================================
-    // 6. Cerrar panel sin guardar
-    // ================================
+    
+    
+    
     btnClose.addEventListener("click", () => {
         settings.style.display = "none";
     });

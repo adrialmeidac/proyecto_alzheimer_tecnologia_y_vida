@@ -1,10 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    // Obtener parámetro de la URL
+    
     const params = new URLSearchParams(window.location.search);
     const tipoTest = params.get("test");
 
-    // Elementos del DOM
+    
     const titulo = document.getElementById("tituloTest");
     const descripcion = document.getElementById("descripcionTest");
     const preguntaDiv = document.getElementById("pregunta");
@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const btnSiguiente = document.getElementById("btnSiguiente");
     const estimuloDiv = document.getElementById("estimulo");
 
-    // Helpers botón siguiente
+    
     function mostrarBotonSiguiente(callback) {
         btnSiguiente.style.display = "block";
         btnSiguiente.onclick = callback;
@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
         btnSiguiente.onclick = null;
     }
 
-    // Base de tests
+    
     const tests = {
         memoria: {
             titulo: "Test de Memoria",
@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
-    // Validar test
+    
     if (!tipoTest || !tests[tipoTest]) {
         titulo.textContent = "Test no encontrado";
         descripcion.textContent = "El test solicitado no existe.";
@@ -65,13 +65,13 @@ document.addEventListener("DOMContentLoaded", () => {
     let indice = 0;
     let puntaje = 0;
 
-    // Mostrar título y descripción
+    
     titulo.textContent = test.titulo;
     descripcion.textContent = test.descripcion;
 
-    // ===============================
-    //   MEMORIA
-    // ===============================
+    
+    
+    
     function mostrarPalabrasMemoria() {
         ocultarBotonSiguiente();
         preguntaDiv.textContent = "Memoriza estas palabras:";
@@ -130,9 +130,9 @@ document.addEventListener("DOMContentLoaded", () => {
         mostrarResultado();
     }
 
-    // ===============================
-    //   ATENCIÓN
-    // ===============================
+    
+    
+    
     let rondaAtencion = 0;
     let colorCorrectoActual = null;
     let bloqueadoAtencion = false;
@@ -205,9 +205,9 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // ===============================
-    //   ORIENTACIÓN
-    // ===============================
+    
+    
+    
     function generarPreguntasOrientacion() {
         const ahora = new Date();
         const diasSemana = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
@@ -286,9 +286,9 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // ===============================
-    //   RESULTADO + BACKEND
-    // ===============================
+    
+    
+    
     function mostrarResultado() {
         preguntaDiv.textContent = "Resultado del Test";
 
@@ -365,7 +365,7 @@ document.addEventListener("DOMContentLoaded", () => {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                tipo: tipoTest, // 🔥 ahora guarda el tipo real
+                tipo: tipoTest, 
                 dificultad: "ninguna",
                 tiempo: 0,
                 puntuacion: puntaje
@@ -376,9 +376,9 @@ document.addEventListener("DOMContentLoaded", () => {
         .catch(err => console.error("Error al guardar resultado:", err));
     }
 
-    // ===============================
-    //   INICIO AUTOMÁTICO DEL TEST
-    // ===============================
+    
+    
+    
     if (tipoTest === "memoria") mostrarPalabrasMemoria();
     if (tipoTest === "atencion") mostrarEstimuloAtencion();
     if (tipoTest === "orientacion") {

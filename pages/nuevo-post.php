@@ -7,10 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nueva Publicación</title>
 
-    <!-- Bootstrap -->
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- CSS -->
+    
     <link rel="stylesheet" href="/assets/css/color.css">
     <link rel="stylesheet" href="/assets/css/global.css">
     <link rel="stylesheet" href="/assets/css/header.css">
@@ -22,13 +22,13 @@
 
 <body>
 
-    <!-- HEADER -->
+    
     <?php include '../includes/header.php'; ?>
 
-    <!-- BOTÓN MODO OSCURO -->
+    
     <button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
 
-    <!-- MENÚ SEGÚN SESIÓN -->
+    
     <?php
     if (!isset($_SESSION["user_id"])) {
         include '../includes/public-menu.php';
@@ -44,10 +44,10 @@
     }
     ?>
 
-    <!-- MENÚ RESPONSIVE -->
+    
     <?php include '../includes/responsive-menu.php'; ?>
 
-    <!-- BANNER SEGÚN SESIÓN -->
+    
     <?php
     if (!isset($_SESSION["user_id"])) {
         include '../includes/public-banner.php';
@@ -59,7 +59,7 @@
     <h1>Nueva Publicación</h1>
     <p class="subtitle">Comparte tus ideas o experiencias</p>
 
-    <!-- CONTENIDO PRINCIPAL -->
+    
     <main class="newpost-container">
 
         <section class="newpost-section">
@@ -82,17 +82,17 @@
 
     </main>
 
-    <!-- BOTÓN VOLVER -->
+    
     <div class="text-center mt-4">
         <button class="btn btn-secondary px-4 py-2" onclick="location.href='foro.php'">
             Volver
         </button>
     </div>
 
-    <!-- FOOTER -->
+    
     <?php include '../includes/footer.php'; ?>
 
-    <!-- JS -->
+    
     <script src="/assets/js/theme.js"></script>
 
 </body>

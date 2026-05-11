@@ -1,6 +1,4 @@
-/* ============================
-   LISTA DE TESTS (tarjetas)
-============================ */
+
 
 .tests-container {
     display: grid;
@@ -35,9 +33,7 @@
 }
 
 
-/* ============================
-   TEST INDIVIDUAL
-============================ */
+
 
 .test-container {
     max-width: 700px;
@@ -56,9 +52,7 @@
     margin-bottom: 20px;
 }
 
-/* ============================
-   OPCIONES DEL TEST
-============================ */
+
 
 .test-options {
     display: flex;
@@ -96,9 +90,7 @@
 }
 
 
-/* ============================
-   ESTADOS DE RESPUESTA
-============================ */
+
 
 .test-option-btn.correct {
     background: var(--color-success) !important; 
@@ -116,12 +108,8 @@
     border: 3px solid var(--color-primary-dark);
     transform: scale(1.07);
 }
-/* ============================
-   MODAL DE INSTRUCCIONES
-============================ */
-/* ============================
-   MODAL DE INSTRUCCIONES — REDISEÑO COMPLETO
-============================ */
+
+
 
 #modalInstrucciones .modal-dialog {
     max-width: 480px;
@@ -136,7 +124,7 @@
     animation: modalFade 0.25s ease-out;
 }
 
-/* Header */
+
 #modalInstrucciones .modal-header {
     border-bottom: none;
     padding-bottom: 0;
@@ -149,7 +137,7 @@
     color: var(--color-primary);
 }
 
-/* Body */
+
 #modalInstrucciones .modal-body {
     padding: 10px 25px 5px;
 }
@@ -173,7 +161,7 @@
     position: relative;
 }
 
-/* Icono tipo check */
+
 #modalInstrucciones .modal-body ul li::before {
     content: "✔";
     position: absolute;
@@ -183,7 +171,7 @@
     font-weight: bold;
 }
 
-/* Footer */
+
 #modalInstrucciones .modal-footer {
     border-top: none;
     padding: 10px 25px 20px;
@@ -192,7 +180,7 @@
     gap: 15px;
 }
 
-/* Botones */
+
 #modalInstrucciones .modal-footer .btn {
     flex: 1;
     padding: 14px 0;
@@ -200,7 +188,7 @@
     border-radius: 10px;
 }
 
-/* Botón cerrar */
+
 #modalInstrucciones .btn-secondary {
     background: #d1d1d1;
     color: #333;
@@ -211,7 +199,7 @@
     background: #bcbcbc;
 }
 
-/* Botón entendido */
+
 #modalInstrucciones .btn-primary {
     background: var(--color-primary);
     border: none;
@@ -221,7 +209,7 @@
     background: var(--color-primary-dark);
 }
 
-/* Animación */
+
 @keyframes modalFade {
     from { opacity: 0; transform: translateY(-10px) scale(0.97); }
     to { opacity: 1; transform: translateY(0) scale(1); }

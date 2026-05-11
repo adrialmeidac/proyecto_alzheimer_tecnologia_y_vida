@@ -21,11 +21,16 @@ if (!isset($_SESSION["user_id"]) || $_SESSION["rol"] !== "admin") {
 
 </head>
 
-<body class="bg-light">
+<body>
+<?php include "../includes/header.php"; ?>
+<?php include "../includes/menu-admin.php"; ?>
+<button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
+
+<main class="admin-content flex-grow-1">
 
 <div class="container py-4">
 
-    <h2 class="mb-4">Gestión de Usuarios</h2>
+    <h1 class="mb-4">Gestión de Usuarios</h1>
 
     <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalCrear">
         Crear Usuario
@@ -51,9 +56,7 @@ if (!isset($_SESSION["user_id"]) || $_SESSION["rol"] !== "admin") {
     </div>
 </div>
 
-<!-- ============================
-     MODAL CREAR
-============================= -->
+
 <div class="modal fade" id="modalCrear">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -84,9 +87,7 @@ if (!isset($_SESSION["user_id"]) || $_SESSION["rol"] !== "admin") {
     </div>
 </div>
 
-<!-- ============================
-     MODAL EDITAR
-============================= -->
+
 <div class="modal fade" id="modalEditar">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -117,19 +118,20 @@ if (!isset($_SESSION["user_id"]) || $_SESSION["rol"] !== "admin") {
         </div>
     </div>
 </div>
-    <!-- BOTÓN VOLVER -->
+    
     <div class="text-center mt-4">
         <button class="btn btn-secondary px-4 py-2" onclick="location.href='/admin/index.php'">
             Volver
         </button>
     </div>
+</main>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-// ===============================
-// LISTAR
-// ===============================
+
+
+
 function cargarUsuarios() {
     fetch("../controllers/admin-usuarios.php?action=listar")
         .then(r => r.json())
@@ -154,9 +156,9 @@ function cargarUsuarios() {
         });
 }
 
-// ===============================
-// CREAR
-// ===============================
+
+
+
 document.getElementById("formCrear").addEventListener("submit", e => {
     e.preventDefault();
 
@@ -174,9 +176,9 @@ document.getElementById("formCrear").addEventListener("submit", e => {
     });
 });
 
-// ===============================
-// ABRIR MODAL EDITAR
-// ===============================
+
+
+
 function abrirEditar(id) {
     fetch("../controllers/admin-usuarios.php?action=obtener", {
         method: "POST",
@@ -196,9 +198,9 @@ function abrirEditar(id) {
     });
 }
 
-// ===============================
-// EDITAR
-// ===============================
+
+
+
 document.getElementById("formEditar").addEventListener("submit", e => {
     e.preventDefault();
 
@@ -216,9 +218,9 @@ document.getElementById("formEditar").addEventListener("submit", e => {
     });
 });
 
-// ===============================
-// ELIMINAR
-// ===============================
+
+
+
 function eliminarUsuario(id) {
     if (!confirm("¿Eliminar este usuario?")) return;
 
@@ -236,6 +238,7 @@ function eliminarUsuario(id) {
 
 cargarUsuarios();
 </script>
+<script src="/assets/js/theme.js"></script>
 
 </body>
 </html>

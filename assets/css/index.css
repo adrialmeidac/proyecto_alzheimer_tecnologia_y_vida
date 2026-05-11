@@ -1,6 +1,4 @@
-body {
-    margin-top: 50px; 
-}
+
 
 .index-container {
     max-width: 100%;
@@ -26,7 +24,7 @@ body {
 }
 
 
-/* Botón principal */
+
 .main-btn {
     background: var(--color-primary);
     color: var(--color-white);
@@ -43,7 +41,7 @@ body {
     font-weight: bold;
 }
 
-/* Botón secundario */
+
 .secondary-btn {
     background: var(--color-white);
     color: var(--color-primary);
@@ -59,7 +57,7 @@ body {
     color: var(--color-white);
 }
 
-/*RESPONSIVE */
+
 
 @media (max-width: 768px) {
 

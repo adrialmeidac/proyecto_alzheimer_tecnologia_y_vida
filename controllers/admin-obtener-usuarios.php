@@ -7,7 +7,7 @@ require_once "../models/bbdd.php";
 $db = new Database();
 $conn = $db->connect();
 
-// Solo admin
+
 if (!isset($_SESSION["id"]) || $_SESSION["rol"] !== "admin") {
     echo json_encode(["success" => false, "error" => "No autorizado"]);
     exit;

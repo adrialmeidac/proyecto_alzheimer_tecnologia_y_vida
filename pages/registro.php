@@ -8,32 +8,32 @@
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <title>Crear cuenta</title>
 
-    <!-- Bootstrap -->
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- CSS GLOBAL -->
+    
     <link rel="stylesheet" href="/assets/css/color.css">
     <link rel="stylesheet" href="/assets/css/global.css">
     <link rel="stylesheet" href="/assets/css/header.css">
     <link rel="stylesheet" href="/assets/css/menu.css">
     <link rel="stylesheet" href="/assets/css/footer.css">
 
-    <!-- CSS REGISTRO -->
+    
     <link rel="stylesheet" href="/assets/css/registro.css">
 
-    <!-- Fuente -->
+    
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
-    <!-- HEADER -->
+    
     <?php include '../includes/header.php'; ?>
 
-    <!-- MENÚ PÚBLICO -->
+    
     <?php include '../includes/public-menu.php'; ?>
 
-    <!-- BOTÓN MODO OSCURO -->
+    
     <button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
 
     <main class="registro-wrapper d-flex justify-content-center align-items-start">
@@ -59,7 +59,7 @@
                 <label for="password2">Repetir contraseña</label>
                 <input type="password" id="password2" placeholder="Repite la contraseña">
 
-                <!-- NUEVO: Selección de rol -->
+                
                 <label for="rol" class="mt-3">Tipo de cuenta</label>
                 <select id="rol" name="rol" class="form-select">
                     <option value="paciente">Paciente</option>
@@ -89,10 +89,10 @@
         </div>
     </main>
 
-    <!-- FOOTER -->
+    
     <?php include '../includes/footer.php'; ?>
 
-    <!-- JS -->
+    
     <script src="/assets/js/registro.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 

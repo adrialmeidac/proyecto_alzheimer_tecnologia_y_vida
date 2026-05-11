@@ -1,15 +1,15 @@
 <?php
 session_start();
 
-// SOLO familiares/cuidadores
+
 if (!in_array($_SESSION["rol"], ["familiar", "cuidador"])) {
     header("Location: /login.php");
     exit();
 }
 
-require_once __DIR__ . "./controllers/obtener-notificaciones-familiar.php";
+require_once __DIR__ . "/../controllers/obtener-notificaciones-familiar.php";
 
-// Obtener todas las notificaciones de los pacientes vinculados
+
 $notificaciones = obtenerNotificacionesFamiliar($_SESSION['user_id']);
 ?>
 <!DOCTYPE html>
@@ -18,7 +18,7 @@ $notificaciones = obtenerNotificacionesFamiliar($_SESSION['user_id']);
     <meta charset="UTF-8">
     <title>Notificaciones de mis pacientes</title>
 
-    <!-- CSS globales -->
+    
     <link rel="stylesheet" href="/assets/css/color.css">
     <link rel="stylesheet" href="/assets/css/global.css">
     <link rel="stylesheet" href="/assets/css/header.css">
@@ -31,19 +31,19 @@ $notificaciones = obtenerNotificacionesFamiliar($_SESSION['user_id']);
 
 <body>
 
-<!-- HEADER -->
+
 <?php include "../includes/header.php"; ?>
 
-<!-- BOTÓN MODO OSCURO -->
+
 <button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
 
-<!-- MENÚ FAMILIAR -->
+
 <?php include "../includes/menu-familiar.php"; ?>
 
-<!-- MENÚ RESPONSIVE -->
+
 <?php include "../includes/responsive-menu.php"; ?>
 
-<!-- BANNER PRIVADO -->
+
 <?php include "../includes/private-banner.php"; ?>
 
 <div class="panel-familiar-container contenedor-notificaciones">
@@ -61,9 +61,6 @@ $notificaciones = obtenerNotificacionesFamiliar($_SESSION['user_id']);
                     👤 <strong><?php echo $n['paciente_nombre']; ?></strong>
                 </p>
 
-                <p class="tipo">
-                    <?php echo ucfirst(str_replace("_", " ", $n['tipo'])); ?>
-                </p>
 
                 <p class="mensaje">
                     <?php echo $n['mensaje']; ?>
@@ -80,13 +77,19 @@ $notificaciones = obtenerNotificacionesFamiliar($_SESSION['user_id']);
                     </form>
                 <?php endif; ?>
 
-            </div>
+                    <form method="POST" action="/controllers/eliminar_notificacion.php" class="mt-2">
+                        <input type="hidden" name="id" value="<?= $n['id'] ?>">
+                        <button type="submit" class="btn btn-danger btn-sm px-3 py-1">
+                        Eliminar
+                        </button>
+</form>            </div>
+    </form>
         <?php endforeach; ?>
     <?php endif; ?>
 
 </div>
 
-<!-- FOOTER -->
+
 <?php include "../includes/footer.php"; ?>
 
 <script src="/assets/js/theme.js"></script>

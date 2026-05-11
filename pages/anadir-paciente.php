@@ -1,7 +1,7 @@
 <?php
 require_once "../middleware/session.php";
 
-// Solo familiares o cuidadores
+
 if (!isset($_SESSION["rol"]) || !in_array($_SESSION["rol"], ["familiar", "cuidador"])) {
     header("Location: /pages/dashboard.php");
     exit();
@@ -19,7 +19,7 @@ $conn = $db->connect();
     <meta charset="UTF-8">
     <title>Añadir paciente</title>
 
-    <!-- CSS globales -->
+    
     <link rel="stylesheet" href="/assets/css/color.css">
     <link rel="stylesheet" href="/assets/css/global.css">
     <link rel="stylesheet" href="/assets/css/header.css">
@@ -33,7 +33,7 @@ $conn = $db->connect();
 
 <?php include "../includes/header.php"; ?>
 
-<!-- MENÚ FAMILIAR -->
+
 <?php include "../includes/menu-familiar.php"; ?>
 <?php include "../includes/responsive-menu.php"; ?>
 <?php include "../includes/private-banner.php"; ?>

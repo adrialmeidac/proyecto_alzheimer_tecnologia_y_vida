@@ -17,9 +17,9 @@ $data = json_decode(file_get_contents("php://input"), true);
 
 switch ($action) {
 
-    // ============================================
-    // LISTAR RELACIONES
-    // ============================================
+    
+    
+    
     case "listar":
         $stmt = $conn->query("
             SELECT r.id, r.parentesco,
@@ -35,9 +35,9 @@ switch ($action) {
         echo json_encode(["success" => true, "relaciones" => $stmt->fetchAll(PDO::FETCH_ASSOC)]);
         break;
 
-    // ============================================
-    // CREAR RELACIÓN
-    // ============================================
+    
+    
+    
     case "crear":
         $stmt = $conn->prepare("
             INSERT INTO relaciones_familiares (paciente_id, familiar_id, parentesco)
@@ -52,18 +52,18 @@ switch ($action) {
         echo json_encode(["success" => true, "message" => "Relación creada"]);
         break;
 
-    // ============================================
-    // OBTENER RELACIÓN
-    // ============================================
+    
+    
+    
     case "obtener":
         $stmt = $conn->prepare("SELECT * FROM relaciones_familiares WHERE id = ?");
         $stmt->execute([$data["id"]]);
         echo json_encode(["success" => true, "relacion" => $stmt->fetch(PDO::FETCH_ASSOC)]);
         break;
 
-    // ============================================
-    // EDITAR RELACIÓN
-    // ============================================
+    
+    
+    
     case "editar":
         $stmt = $conn->prepare("
             UPDATE relaciones_familiares
@@ -80,9 +80,9 @@ switch ($action) {
         echo json_encode(["success" => true, "message" => "Relación actualizada"]);
         break;
 
-    // ============================================
-    // ELIMINAR RELACIÓN
-    // ============================================
+    
+    
+    
     case "eliminar":
         $stmt = $conn->prepare("DELETE FROM relaciones_familiares WHERE id = ?");
         $stmt->execute([$data["id"]]);

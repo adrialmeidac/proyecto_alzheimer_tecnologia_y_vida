@@ -8,10 +8,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resultados de Usuarios</title>
 
-    <!-- Bootstrap -->
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- CSS GLOBAL -->
+    
     <link rel="stylesheet" href="/assets/css/global.css">
     <link rel="stylesheet" href="/assets/css/color.css">
     <link rel="stylesheet" href="/assets/css/header.css">
@@ -38,20 +38,21 @@
 
 <body>
 
-    <!-- HEADER -->
+    
     <?php include $_SERVER["DOCUMENT_ROOT"] . "/includes/header.php"; ?>
 
-    <!-- MENÚ ADMIN -->
+    
     <?php include $_SERVER["DOCUMENT_ROOT"] . "/includes/menu-admin.php"; ?>
 
-    <!-- MENÚ RESPONSIVE -->
+    
     <?php include $_SERVER["DOCUMENT_ROOT"] . "/includes/responsive-menu.php"; ?>
+    <button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
 
     <main class="admin-content flex-grow-1">
 
         <h1 class="admin-title text-center mb-4">Resultados Registrados</h1>
 
-        <!-- FILTROS -->
+        
         <div class="filter-box">
             <div class="row g-3">
 
@@ -81,7 +82,7 @@
             </div>
         </div>
 
-        <!-- TABLA -->
+        
         <div class="admin-table table-responsive">
             <table class="table table-hover align-middle">
                 <thead>
@@ -108,16 +109,16 @@
 
     </main>
 
-    <!-- FOOTER -->
+    
     <?php include $_SERVER["DOCUMENT_ROOT"] . "/includes/footer.php"; ?>
 
     <script>
     let resultados = [];
     let usuarios = [];
 
-    // ===============================
-    // CARGAR USUARIOS PARA FILTRO
-    // ===============================
+    
+    
+    
     async function cargarUsuarios() {
         const res = await fetch("/controllers/admin-obtener-usuarios.php");
         const data = await res.json();
@@ -132,9 +133,9 @@
         });
     }
 
-    // ===============================
-    // CARGAR RESULTADOS
-    // ===============================
+    
+    
+    
     async function cargarResultados() {
         const res = await fetch("/controllers/admin-obtener-resultados.php");
         const data = await res.json();
@@ -150,9 +151,9 @@
         mostrarResultados(resultados);
     }
 
-    // ===============================
-    // MOSTRAR RESULTADOS
-    // ===============================
+    
+    
+    
     function mostrarResultados(lista) {
         const tabla = document.getElementById("tablaResultados");
         tabla.innerHTML = "";
@@ -180,9 +181,9 @@
         });
     }
 
-    // ===============================
-    // APLICAR FILTROS
-    // ===============================
+    
+    
+    
     function aplicarFiltros() {
         const usuario = document.getElementById("filtroUsuario").value;
         const tipo = document.getElementById("filtroTipo").value;
@@ -195,9 +196,9 @@
         mostrarResultados(filtrados);
     }
 
-    // ===============================
-    // ELIMINAR RESULTADO
-    // ===============================
+    
+    
+    
     async function eliminarResultado(id) {
         if (!confirm("¿Eliminar este resultado?")) return;
 
@@ -214,10 +215,11 @@
         if (data.success) cargarResultados();
     }
 
-    // Inicializar
+    
     cargarUsuarios();
     cargarResultados();
     </script>
+<script src="/assets/js/theme.js"></script>
 
 </body>
 </html>

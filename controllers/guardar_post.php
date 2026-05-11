@@ -1,8 +1,8 @@
 <?php
-require_once "../middleware/session.php"; // requiere sesión iniciada
+require_once "../middleware/session.php"; 
 require_once "../models/bbdd.php";
 
-// Solo usuarios loggeados pueden publicar
+
 if (!isset($_SESSION["user_id"])) {
     header("Location: /pages/login.php");
     exit();
@@ -14,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $contenido = trim($_POST["contenido"] ?? "");
     $usuario_id = $_SESSION["user_id"];
 
-    // Validaciones
+    
     if ($titulo === "" || strlen($titulo) < 3) {
         die("El título debe tener al menos 3 caracteres.");
     }
@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         exit();
 
     } catch (Exception $e) {
-        // Error controlado
+        
         header("Location: ../pages/nuevo-post.php?error=1");
         exit();
     }

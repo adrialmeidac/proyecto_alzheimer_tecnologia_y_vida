@@ -1,5 +1,5 @@
 <?php
-// Si el usuario está loggeado, NO mostrar menú público
+
 if (isset($_SESSION["rol"])) {
     return;
 }
@@ -10,7 +10,7 @@ if (isset($_SESSION["rol"])) {
 
         <li role="menuitem"><a href="/pages/index.php">Inicio</a></li>
 
-        <!-- Alzheimer y demencia -->
+        
         <li class="menu-item has-submenu" role="menuitem">
             <a href="#" aria-haspopup="true" aria-expanded="false">Alzheimer y demencia</a>
             <ul class="submenu" role="menu">
@@ -23,7 +23,7 @@ if (isset($_SESSION["rol"])) {
             </ul>
         </li>
 
-        <!-- Rutina diaria -->
+        
         <li class="menu-item has-submenu" role="menuitem">
             <a href="#" aria-haspopup="true" aria-expanded="false">Rutina diaria en casa</a>
             <ul class="submenu" role="menu">
@@ -36,7 +36,7 @@ if (isset($_SESSION["rol"])) {
             </ul>
         </li>
 
-        <!-- El cuidador -->
+        
         <li class="menu-item has-submenu" role="menuitem">
             <a href="#" aria-haspopup="true" aria-expanded="false">El cuidador</a>
             <ul class="submenu" role="menu">
@@ -48,12 +48,12 @@ if (isset($_SESSION["rol"])) {
             </ul>
         </li>
 
-        <!-- Enlaces directos -->
+        
         <li role="menuitem"><a href="/pages/informacion.php">Temática descargable</a></li>
         <li role="menuitem"><a href="/pages/foro.php">Foro</a></li>
         <li role="menuitem"><a href="/pages/contactos-profesionales.php">Contacta a un profesional</a></li>
 
-        <!-- Registro e inicio de sesión -->
+        
         <li role="menuitem"><a href="/pages/registro.php">Regístrate</a></li>
         <li role="menuitem"><a href="/pages/login.php">Iniciar sesión</a></li>
 

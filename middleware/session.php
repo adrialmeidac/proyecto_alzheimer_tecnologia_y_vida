@@ -1,10 +1,10 @@
 <?php
 session_start();
 
-// Si no hay sesión → no autorizado
+
 if (!isset($_SESSION["user_id"])) {
 
-    // Si es AJAX → devolver JSON
+    
     if (
         !empty($_SERVER['HTTP_X_REQUESTED_WITH']) &&
         strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest'
@@ -17,7 +17,7 @@ if (!isset($_SESSION["user_id"])) {
         exit;
     }
 
-    // Navegación normal → redirigir al login
+    
     header("Location: /pages/login.php");
     exit;
 }

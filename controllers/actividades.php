@@ -19,9 +19,9 @@ if (!$action) {
 
 try {
 
-    // ============================================================
-    // 1. LISTAR ACTIVIDADES DEL USUARIO
-    // ============================================================
+    
+    
+    
     if ($action === "listar") {
 
         $stmt = $conn->prepare("
@@ -39,9 +39,9 @@ try {
         exit;
     }
 
-    // ============================================================
-    // 2. CREAR ACTIVIDAD
-    // ============================================================
+    
+    
+    
     if ($action === "crear") {
 
         $titulo = $data["titulo"] ?? "";
@@ -64,9 +64,9 @@ try {
         exit;
     }
 
-    // ============================================================
-    // 3. ACTUALIZAR ACTIVIDAD
-    // ============================================================
+    
+    
+    
     if ($action === "actualizar") {
 
         $id = $data["id"] ?? null;
@@ -79,7 +79,7 @@ try {
             exit;
         }
 
-        // Verificar que pertenece al usuario
+        
         $stmt = $conn->prepare("SELECT usuario_id FROM actividades WHERE id = ?");
         $stmt->execute([$id]);
         $act = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -99,9 +99,9 @@ try {
         echo json_encode(["success" => true]);
         exit;
     }
-// ============================================================
-// 4. MARCAR COMO REALIZADA
-// ============================================================
+
+
+
 if ($action === "marcar_realizada") {
 
     $id = $data["id"] ?? null;
@@ -111,7 +111,7 @@ if ($action === "marcar_realizada") {
         exit;
     }
 
-    // Verificar dueño
+    
     $stmt = $conn->prepare("SELECT usuario_id, titulo FROM actividades WHERE id = ?");
     $stmt->execute([$id]);
     $act = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -121,7 +121,7 @@ if ($action === "marcar_realizada") {
         exit;
     }
 
-    // Marcar como realizada
+    
     $stmt = $conn->prepare("
         UPDATE actividades
         SET estado = 'realizada'
@@ -129,9 +129,9 @@ if ($action === "marcar_realizada") {
     ");
     $stmt->execute([$id, $userId]);
 
-    // ============================================
-    // GUARDAR EN HISTORIAL
-    // ============================================
+    
+    
+    
     $detalle = "Actividad realizada: " . $act["titulo"];
 
     $stmt = $conn->prepare("
@@ -145,9 +145,9 @@ if ($action === "marcar_realizada") {
 }
 
 
-    // ============================================================
-    // 5. ELIMINAR ACTIVIDAD
-    // ============================================================
+    
+    
+    
     if ($action === "eliminar") {
 
         $id = $data["id"] ?? null;
@@ -157,7 +157,7 @@ if ($action === "marcar_realizada") {
             exit;
         }
 
-        // Verificar dueño
+        
         $stmt = $conn->prepare("SELECT usuario_id FROM actividades WHERE id = ?");
         $stmt->execute([$id]);
         $act = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -174,9 +174,9 @@ if ($action === "marcar_realizada") {
         exit;
     }
 
-    // ============================================================
-    // 6. LISTAR HISTORIAL
-    // ============================================================
+    
+    
+    
     if ($action === "listar_historial") {
 
         $stmt = $conn->prepare("
@@ -194,9 +194,9 @@ if ($action === "marcar_realizada") {
         exit;
     }
 
-    // ============================================================
-    // 7. BORRAR HISTORIAL
-    // ============================================================
+    
+    
+    
     if ($action === "borrar_historial") {
 
         $stmt = $conn->prepare("DELETE FROM resultados WHERE usuario_id = ?");
@@ -206,9 +206,9 @@ if ($action === "marcar_realizada") {
         exit;
     }
 
-    // ============================================================
-    // ACCIÓN INVÁLIDA
-    // ============================================================
+    
+    
+    
     echo json_encode(["success" => false, "error" => "Acción inválida"]);
 
 } catch (Exception $e) {

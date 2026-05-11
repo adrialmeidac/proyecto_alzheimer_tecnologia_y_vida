@@ -6,10 +6,10 @@
     <meta charset="UTF-8">
     <title>Relaciones Familiares</title>
 
-    <!-- Bootstrap -->
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- CSS GLOBAL -->
+    
     <link rel="stylesheet" href="/assets/css/global.css">
     <link rel="stylesheet" href="/assets/css/color.css">
     <link rel="stylesheet" href="/assets/css/header.css">
@@ -30,14 +30,16 @@
 
 <body>
 
-    <!-- HEADER -->
+    
     <?php include $_SERVER["DOCUMENT_ROOT"] . "/includes/header.php"; ?>
 
-    <!-- MENÚ ADMIN -->
+    
     <?php include $_SERVER["DOCUMENT_ROOT"] . "/includes/menu-admin.php"; ?>
 
-    <!-- MENÚ RESPONSIVE -->
+    
     <?php include $_SERVER["DOCUMENT_ROOT"] . "/includes/responsive-menu.php"; ?>
+    <button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
+
 
     <main class="admin-content flex-grow-1">
 
@@ -68,10 +70,10 @@
 
     </main>
 
-    <!-- FOOTER -->
+    
     <?php include $_SERVER["DOCUMENT_ROOT"] . "/includes/footer.php"; ?>
 
-    <!-- MODAL CREAR -->
+    
     <div class="modal fade" id="modalCrear">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -99,7 +101,7 @@
         </div>
     </div>
 
-    <!-- MODAL EDITAR -->
+    
     <div class="modal fade" id="modalEditar">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -129,13 +131,13 @@
         </div>
     </div>
 
-    <!-- JS -->
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-    // ===============================
-    // CARGAR LISTAS DE USUARIOS
-    // ===============================
+    
+    
+    
     async function cargarListas() {
         const res = await fetch("/controllers/admin-relaciones.php?action=listas");
         const data = await res.json();
@@ -156,9 +158,9 @@
         });
     }
 
-    // ===============================
-    // LISTAR RELACIONES
-    // ===============================
+    
+    
+    
     async function cargarRelaciones() {
         const res = await fetch("/controllers/admin-relaciones.php?action=listar");
         const data = await res.json();
@@ -182,9 +184,9 @@
         });
     }
 
-    // ===============================
-    // CREAR
-    // ===============================
+    
+    
+    
     document.getElementById("formCrear").addEventListener("submit", async e => {
         e.preventDefault();
 
@@ -205,9 +207,9 @@
         cargarRelaciones();
     });
 
-    // ===============================
-    // ABRIR EDITAR
-    // ===============================
+    
+    
+    
     async function abrirEditar(id) {
         const res = await fetch("/controllers/admin-relaciones.php?action=obtener", {
             method: "POST",
@@ -226,9 +228,9 @@
         new bootstrap.Modal(document.getElementById("modalEditar")).show();
     }
 
-    // ===============================
-    // EDITAR
-    // ===============================
+    
+    
+    
     document.getElementById("formEditar").addEventListener("submit", async e => {
         e.preventDefault();
 
@@ -250,9 +252,9 @@
         cargarRelaciones();
     });
 
-    // ===============================
-    // ELIMINAR
-    // ===============================
+    
+    
+    
     async function eliminarRelacion(id) {
         if (!confirm("¿Eliminar esta relación?")) return;
 
@@ -267,10 +269,11 @@
         cargarRelaciones();
     }
 
-    // Inicializar
+    
     cargarListas();
     cargarRelaciones();
     </script>
+<script src="/assets/js/theme.js"></script>
 
 </body>
 </html>

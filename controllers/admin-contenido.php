@@ -1,6 +1,6 @@
 <?php
 header("Content-Type: application/json");
-require_once "../middleware/admin.php"; // Seguridad unificada
+require_once "../middleware/admin.php"; 
 require_once "../models/bbdd.php";
 
 $db = new Database();
@@ -10,9 +10,9 @@ $action = $_GET["action"] ?? null;
 
 switch ($action) {
 
-    // ---------------------------------------------------------
-    // LISTAR CONTENIDO
-    // ---------------------------------------------------------
+    
+    
+    
     case "listar":
 
         $sql = $conn->prepare("
@@ -26,9 +26,9 @@ switch ($action) {
         echo json_encode(["success" => true, "contenido" => $data]);
         break;
 
-    // ---------------------------------------------------------
-    // CREAR CONTENIDO
-    // ---------------------------------------------------------
+    
+    
+    
     case "crear":
 
         if (!isset($_POST["titulo"], $_POST["descripcion"], $_FILES["archivo"])) {
@@ -39,7 +39,7 @@ switch ($action) {
         $titulo = trim($_POST["titulo"]);
         $descripcion = trim($_POST["descripcion"]);
 
-        // Validar archivo
+        
         $file = $_FILES["archivo"];
 
         if ($file["error"] !== 0) {
@@ -47,24 +47,24 @@ switch ($action) {
             exit;
         }
 
-        // Validar tipo MIME
+        
         $mime = mime_content_type($file["tmp_name"]);
         if ($mime !== "application/pdf") {
             echo json_encode(["success" => false, "error" => "Solo se permiten archivos PDF"]);
             exit;
         }
 
-        // Validar tamaño (máx 10MB)
+        
         if ($file["size"] > 10 * 1024 * 1024) {
             echo json_encode(["success" => false, "error" => "El PDF es demasiado grande"]);
             exit;
         }
 
-        // Carpeta segura
+        
         $uploadDir = "../uploads/contenido/";
         if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
 
-        // Nombre seguro
+        
         $nombrePDF = time() . "-" . preg_replace("/[^a-zA-Z0-9\.\-_]/", "", basename($file["name"]));
         $rutaPDF = $uploadDir . $nombrePDF;
 
@@ -73,7 +73,7 @@ switch ($action) {
             exit;
         }
 
-        // Guardar en BD
+        
         $sql = $conn->prepare("
             INSERT INTO contenido (titulo, descripcion, archivo)
             VALUES (:t, :d, :a)
@@ -87,9 +87,9 @@ switch ($action) {
         echo json_encode(["success" => true, "message" => "Contenido creado"]);
         break;
 
-    // ---------------------------------------------------------
-    // EDITAR CONTENIDO
-    // ---------------------------------------------------------
+    
+    
+    
     case "editar":
 
         if (!isset($_POST["id"], $_POST["titulo"], $_POST["descripcion"])) {
@@ -101,7 +101,7 @@ switch ($action) {
         $titulo = trim($_POST["titulo"]);
         $descripcion = trim($_POST["descripcion"]);
 
-        // Obtener registro actual
+        
         $sql = $conn->prepare("SELECT archivo FROM contenido WHERE id = :id");
         $sql->execute([":id" => $id]);
         $actual = $sql->fetch(PDO::FETCH_ASSOC);
@@ -113,21 +113,21 @@ switch ($action) {
 
         $archivoFinal = $actual["archivo"];
 
-        // Si sube un nuevo PDF
+        
         if (isset($_FILES["archivo"]) && $_FILES["archivo"]["error"] === 0) {
 
-            // Validar tipo MIME
+            
             $mime = mime_content_type($_FILES["archivo"]["tmp_name"]);
             if ($mime !== "application/pdf") {
                 echo json_encode(["success" => false, "error" => "Solo se permiten archivos PDF"]);
                 exit;
             }
 
-            // Borrar PDF anterior
+            
             $rutaAnterior = ".." . $actual["archivo"];
             if (file_exists($rutaAnterior)) unlink($rutaAnterior);
 
-            // Subir nuevo PDF
+            
             $uploadDir = "../uploads/contenido/";
             if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
 
@@ -139,7 +139,7 @@ switch ($action) {
             $archivoFinal = "/uploads/contenido/" . $nombrePDF;
         }
 
-        // Actualizar BD
+        
         $sql = $conn->prepare("
             UPDATE contenido 
             SET titulo = :t, descripcion = :d, archivo = :a 
@@ -155,9 +155,9 @@ switch ($action) {
         echo json_encode(["success" => true, "message" => "Contenido actualizado"]);
         break;
 
-    // ---------------------------------------------------------
-    // ELIMINAR CONTENIDO
-    // ---------------------------------------------------------
+    
+    
+    
     case "eliminar":
 
         if (!isset($_POST["id"])) {
@@ -167,7 +167,7 @@ switch ($action) {
 
         $id = $_POST["id"];
 
-        // Obtener archivo
+        
         $sql = $conn->prepare("SELECT archivo FROM contenido WHERE id = :id");
         $sql->execute([":id" => $id]);
         $data = $sql->fetch(PDO::FETCH_ASSOC);
@@ -177,11 +177,11 @@ switch ($action) {
             exit;
         }
 
-        // Borrar archivo físico
+        
         $ruta = ".." . $data["archivo"];
         if (file_exists($ruta)) unlink($ruta);
 
-        // Borrar BD
+        
         $sql = $conn->prepare("DELETE FROM contenido WHERE id = :id");
         $sql->execute([":id" => $id]);
 

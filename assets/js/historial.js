@@ -1,9 +1,9 @@
 const historialList = document.getElementById("historialList");
 const clearHistoryBtn = document.getElementById("clearHistoryBtn");
 
-// ============================
-// 1. CARGAR HISTORIAL
-// ============================
+
+
+
 
 async function loadHistorial() {
     try {
@@ -22,9 +22,9 @@ async function loadHistorial() {
     }
 }
 
-// ============================
-// 2. RENDERIZAR LISTA COMPLETA
-// ============================
+
+
+
 
 function renderLista(lista) {
     historialList.innerHTML = "";
@@ -37,9 +37,9 @@ function renderLista(lista) {
     lista.forEach(item => renderHistorialItem(item));
 }
 
-// ============================
-// 3. CREAR ITEM EN EL DOM
-// ============================
+
+
+
 
 function renderHistorialItem(item) {
 
@@ -66,9 +66,9 @@ function renderHistorialItem(item) {
     historialList.appendChild(li);
 }
 
-// ============================
-// 4. BORRAR HISTORIAL
-// ============================
+
+
+
 
 clearHistoryBtn.addEventListener("click", async () => {
     if (!confirm("¿Borrar todo el historial?")) return;
@@ -88,9 +88,9 @@ clearHistoryBtn.addEventListener("click", async () => {
     }
 });
 
-// ============================
-// 5. FILTROS
-// ============================
+
+
+
 
 document.querySelectorAll(".filter-btn").forEach(btn => {
     btn.addEventListener("click", () => aplicarFiltro(btn.dataset.filter));
@@ -140,9 +140,7 @@ async function aplicarFiltro(filtro) {
     }
 }
 
-// ============================
-// 6. SANITIZAR TEXTO
-// ============================
+
 
 function sanitize(text) {
     const div = document.createElement("div");
@@ -150,8 +148,8 @@ function sanitize(text) {
     return div.innerHTML;
 }
 
-// ============================
-// 7. INICIALIZAR
-// ============================
+
+
+
 
 loadHistorial();

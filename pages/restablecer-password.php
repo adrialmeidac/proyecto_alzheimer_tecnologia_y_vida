@@ -7,33 +7,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Restablecer contraseña</title>
 
-    <!-- Bootstrap -->
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- CSS GLOBAL -->
+    
     <link rel="stylesheet" href="/assets/css/color.css">
     <link rel="stylesheet" href="/assets/css/global.css">
     <link rel="stylesheet" href="/assets/css/header.css">
     <link rel="stylesheet" href="/assets/css/menu.css">
     <link rel="stylesheet" href="/assets/css/footer.css">
 
-    <!-- CSS LOGIN -->
+    
     <link rel="stylesheet" href="/assets/css/login.css">
 
-    <!-- Fuente -->
+    
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
-    <!-- HEADER -->
+    
     <?php include $_SERVER["DOCUMENT_ROOT"] . '/includes/header.php'; ?>
 
-    <!-- MENÚ PÚBLICO -->
+    
     <?php include $_SERVER["DOCUMENT_ROOT"] . '/includes/public-menu.php'; ?>
 
     <?php
-        // Obtener token desde la URL
+        
         $token = $_GET["token"] ?? null;
         $tokenValido = $token && preg_match("/^[a-f0-9]{64}$/", $token);
     ?>
@@ -75,10 +75,10 @@
         </div>
     </main>
 
-    <!-- FOOTER -->
+    
     <?php include $_SERVER["DOCUMENT_ROOT"] . '/includes/footer.php'; ?>
 
-    <!-- JS -->
+    
     <script src="/assets/js/theme.js"></script>
 
     <script>

@@ -4,7 +4,7 @@ header("Content-Type: application/json");
 require_once "../middleware/admin.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/models/bbdd.php";
 
-// Leer acción desde GET o JSON
+
 $input = json_decode(file_get_contents("php://input"), true);
 $action = $_GET["action"] ?? ($input["action"] ?? null);
 
@@ -20,9 +20,9 @@ try {
 
     switch ($action) {
 
-        // ---------------------------------------------------------
-        // LISTAR NOTIFICACIONES (con filtros)
-        // ---------------------------------------------------------
+        
+        
+        
         case "listar":
 
             $usuario = $_GET["usuario_id"] ?? null;
@@ -65,9 +65,9 @@ try {
             exit;
 
 
-        // ---------------------------------------------------------
-        // ELIMINAR NOTIFICACIÓN
-        // ---------------------------------------------------------
+        
+        
+        
         case "eliminar":
 
             $id = $input["id"] ?? null;
@@ -94,9 +94,9 @@ try {
             exit;
 
 
-        // ---------------------------------------------------------
-        // ACCIÓN NO VÁLIDA
-        // ---------------------------------------------------------
+        
+        
+        
         default:
             http_response_code(400);
             echo json_encode(["success" => false, "error" => "Acción no válida"]);

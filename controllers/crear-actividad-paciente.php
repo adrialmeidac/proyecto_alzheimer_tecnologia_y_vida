@@ -2,13 +2,13 @@
 session_start();
 require_once "../models/bbdd.php";
 
-// Solo familiares/cuidadores
+
 if (!in_array($_SESSION["rol"], ["familiar", "cuidador"])) {
     header("Location: /pages/dashboard.php");
     exit();
 }
 
-// Solo aceptar POST
+
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     header("Location: /pages/dashboard.php");
     exit();
@@ -20,7 +20,7 @@ $fecha = $_POST["fecha"] ?? "";
 $hora = $_POST["hora"] ?? null;
 $familiar_id = $_SESSION["user_id"];
 
-// Validaciones
+
 if (!$paciente_id || $descripcion === "" || !$fecha) {
     header("Location: /pages/actividades_paciente.php?error=1");
     exit();
@@ -29,10 +29,10 @@ if (!$paciente_id || $descripcion === "" || !$fecha) {
 $db = new Database();
 $conn = $db->connect();
 
-// Validar que el paciente pertenece al familiar/cuidador
+
 $sqlCheck = $conn->prepare("
     SELECT 1 
-    FROM relaciones_paciente_familiar
+    FROM relaciones_familiares
     WHERE familiar_id = :familiar
       AND paciente_id = :paciente
     LIMIT 1
@@ -46,7 +46,7 @@ if (!$sqlCheck->fetch()) {
     die("No tienes permiso para crear actividades para este paciente.");
 }
 
-// Insertar actividad en la tabla correcta
+
 $sql = $conn->prepare("
     INSERT INTO actividades_usuario 
     (usuario_id, familiar_id, texto, fecha, hora_limite, realizada, notificada, notificar)

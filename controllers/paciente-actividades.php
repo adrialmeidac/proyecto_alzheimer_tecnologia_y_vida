@@ -17,9 +17,9 @@ $data = json_decode(file_get_contents("php://input"), true);
 
 switch ($action) {
 
-    // ============================================
-    // LISTAR ACTIVIDADES DEL PACIENTE
-    // ============================================
+    
+    
+    
     case "listar":
         $stmt = $conn->prepare("
             SELECT * FROM actividades
@@ -34,9 +34,9 @@ switch ($action) {
         ]);
         break;
 
-    // ============================================
-    // MARCAR ACTIVIDAD COMO REALIZADA
-    // ============================================
+    
+    
+    
     case "realizar":
         $stmt = $conn->prepare("
             UPDATE actividades

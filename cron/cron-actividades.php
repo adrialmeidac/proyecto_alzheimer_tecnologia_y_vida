@@ -5,11 +5,11 @@ require_once __DIR__ . "/../controllers/crear-notificaciones.php";
 $db = new Database();
 $conn = $db->connect();
 
-// Fecha y hora actual
+
 $hoy = date("Y-m-d");
 $horaActual = date("H:i:s");
 
-// 1) Buscar actividades vencidas y no notificadas
+
 $sql = $conn->prepare("
     SELECT 
         id,
@@ -41,7 +41,7 @@ foreach ($actividades as $actividad) {
     $pacienteId = $actividad["usuario_id"];
     $texto = $actividad["texto"];
 
-    // 2) Crear notificación general (paciente + familiares)
+    
     crearNotificacion(
         $pacienteId,
         "actividad_no_realizada",
@@ -49,7 +49,7 @@ foreach ($actividades as $actividad) {
         $actividadId
     );
 
-    // 3) Marcar actividad como notificada
+    
     $update = $conn->prepare("
         UPDATE actividades_usuario
         SET notificada = 1

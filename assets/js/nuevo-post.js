@@ -10,6 +10,6 @@ document.getElementById("postForm").onsubmit = function(e) {
 
     alert("¡Publicación creada con éxito!");
 
-    // En Laravel, aquí se enviará por POST a la base de datos
+    
     location.href = "foro.php";
 };

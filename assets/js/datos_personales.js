@@ -9,21 +9,21 @@ document.getElementById("datosForm").addEventListener("submit", async function (
     const errorBox = document.getElementById("datos-errors");
     let errores = [];
 
-    // ============================
-    // VALIDACIONES
-    // ============================
+    
+    
+    
 
-    // Nombre
+    
     if (!/^[a-zA-ZÀ-ÿ\s]{2,40}$/.test(nombre)) {
         errores.push("El nombre debe contener solo letras y tener al menos 2 caracteres.");
     }
 
-    // Apellido
+    
     if (!/^[a-zA-ZÀ-ÿ\s]{2,60}$/.test(apellido)) {
         errores.push("El apellido debe contener solo letras y tener al menos 2 caracteres.");
     }
 
-    // Fecha
+    
     if (!fecha) {
         errores.push("Debes seleccionar una fecha de nacimiento.");
     } else {
@@ -35,12 +35,12 @@ document.getElementById("datosForm").addEventListener("submit", async function (
         }
     }
 
-    // Teléfono
+    
     if (telefono !== "" && !/^[1-9][0-9]{8}$/.test(telefono)) {
         errores.push("El teléfono debe tener 9 dígitos y no comenzar por 0.");
     }
 
-    // Mostrar errores
+    
     if (errores.length > 0) {
         errorBox.style.display = "block";
         errorBox.innerHTML = errores.map(e => `<p>${e}</p>`).join("");
@@ -49,9 +49,9 @@ document.getElementById("datosForm").addEventListener("submit", async function (
 
     errorBox.style.display = "none";
 
-    // ============================
-    // ENVIAR DATOS AL BACKEND
-    // ============================
+    
+    
+    
 
     const formData = new FormData(this);
 
@@ -69,7 +69,7 @@ document.getElementById("datosForm").addEventListener("submit", async function (
             return;
         }
 
-        // Redirigir
+        
         if (result.redirect) {
             window.location.href = result.redirect;
         }

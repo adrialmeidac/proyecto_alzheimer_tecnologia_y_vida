@@ -17,7 +17,7 @@ function obtenerNotificacionesFamiliar($familiar_id) {
             n.fecha,
             n.leida
         FROM notificaciones n
-        INNER JOIN relaciones_paciente_familiar rpf 
+        INNER JOIN relaciones_familiares rpf 
             ON rpf.paciente_id = n.usuario_id
         INNER JOIN usuarios u
             ON u.id = n.usuario_id

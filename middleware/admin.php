@@ -1,10 +1,10 @@
 <?php
-require_once __DIR__ . "/session.php"; // Maneja sesión y seguridad base
+require_once __DIR__ . "/session.php"; 
 
-// Validar rol admin
+
 if (!isset($_SESSION["rol"]) || $_SESSION["rol"] !== "admin") {
 
-    // Si es AJAX → devolver JSON
+    
     if (
         !empty($_SERVER['HTTP_X_REQUESTED_WITH']) &&
         strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest'
@@ -17,7 +17,7 @@ if (!isset($_SESSION["rol"]) || $_SESSION["rol"] !== "admin") {
         exit;
     }
 
-    // Si es navegación normal → redirigir
+    
     header("Location: /pages/login.php");
     exit;
 }

@@ -7,33 +7,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar sesión</title>
 
-    <!-- Bootstrap -->
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- CSS GLOBAL -->
+    
     <link rel="stylesheet" href="/assets/css/color.css">
     <link rel="stylesheet" href="/assets/css/global.css">
     <link rel="stylesheet" href="/assets/css/header.css">
     <link rel="stylesheet" href="/assets/css/menu.css">
     <link rel="stylesheet" href="/assets/css/footer.css">
     <link rel="stylesheet" href="/assets/css/login.css">
+    <link rel="stylesheet" href="/assets/css/banner.css">
 
-    <!-- Fuente -->
+    
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
-    <!-- HEADER -->
+    
     <?php include $_SERVER["DOCUMENT_ROOT"] . '/includes/header.php'; ?>
 
-    <!-- BOTÓN MODO OSCURO -->
+    
     <button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
 
-    <!-- MENÚ PÚBLICO -->
+    
     <?php include $_SERVER["DOCUMENT_ROOT"] . '/includes/public-menu.php'; ?>
 
-    <!-- BANNER PÚBLICO -->
+    
     <?php include $_SERVER["DOCUMENT_ROOT"] . '/includes/public-banner.php'; ?>
 
     <main class="login-wrapper d-flex justify-content-center align-items-start">
@@ -51,7 +52,7 @@
 
                 <button type="submit" class="main-btn w-100 mt-4">Entrar</button>
 
-                <!-- 🔥 ENLACE NUEVO: OLVIDÉ MI CONTRASEÑA -->
+                
                 <p class="forgot-password text-center mt-2">
                     <a href="/pages/recuperar-password.php" class="forgot-link">
                         ¿Olvidaste tu contraseña?
@@ -72,10 +73,10 @@
         </div>
     </main>
 
-    <!-- FOOTER -->
+    
     <?php include $_SERVER["DOCUMENT_ROOT"] . '/includes/footer.php'; ?>
 
-    <!-- JS -->
+    
     <script src="/assets/js/theme.js"></script>
     <script src="/assets/js/login.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

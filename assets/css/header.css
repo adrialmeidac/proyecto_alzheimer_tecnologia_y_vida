@@ -1,9 +1,9 @@
-/* HEADER */
+
 .header {
     width: 100%;
     background: var(--color-white);
     color: var(--color-primary);
-    padding: 15px 25px; /* más aire */
+    padding: 15px 25px; 
     box-sizing: border-box;
     border-bottom: 1px solid #e5e5e5;
     position: fixed;
@@ -12,16 +12,16 @@
     z-index: 4000;
 }
 
-/* CONTENEDOR INTERNO */
+
 .header-inner {
     display: flex;
-    justify-content: center; /* antes estaba a la derecha */
+    justify-content: center; 
     align-items: center;
     width: 100%;
     position: relative;
 }
 
-/* BOTÓN HAMBURGUESA */
+
 .menu-toggle {
     display: none;
     position: absolute;
@@ -38,7 +38,7 @@
     z-index: 4500;
 }
 
-/* Mostrar solo en móvil */
+
 @media (max-width: 768px) {
     .menu-toggle {
         display: block;

@@ -1,7 +1,7 @@
 <?php
-// Validar sesión y rol
+
 if (!isset($_SESSION["rol"]) || $_SESSION["rol"] !== "admin") {
-    return; // No mostrar menú si no es admin
+    return; 
 }
 ?>
 

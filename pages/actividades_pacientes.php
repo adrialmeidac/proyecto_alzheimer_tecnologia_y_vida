@@ -1,9 +1,9 @@
 <?php
 require_once "../middleware/session.php";
 
-// SOLO familiares/cuidadores
+
 if (!in_array($_SESSION["rol"], ["familiar", "cuidador"])) {
-    header("Location: /pages/dashboard.php");
+    header("Location: /pages/dashboardFamiliar.php");
     exit();
 }
 
@@ -13,7 +13,7 @@ $conn = $db->connect();
 
 $familiar_id = $_SESSION["user_id"];
 
-// OBTENER PACIENTES VINCULADOS
+
 $sql = $conn->prepare("
     SELECT u.id, u.nombre, u.apellidos
     FROM usuarios u
@@ -24,16 +24,16 @@ $sql = $conn->prepare("
 $sql->execute([$familiar_id]);
 $pacientes = $sql->fetchAll(PDO::FETCH_ASSOC);
 
-// SI NO TIENE PACIENTES VINCULADOS
+
 if (!$pacientes) {
     header("Location: /pages/registro_familiar.php");
     exit();
 }
 
-// SELECCIONAR PACIENTE ACTUAL
+
 $paciente_id = $_GET["paciente"] ?? $pacientes[0]["id"];
 
-// OBTENER ACTIVIDADES DEL PACIENTE
+
 $sql = $conn->prepare("
     SELECT *
     FROM actividades
@@ -50,27 +50,39 @@ $actividades = $sql->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <title>Actividades del Paciente</title>
 
+    <link rel="stylesheet" href="/assets/css/color.css">
     <link rel="stylesheet" href="/assets/css/global.css">
     <link rel="stylesheet" href="/assets/css/header.css">
+    <link rel="stylesheet" href="/assets/css/footer.css">
     <link rel="stylesheet" href="/assets/css/menu.css">
+    <link rel="stylesheet" href="/assets/css/banner.css">
     <link rel="stylesheet" href="/assets/css/panel-familiar.css">
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+        
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    </head>
 
-<body>
+    <body>
 
 <?php include "../includes/header.php"; ?>
-<?php include "../includes/menu-familiar.php"; ?>
+
 
 <button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
 
+
+<?php include "../includes/menu-familiar.php"; ?>
+
+
+<?php include "../includes/responsive-menu.php"; ?>
+
+
+<?php include "../includes/private-banner.php"; ?>
+
 <div class="panel-familiar-container">
 
-    <h2 class="mb-3">Actividades del Paciente</h2>
+    <h1 class="mb-3">Actividades del Paciente</h1>
 
-    <!-- Selector de paciente -->
+    
     <form method="GET" class="mb-4">
         <label class="form-label">Seleccionar paciente</label>
         <select name="paciente" class="form-select" onchange="this.form.submit()">
@@ -82,11 +94,11 @@ $actividades = $sql->fetchAll(PDO::FETCH_ASSOC);
         </select>
     </form>
 
-    <!-- FORMULARIO PARA CREAR ACTIVIDAD -->
+    
     <div class="card p-4 mb-4 shadow-sm">
         <h4 class="mb-3">Crear nueva actividad</h4>
 
-<form action="/controllers/actividades-familiares.php?action=crear" method="POST">
+<form action="/controllers/actividades-familiar.php?action=crear" method="POST">
     <input type="hidden" name="paciente_id" value="<?= $paciente_id ?>">
 
     <label class="form-label">Descripción</label>
@@ -98,11 +110,11 @@ $actividades = $sql->fetchAll(PDO::FETCH_ASSOC);
     <label class="form-label mt-3">Hora límite</label>
     <input type="time" name="hora" class="form-control" required>
 
-    <button class="btn btn-primary mt-4 w-100">Guardar actividad</button>
+    <button type="submit" class="btn btn-primary mt-4 w-100">Guardar actividad</button>
 </form>
     </div>
 
-    <!-- LISTA DE ACTIVIDADES -->
+    
     <h4 class="mb-3">Actividades registradas</h4>
 
     <?php if (!$actividades): ?>
@@ -156,6 +168,8 @@ $actividades = $sql->fetchAll(PDO::FETCH_ASSOC);
 </div>
 
 <script src="/assets/js/theme.js"></script>
+<script src="/assets/js/familiar.js"></script>
+
 
 </body>
 </html>

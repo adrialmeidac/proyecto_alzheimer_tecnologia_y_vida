@@ -1,8 +1,8 @@
 <?php
-require_once "../middleware/session.php"; // Sesión obligatoria
+require_once "../middleware/session.php"; 
 require_once "../models/bbdd.php";
 
-// Solo familiares o cuidadores pueden completar actividades
+
 if (!isset($_SESSION["rol"]) || !in_array($_SESSION["rol"], ["familiar", "cuidador"])) {
     header("Location: /pages/dashboard.php");
     exit();
@@ -10,7 +10,7 @@ if (!isset($_SESSION["rol"]) || !in_array($_SESSION["rol"], ["familiar", "cuidad
 
 $id = $_GET["id"] ?? null;
 
-// Validación básica
+
 if (!$id || !is_numeric($id)) {
     header("Location: /pages/dashboard.php");
     exit();
@@ -19,7 +19,7 @@ if (!$id || !is_numeric($id)) {
 $db = new Database();
 $conn = $db->connect();
 
-// Verificar que la actividad pertenece a un paciente vinculado al familiar/cuidador
+
 $sql = $conn->prepare("
     SELECT ap.usuario_id
     FROM actividades ap
@@ -35,12 +35,12 @@ $sql->execute([
 $actividad = $sql->fetch(PDO::FETCH_ASSOC);
 
 if (!$actividad) {
-    // Intento de completar actividad que no pertenece al familiar/cuidador
+    
     header("Location: /pages/dashboard.php?error=permiso");
     exit();
 }
 
-// Marcar actividad como completada
+
 $sql = $conn->prepare("
     UPDATE actividades
     SET completada = 1
@@ -48,6 +48,6 @@ $sql = $conn->prepare("
 ");
 $sql->execute([':id' => $id]);
 
-// Volver a la página anterior
+
 header("Location: " . ($_SERVER["HTTP_REFERER"] ?? "/pages/dashboard.php"));
 exit();

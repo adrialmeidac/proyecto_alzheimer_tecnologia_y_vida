@@ -20,7 +20,7 @@ $conn = $db->connect();
 
 try {
 
-    // Verificar que la respuesta existe y pertenece al tema
+    
     $stmt = $conn->prepare("
         SELECT id 
         FROM foro_respuestas 
@@ -36,7 +36,7 @@ try {
         exit;
     }
 
-    // Eliminar respuesta
+    
     $del = $conn->prepare("DELETE FROM foro_respuestas WHERE id = ?");
     $del->execute([$id]);
 

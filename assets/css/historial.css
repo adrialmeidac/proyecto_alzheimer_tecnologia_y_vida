@@ -1,11 +1,11 @@
-/* CONTENEDOR GENERAL */
+
 .activities-container {
     max-width: 650px;
-    margin: 120px auto 40px;
+    margin: 0 auto 40px;
     padding: 20px;
 }
 
-/* FILTROS */
+
 .filters {
     display: flex;
     gap: 6px;
@@ -36,7 +36,7 @@
     border-color: var(--color-primary-dark);
 }
 
-/* LISTA DEL HISTORIAL */
+
 .historial-list {
     list-style: none;
     padding: 0;
@@ -46,7 +46,7 @@
     gap: 12px;
 }
 
-/* TARJETA DE ACTIVIDAD */
+
 .historial-item {
     background: var(--color-gray-100);
     border-radius: 12px;
@@ -55,26 +55,26 @@
     transition: background 0.25s ease, border-color 0.25s ease, transform 0.15s ease;
 }
 
-/* Hover suave */
+
 .historial-item:hover {
     background: var(--color-gray-200);
     border-color: var(--color-primary);
     transform: translateY(-2px);
 }
 
-/* TEXTO PRINCIPAL */
+
 .historial-item strong {
     font-size: 1rem;
     color: var(--color-primary-dark);
 }
 
-/* TEXTO SECUNDARIO */
+
 .historial-item small {
     font-size: 0.85rem;
     color: var(--color-text-light);
 }
 
-/* ICONOS */
+
 .icon-check {
     color: var(--color-primary);
     font-weight: bold;
@@ -88,7 +88,7 @@
     color: var(--color-error);
 }
 
-/* RESPONSIVE */
+
 @media (max-width: 480px) {
     .filters {
         justify-content: center;

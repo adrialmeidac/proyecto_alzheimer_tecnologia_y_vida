@@ -6,9 +6,9 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-// SOLO familiares o cuidadores
+
 if (!in_array($_SESSION["rol"], ["familiar", "cuidador"])) {
-    header("Location: /pages/dashboard.php");
+    header("Location: /pages/dashboardFamiliar.php");
     exit();
 }
 
@@ -27,13 +27,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email_paciente = trim($_POST["email_paciente"]);
     $tipo_relacion = trim($_POST["tipo_relacion"]);
 
-    // Validar email
+    
     if (!filter_var($email_paciente, FILTER_VALIDATE_EMAIL)) {
         $mensaje = "El correo no es válido.";
         $tipo_mensaje = "error";
     } else {
 
-        // 1. Buscar paciente
+        
         $sql = $conn->prepare("SELECT id, rol, perfil_completado FROM usuarios WHERE email = ?");
         $sql->execute([$email_paciente]);
         $paciente = $sql->fetch(PDO::FETCH_ASSOC);
@@ -58,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             $paciente_id = $paciente["id"];
 
-            // 2. Verificar si ya están vinculados
+            
             $sql = $conn->prepare("
                 SELECT id FROM relaciones_familiares
                 WHERE paciente_id = ? AND familiar_id = ?
@@ -71,14 +71,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             } else {
 
-                // 3. Insertar relación
+                
                 $sql = $conn->prepare("
-                    INSERT INTO relaciones_familiares (paciente_id, familiar_id, $tipo_relacion)
+                    INSERT INTO relaciones_familiares (paciente_id, familiar_id, parentesco)
                     VALUES (?, ?, ?)
                 ");
-                $sql->execute([$paciente_id, $familiar_id, $parentesco]);
+                $sql->execute([$paciente_id, $familiar_id, $tipo_relacion]);
 
-                // 4. Marcar perfil del familiar como completado
+                
                 $update = $conn->prepare("
                     UPDATE usuarios SET perfil_completado = 1
                     WHERE id = ?
@@ -102,7 +102,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <meta charset="UTF-8">
     <title>Vincular Paciente</title>
 
-    <!-- CSS globales -->
+    
     <link rel="stylesheet" href="/assets/css/color.css">
     <link rel="stylesheet" href="/assets/css/global.css">
     <link rel="stylesheet" href="/assets/css/header.css">

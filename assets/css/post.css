@@ -1,15 +1,13 @@
-/* ============================
-   ESTILOS PARA post.php
-   ============================ */
 
-/* Contenedor principal */
+
+
 .post-container {
     max-width: 900px;
     margin: 40px auto;
     padding: 20px;
 }
 
-/* Título del post */
+
 .post-container h1 {
     font-size: 2rem;
     font-weight: 700;
@@ -17,7 +15,7 @@
     color: var(--color-primary);
 }
 
-/* Autor y fecha */
+
 .post-author,
 .post-date {
     font-size: 0.95rem;
@@ -25,7 +23,7 @@
     margin-bottom: 5px;
 }
 
-/* Contenido del post */
+
 .post-content {
     background: var(--color-card-bg);
     padding: 20px;
@@ -37,9 +35,7 @@
     color: var(--color-text);
 }
 
-/* ============================
-   RESPUESTAS
-   ============================ */
+
 
 h2 {
     margin-top: 40px;
@@ -48,7 +44,7 @@ h2 {
     color: var(--color-primary);
 }
 
-/* Tarjeta de respuesta */
+
 .respuesta-card {
     background: var(--color-card-bg);
     padding: 15px 20px;
@@ -67,9 +63,7 @@ h2 {
     font-size: 0.85rem;
 }
 
-/* ============================
-   FORMULARIO DE RESPUESTA
-   ============================ */
+
 
 form textarea {
     border-radius: 10px;
@@ -94,9 +88,7 @@ form button {
     font-size: 0.85rem;
 }
 
-/* ============================
-   BOTÓN VOLVER
-   ============================ */
+
 
 .btn-volver {
     margin-top: 30px;
@@ -104,9 +96,7 @@ form button {
     border-radius: 8px;
 }
 
-/* ============================
-   RESPONSIVE
-   ============================ */
+
 
 @media (max-width: 768px) {
     .post-container {

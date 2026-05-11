@@ -28,7 +28,7 @@
 
         <input type="hidden" name="action" value="crear">
 
-        <!-- DATOS BÁSICOS -->
+        
         <div class="mb-3">
             <label class="form-label">Nombre completo</label>
             <input type="text" name="nombre" class="form-control" required>
@@ -44,7 +44,7 @@
             <input type="text" name="direccion" class="form-control" required>
         </div>
 
-        <!-- SERVICIOS -->
+        
         <h5 class="mt-4">Servicios ofrecidos</h5>
 
         <div class="row">
@@ -59,7 +59,7 @@
             <?php endforeach; ?>
         </div>
 
-        <!-- HORARIOS -->
+        
         <h5 class="mt-4">Horario de trabajo</h5>
 
         <?php 
@@ -93,13 +93,13 @@
             <?php endforeach; ?>
         </div>
 
-        <!-- FOTO -->
+        
         <div class="mb-3">
             <label class="form-label">Foto del profesional (opcional)</label>
             <input type="file" name="foto" class="form-control" accept="image/*">
         </div>
 
-        <!-- BOTONES -->
+        
         <button type="submit" class="btn btn-primary px-4">Guardar</button>
         <a href="/pages/admin-profesionales.php" class="btn btn-secondary">Cancelar</a>
 

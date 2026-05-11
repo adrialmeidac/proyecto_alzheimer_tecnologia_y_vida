@@ -1,6 +1,6 @@
-/* CONTENEDOR PRINCIPAL DEL MÓDULO FAMILIAR */
+
 .panel-familiar-container {
-    margin-top: 160px;
+    margin-top: 60px;
     width: 100%;
     max-width: 900px;
     margin-left: auto;
@@ -8,23 +8,24 @@
     padding-bottom: 40px;
 }
 
-/* FORMULARIOS CENTRADOS */
+
 .panel-familiar-container form {
     max-width: 500px;
     margin: 0 auto;
 }
 
-/* CAJA DEL FORMULARIO */
+
 .form-container {
+    margin-top: 40px;
     max-width: 450px;
-    margin: 0 auto;
+   
     padding: 25px;
     border-radius: 10px;
     background: #fff;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
-/* ESPACIADO ENTRE ELEMENTOS */
+
 .panel-familiar-container label {
     margin-top: 10px;
     font-weight: 600;
@@ -34,17 +35,17 @@
     margin-top: 15px;
 }
 
-/* TARJETAS DE NOTIFICACIONES / PACIENTES */
+
 .panel-familiar-container .notificacion {
     margin-bottom: 20px;
 }
 
-/* CONTENEDOR DEL BOTÓN "VINCULAR PACIENTE" */
+
 .acciones-pacientes {
     margin-bottom: 20px;
 }
 
-/* BOTÓN PARA VINCULAR NUEVO PACIENTE */
+
 .btn-agregar-paciente {
     display: inline-block;
     background-color: var(--color-primary);
@@ -60,7 +61,7 @@
     background-color: var(--color-primary-dark);
 }
 
-/* MENSAJE DE ÉXITO */
+
 .alerta-exito {
     background-color: var(--color-success);
     color: var(--color-white);
@@ -70,3 +71,6 @@
     font-weight: 600;
 }
 
+.form-container .mensaje {
+    margin-bottom: 20px; 
+}

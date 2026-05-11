@@ -4,11 +4,11 @@ require_once __DIR__ . "/enviar_email.php";
 
 function crearNotificacion($usuario_id, $tipo, $mensaje, $referencia_id = null)
 {
-    // Conexión
+    
     $db = new Database();
     $conn = $db->connect();
 
-    // 1. Insertar notificación (columna corregida)
+    
     $sql = "INSERT INTO notificaciones (usuario_id, tipo, mensaje, referencia_id)
             VALUES (:usuario_id, :tipo, :mensaje, :referencia_id)";
 
@@ -20,7 +20,7 @@ function crearNotificacion($usuario_id, $tipo, $mensaje, $referencia_id = null)
         ':referencia_id' => $referencia_id
     ]);
 
-    // 2. Obtener email del paciente
+    
     $sqlUser = $conn->prepare("
         SELECT nombre, apellidos, email 
         FROM usuarios 
@@ -31,23 +31,23 @@ function crearNotificacion($usuario_id, $tipo, $mensaje, $referencia_id = null)
     $paciente = $sqlUser->fetch(PDO::FETCH_ASSOC);
 
     if (!$paciente) {
-        return false; // paciente eliminado o inexistente
+        return false; 
     }
 
     $emailPaciente = $paciente['email'];
     $nombrePaciente = $paciente['nombre'] . " " . $paciente['apellidos'];
 
-    // 3. Obtener familiares vinculados (tabla corregida)
+    
     $sqlFam = $conn->prepare("
         SELECT u.email 
-        FROM relaciones_paciente_familiar r
+        FROM relaciones_familiares r
         INNER JOIN usuarios u ON u.id = r.familiar_id
         WHERE r.paciente_id = :id
     ");
     $sqlFam->execute([':id' => $usuario_id]);
     $familiares = $sqlFam->fetchAll(PDO::FETCH_ASSOC);
 
-    // 4. Preparar email
+    
     $asunto = "Nueva notificación de $nombrePaciente";
     $mensajeHTML = "
         <h2>Notificación del sistema</h2>
@@ -57,14 +57,14 @@ function crearNotificacion($usuario_id, $tipo, $mensaje, $referencia_id = null)
         <p><small>Este mensaje fue generado automáticamente.</small></p>
     ";
 
-    // 5. Enviar email a cada familiar vinculado
+    
     foreach ($familiares as $fam) {
         if (!empty($fam['email'])) {
             enviarEmail($fam['email'], $asunto, $mensajeHTML);
         }
     }
 
-    // 6. Enviar también al paciente (si tiene email)
+    
     if (!empty($emailPaciente)) {
         enviarEmail($emailPaciente, $asunto, $mensajeHTML);
     }

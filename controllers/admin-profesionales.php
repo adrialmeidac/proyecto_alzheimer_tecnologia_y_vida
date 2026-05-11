@@ -15,9 +15,9 @@ if (!$action) {
 
 try {
 
-    // ============================================================
-    // OBTENER UN PROFESIONAL (GET)
-    // ============================================================
+    
+    
+    
     if ($action === "get") {
 
         $id = $_GET["id"] ?? null;
@@ -40,9 +40,9 @@ try {
         exit;
     }
 
-    // ============================================================
-    // LISTAR PROFESIONALES
-    // ============================================================
+    
+    
+    
     if ($action === "listar") {
 
         $stmt = $conn->prepare("
@@ -57,17 +57,17 @@ try {
         exit;
     }
 
-    // ============================================================
-    // CREAR PROFESIONAL
-    // ============================================================
+    
+    
+    
     if ($action === "crear") {
 
-        // Servicios
+        
         $servicios = isset($_POST["servicios"])
             ? implode(", ", $_POST["servicios"])
             : null;
 
-        // Foto
+        
         $fotoFinal = null;
 
         if (!empty($_FILES["foto"]["name"])) {
@@ -109,14 +109,14 @@ try {
         exit;
     }
 
-    // ============================================================
-    // EDITAR PROFESIONAL
-    // ============================================================
+    
+    
+    
     if ($action === "editar") {
 
         $id = $_POST["id"];
 
-        // Obtener registro actual
+        
         $stmt = $conn->prepare("SELECT foto FROM profesionales WHERE id = :id");
         $stmt->execute([":id" => $id]);
         $actual = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -126,17 +126,17 @@ try {
             exit;
         }
 
-        // Servicios
+        
         $servicios = isset($_POST["servicios"])
             ? implode(", ", $_POST["servicios"])
             : null;
 
-        // Foto
+        
         $fotoFinal = $actual["foto"];
 
         if (!empty($_FILES["foto"]["name"])) {
 
-            // Borrar foto anterior
+            
             if ($fotoFinal && file_exists(".." . $fotoFinal)) {
                 unlink(".." . $fotoFinal);
             }
@@ -185,14 +185,14 @@ try {
         exit;
     }
 
-    // ============================================================
-    // ELIMINAR PROFESIONAL
-    // ============================================================
+    
+    
+    
     if ($action === "eliminar") {
 
         $id = $_GET["id"] ?? $_POST["id"];
 
-        // Obtener foto
+        
         $stmt = $conn->prepare("SELECT foto FROM profesionales WHERE id = :id");
         $stmt->execute([":id" => $id]);
         $data = $stmt->fetch(PDO::FETCH_ASSOC);

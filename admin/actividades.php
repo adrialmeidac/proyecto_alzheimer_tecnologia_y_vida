@@ -17,15 +17,21 @@ if (!isset($_SESSION["user_id"]) || $_SESSION["rol"] !== "admin") {
     <link rel="stylesheet" href="/assets/css/footer.css">
     <link rel="stylesheet" href="/assets/css/admin.css">
     <link rel="stylesheet" href="/assets/css/menu.css">
-
-
 </head>
 
-<body class="bg-light">
+<body>
+    <?php include "../includes/header.php"; ?>
+    <?php include "../includes/menu-admin.php"; ?>
+    <button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
 
-<div class="container py-4">
 
-    <h2 class="mb-4">Gestión de Actividades</h2>
+
+    <main class="admin-content flex-grow-1">
+
+
+    <div class="container py-4">
+
+    <h1 class="mb-4">Gestión de Actividades</h1>
 
     <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalCrear">
         Crear Actividad
@@ -53,9 +59,6 @@ if (!isset($_SESSION["user_id"]) || $_SESSION["rol"] !== "admin") {
     </div>
 </div>
 
-<!-- ============================
-     MODAL CREAR
-============================= -->
 <div class="modal fade" id="modalCrear">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -84,7 +87,9 @@ if (!isset($_SESSION["user_id"]) || $_SESSION["rol"] !== "admin") {
 
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Cancelar
+                    </button>
                     <button class="btn btn-primary">Crear</button>
                 </div>
             </form>
@@ -92,9 +97,7 @@ if (!isset($_SESSION["user_id"]) || $_SESSION["rol"] !== "admin") {
     </div>
 </div>
 
-<!-- ============================
-     MODAL EDITAR
-============================= -->
+
 <div class="modal fade" id="modalEditar">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -126,32 +129,38 @@ if (!isset($_SESSION["user_id"]) || $_SESSION["rol"] !== "admin") {
 
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button class="btn btn-primary">Guardar Cambios</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                     Cancelar
+                    </button>
+                   <button class="btn btn-primary">Guardar Cambios</button>
                 </div>
             </form>
         </div>
     </div>
-</div>
-    <!-- BOTÓN VOLVER -->
-    <div class="text-center mt-4">
-        <button class="btn btn-secondary px-4 py-2" onclick="location.href='/admin/index.php'">
-            Volver
-        </button>
     </div>
+    
+    <div class="text-center mt-4">
+    <button class="btn btn-secondary px-4 py-2" onclick="location.href='/admin/index.php'">
+        Volver
+    </button>
+    </div>
+</main>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-// ===============================
-// LISTAR
-// ===============================
+
 function cargarActividades() {
     fetch("../controllers/admin-actividades.php?action=listar")
         .then(r => r.json())
         .then(data => {
             const tbody = document.getElementById("tablaActividades");
             tbody.innerHTML = "";
+            if (!data || !Array.isArray(data.actividades)) {
+                console.error("Respuesta inesperada:", data);
+                tbody.innerHTML = `<tr><td colspan="7" class="text-center text-danger">No se pudieron cargar las actividades.</td></tr>`;
+                return;
+            }
 
             data.actividades.forEach(a => {
                 tbody.innerHTML += `
@@ -172,34 +181,37 @@ function cargarActividades() {
         });
 }
 
-// ===============================
-// CREAR
-// ===============================
+
 document.getElementById("formCrear").addEventListener("submit", e => {
     e.preventDefault();
 
-    const datos = Object.fromEntries(new FormData(e.target));
+    const form = e.target;
+    const formData = new FormData(form);
 
     fetch("../controllers/admin-actividades.php?action=crear", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(datos)
+        body: formData
     })
     .then(r => r.json())
     .then(data => {
         alert(data.message);
+        form.reset(); 
+
+        const modalEl = document.getElementById("modalCrear");
+        const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+        modal.hide(); 
         cargarActividades();
     });
 });
 
-// ===============================
-// ABRIR EDITAR
-// ===============================
+
 function abrirEditar(id) {
+    const formData = new FormData();
+    formData.append("id", id);
+
     fetch("../controllers/admin-actividades.php?action=obtener", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id })
+        body: formData
     })
     .then(r => r.json())
     .then(data => {
@@ -217,36 +229,60 @@ function abrirEditar(id) {
     });
 }
 
-// ===============================
-// EDITAR
-// ===============================
 document.getElementById("formEditar").addEventListener("submit", e => {
     e.preventDefault();
 
-    const datos = Object.fromEntries(new FormData(e.target));
+    const form = e.target;
+    const formData = new FormData(form);
 
     fetch("../controllers/admin-actividades.php?action=editar", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(datos)
+        body: formData
     })
     .then(r => r.json())
     .then(data => {
         alert(data.message);
+
+        const modalEl = document.getElementById("modalEditar");
+        const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+        modal.hide();
+
+        cargarActividades();
+    });
+});
+document.getElementById("formEditar").addEventListener("submit", e => {
+    e.preventDefault();
+
+    const form = e.target;
+    const formData = new FormData(form);
+
+    fetch("../controllers/admin-actividades.php?action=editar", {
+        method: "POST",
+        body: formData
+    })
+    .then(r => r.json())
+    .then(data => {
+        alert(data.message);
+
+        const modalEl = document.getElementById("modalEditar");
+        const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+        modal.hide();
+
         cargarActividades();
     });
 });
 
-// ===============================
-// ELIMINAR
-// ===============================
+
+
 function eliminarActividad(id) {
     if (!confirm("¿Eliminar esta actividad?")) return;
 
+    const formData = new FormData();
+    formData.append("id", id);
+
     fetch("../controllers/admin-actividades.php?action=eliminar", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id })
+        body: formData
     })
     .then(r => r.json())
     .then(data => {
@@ -256,7 +292,9 @@ function eliminarActividad(id) {
 }
 
 cargarActividades();
+
 </script>
+<script src="/assets/js/theme.js"></script>
 
 </body>
 </html>

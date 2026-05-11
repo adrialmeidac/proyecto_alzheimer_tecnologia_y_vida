@@ -1,4 +1,4 @@
-// VALIDACIÓN PREVIA ANTES DE EJECUTAR RECAPTCHA
+
 document.getElementById("registroForm").addEventListener("submit", function (e) {
     e.preventDefault();
 
@@ -7,37 +7,37 @@ document.getElementById("registroForm").addEventListener("submit", function (e) 
     const email     = document.getElementById("email").value.trim();
     const password  = document.getElementById("password").value.trim();
     const password2 = document.getElementById("password2").value.trim();
-    const rol       = document.getElementById("rol").value; // NUEVO
+    const rol       = document.getElementById("rol").value; 
 
     const errores = [];
 
-    // Validación de nombre
+    
     if (nombre.length < 3) {
         errores.push("El nombre debe tener al menos 3 caracteres.");
     }
 
-    // Validación de email
+    
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
         errores.push("El correo electrónico no es válido.");
     }
 
-    // Validación de contraseña
+    
     if (password.length < 6) {
         errores.push("La contraseña debe tener al menos 6 caracteres.");
     }
 
-    // Confirmación de contraseña
+    
     if (password !== password2) {
         errores.push("Las contraseñas no coinciden.");
     }
 
-    // Validación de rol
+    
     if (!rol) {
         errores.push("Debes seleccionar un tipo de cuenta.");
     }
 
-    // Mostrar errores si existen
+    
     if (errores.length > 0) {
         alert(errores.join("\n"));
         if (typeof grecaptcha !== "undefined") {
@@ -46,19 +46,19 @@ document.getElementById("registroForm").addEventListener("submit", function (e) 
         return;
     }
 
-    // Si todo está bien → ejecutar reCAPTCHA invisible
+    
     grecaptcha.execute();
 });
 
 
-// FUNCIÓN QUE GOOGLE LLAMA CUANDO EL USUARIO PASA EL RECAPTCHA
+
 function onSubmit(token) {
     const nombre    = document.getElementById("nombre").value.trim();
     const apellidos = document.getElementById("apellidos").value.trim();
     const email     = document.getElementById("email").value.trim();
     const password  = document.getElementById("password").value.trim();
     const password2 = document.getElementById("password2").value.trim();
-    const rol       = document.getElementById("rol").value; // NUEVO
+    const rol       = document.getElementById("rol").value; 
 
     fetch("/controllers/registro.php", {
         method: "POST",
@@ -69,7 +69,7 @@ function onSubmit(token) {
             email: email,
             password: password,
             password2: password2,
-            rol: rol,           // NUEVO
+            rol: rol,           
             recaptcha: token
         })
     })
@@ -77,7 +77,7 @@ function onSubmit(token) {
     .then(data => {
 
         if (data.success) {
-            // Redirección dinámica según el rol
+            
             window.location.href = data.redirect;
             return;
         }

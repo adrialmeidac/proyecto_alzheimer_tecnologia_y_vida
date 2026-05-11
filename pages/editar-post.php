@@ -1,5 +1,5 @@
 <?php
-require_once "../middleware/session-admin.php"; // SOLO ADMIN
+require_once "../middleware/session-admin.php"; 
 require_once "../models/bbdd.php";
 
 $db = new Database();
@@ -7,7 +7,7 @@ $conn = $db->connect();
 
 $id = $_GET['id'] ?? null;
 
-// Obtener el post
+
 $sql = $conn->prepare("SELECT * FROM foro_temas WHERE id = :id");
 $sql->execute([':id' => $id]);
 $post = $sql->fetch(PDO::FETCH_ASSOC);
@@ -23,10 +23,10 @@ if (!$post) {
     <meta charset="UTF-8">
     <title>Editar Publicación</title>
 
-    <!-- Bootstrap -->
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- CSS -->
+    
     <link rel="stylesheet" href="/assets/css/color.css">
     <link rel="stylesheet" href="/assets/css/global.css">
     <link rel="stylesheet" href="/assets/css/header.css">
@@ -43,13 +43,13 @@ if (!$post) {
 
 <button class="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
 
-<!-- MENÚ ADMIN -->
+
 <?php include '../includes/menu-admin.php'; ?>
 
-<!-- MENÚ RESPONSIVE -->
+
 <?php include '../includes/responsive-menu.php'; ?>
 
-<!-- BANNER PRIVADO -->
+
 <?php include '../includes/private-banner.php'; ?>
 
 <div class="container forum-container">
